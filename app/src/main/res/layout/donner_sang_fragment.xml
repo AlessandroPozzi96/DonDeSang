@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/holo_red_light">
+
+    <TextView
+        android:id="@+id/text_bienvenue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:fontFamily="sans-serif-condensed"
+        android:text="@string/bienvenue"
+        android:textSize="36sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/editText"
+        android:layout_width="321dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/text_bienvenue"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="38dp"
+        android:layout_marginTop="34dp"
+        android:layout_marginEnd="25dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="@string/tu_es_en_bonne_sant"
+        android:autofillHints="" />
+
+    <EditText
+        android:id="@+id/editText2"
+        android:layout_width="318dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="38dp"
+        android:layout_marginTop="173dp"
+        android:layout_marginEnd="28dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="@string/tu_as_entre_18_et_70_ans" />
+
+    <EditText
+        android:id="@+id/editText3"
+        android:layout_width="316dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editText2"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="28dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="@string/tu_p_ses_au_moins_50_kg" />
+
+    <Button
+        android:id="@+id/button_donner_sang"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="32dp"
+        android:text="@string/alors_donne_ton_sang" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/button_donner_sang"
+        android:layout_below="@+id/editText3"
+        android:layout_alignStart="@+id/editText3"
+        android:layout_marginStart="0dp"
+        android:layout_marginBottom="121dp"
+        android:text="@string/aucun_risque_que_tu_transmettes_une_maladie_par_le_sang"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+</RelativeLayout>
