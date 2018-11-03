@@ -16,49 +16,6 @@
         android:textSize="36sp"
         android:textStyle="bold" />
 
-    <EditText
-        android:id="@+id/editText"
-        android:layout_width="321dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/text_bienvenue"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="38dp"
-        android:layout_marginTop="34dp"
-        android:layout_marginEnd="25dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="@string/tu_es_en_bonne_sant"
-        android:autofillHints="" />
-
-    <EditText
-        android:id="@+id/editText2"
-        android:layout_width="318dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="38dp"
-        android:layout_marginTop="173dp"
-        android:layout_marginEnd="28dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="@string/tu_as_entre_18_et_70_ans" />
-
-    <EditText
-        android:id="@+id/editText3"
-        android:layout_width="316dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/editText2"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="0dp"
-        android:layout_marginEnd="28dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="@string/tu_p_ses_au_moins_50_kg" />
-
     <Button
         android:id="@+id/button_donner_sang"
         android:layout_width="wrap_content"
@@ -70,15 +27,16 @@
 
     <TextView
         android:id="@+id/textView2"
-        android:layout_width="wrap_content"
+        android:layout_width="346dp"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/button_donner_sang"
-        android:layout_below="@+id/editText3"
-        android:layout_alignStart="@+id/editText3"
-        android:layout_marginStart="0dp"
-        android:layout_marginBottom="121dp"
-        android:text="@string/aucun_risque_que_tu_transmettes_une_maladie_par_le_sang"
-        android:textSize="18sp"
-        android:textStyle="bold" />
+        android:layout_below="@+id/text_bienvenue"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="110dp"
+        android:layout_marginBottom="246dp"
+        android:text="Tu veux sauver des vies ? "
+        android:textAlignment="viewStart"
+        android:textSize="24sp" />
 
 </RelativeLayout>
