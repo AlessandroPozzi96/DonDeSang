@@ -1,4 +1,4 @@
-package com.henallux.dondesang;
+package com.henallux.dondesang.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,7 +12,11 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 
-public class ConditionsDonSangFragment extends Fragment implements IOnBackPressed{
+import com.henallux.dondesang.IOnBackPressed;
+import com.henallux.dondesang.R;
+import com.henallux.dondesang.activity.MainActivity;
+
+public class ConditionsDonSangFragment extends Fragment implements IOnBackPressed {
     private WebView webView;
     private Button button;
     private View view;

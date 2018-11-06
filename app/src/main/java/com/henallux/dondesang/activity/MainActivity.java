@@ -1,16 +1,25 @@
-package com.henallux.dondesang;
+package com.henallux.dondesang.activity;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.Toast;
+import android.view.View;
+import android.widget.Button;
+
+import com.henallux.dondesang.fragment.CarteFragment;
+import com.henallux.dondesang.fragment.FavoriteFragment;
+import com.henallux.dondesang.fragment.GroupFragment;
+import com.henallux.dondesang.fragment.MessageFragment;
+import com.henallux.dondesang.fragment.ProfileFragment;
+import com.henallux.dondesang.R;
 
 
 public class MainActivity extends AppCompatActivity {
-
+    private Button butCarte;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,8 +31,9 @@ public class MainActivity extends AppCompatActivity {
         //I added this if statement to keep the selected fragment when rotating the device
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                    new ProfileFragment()).commit();
+                    new CarteFragment()).commit();
         }
+
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
@@ -33,11 +43,11 @@ public class MainActivity extends AppCompatActivity {
                     Fragment selectedFragment = null;
 
                     switch (item.getItemId()) {
-                        case R.id.nav_chat:
-                            selectedFragment = new ChatFragment();
-                            break;
                         case R.id.nav_profile:
                             selectedFragment = new ProfileFragment();
+                            break;
+                        case R.id.nav_chat:
+                            selectedFragment = new CarteFragment();
                             break;
                         case R.id.nav_group:
                             selectedFragment = new GroupFragment();
