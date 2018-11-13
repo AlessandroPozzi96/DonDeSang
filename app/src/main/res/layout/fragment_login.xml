@@ -3,49 +3,53 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:layout_editor_absoluteY="25dp">
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/editLoginId"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="176dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Name"
-        app:layout_constraintEnd_toEndOf="@+id/editText2"
-        app:layout_constraintStart_toStartOf="@+id/editText2"
+        android:text="@string/exempleLogin"
+        app:layout_constraintEnd_toEndOf="@+id/editPasswordId"
+        app:layout_constraintStart_toStartOf="@+id/editPasswordId"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/editText2"
+        android:id="@+id/editPasswordId"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="74dp"
-        android:layout_marginBottom="186dp"
+        android:layout_marginTop="55dp"
+        android:layout_marginEnd="64dp"
         android:ems="10"
         android:inputType="textPassword"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editLoginId" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/textLoginId"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="11dp"
-        android:text="TextView"
-        app:layout_constraintBottom_toTopOf="@+id/editText"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_marginStart="27dp"
+        android:layout_marginBottom="10dp"
+        android:text="@string/login"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/editLoginId"
+        app:layout_constraintStart_toStartOf="@+id/editLoginId" />
 
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/textPasswordId"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="15dp"
-        android:text="TextView"
-        app:layout_constraintBottom_toTopOf="@+id/editText2"
+        android:layout_marginBottom="8dp"
+        android:text="@string/password"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/editPasswordId"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.531"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
@@ -54,27 +58,30 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="53dp"
         android:text="@string/connexion"
+        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/buttonLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:layout_marginEnd="58dp"
-        android:text="Button"
-        app:layout_constraintEnd_toEndOf="@+id/button2"
-        app:layout_constraintTop_toBottomOf="@+id/button2" />
+        android:layout_marginTop="16dp"
+        android:background="@drawable/sauver_vies_button"
+        android:text="@string/buttonSeConnecter"
+        app:layout_constraintEnd_toStartOf="@+id/buttonMotDePasseOublier"
+        app:layout_constraintStart_toStartOf="@+id/buttonMotDePasseOublier"
+        app:layout_constraintTop_toBottomOf="@+id/buttonMotDePasseOublier" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/buttonMotDePasseOublier"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="1dp"
-        android:text="Button"
-        app:layout_constraintEnd_toEndOf="@+id/editText2"
-        app:layout_constraintTop_toBottomOf="@+id/editText2" />
+        android:layout_marginTop="7dp"
+        android:background="@drawable/sauver_vies_button"
+        android:text="@string/mdpOublie"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="@+id/editPasswordId"
+        app:layout_constraintTop_toBottomOf="@+id/editPasswordId" />
 </android.support.constraint.ConstraintLayout>
