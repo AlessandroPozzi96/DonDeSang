@@ -15,4 +15,5 @@
     <string name="aucun_risque_que_tu_transmettes_une_maladie_par_le_sang">Aucun risque que tu transmettes une maladie par le sang ?</string>
     <string name="tu_p_ses_au_moins_50_kg">Tu pèses au moins 50 Kg ?</string>
     <string name="tu_es_en_bonne_sant">Tu es en bonne santé ?</string>
+    <string name="connexion">Connexion</string>
 </resources>
