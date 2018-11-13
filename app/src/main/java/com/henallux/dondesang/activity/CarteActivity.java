@@ -15,6 +15,6 @@ public class CarteActivity extends AppCompatActivity {
         setContentView(R.layout.activity_carte);
 
         Application application = (Application) this.getApplicationContext();
-        Toast.makeText(CarteActivity.this, application.getCodePostale(), Toast.LENGTH_LONG).show();
+        Toast.makeText(CarteActivity.this, "" + application.getLatitude(), Toast.LENGTH_LONG).show();
     }
 }

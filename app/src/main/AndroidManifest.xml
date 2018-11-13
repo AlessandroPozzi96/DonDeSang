@@ -2,7 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.henallux.dondesang">
 
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
+    
 
     <application
         android:allowBackup="true"
@@ -27,6 +29,8 @@
             android:resource="@array/preloaded_fonts" />
 
         <activity android:name=".activity.CarteActivity"></activity>
+        
+        <service android:name=".service.GPS_Service" />
     </application>
 
 </manifest>

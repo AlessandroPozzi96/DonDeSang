@@ -1,8 +1,8 @@
 package com.henallux.dondesang.activity;
 
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,10 +16,11 @@ import com.henallux.dondesang.fragment.GroupFragment;
 import com.henallux.dondesang.fragment.MessageFragment;
 import com.henallux.dondesang.fragment.ProfileFragment;
 import com.henallux.dondesang.R;
+import com.henallux.dondesang.model.Application;
 
 
 public class MainActivity extends AppCompatActivity {
-    private Button butCarte;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
