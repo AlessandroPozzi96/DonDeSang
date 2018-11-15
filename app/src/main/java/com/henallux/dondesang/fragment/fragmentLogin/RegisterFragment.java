@@ -1,4 +1,4 @@
-package com.henallux.dondesang.fragment;
+package com.henallux.dondesang.fragment.fragmentLogin;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,11 +10,11 @@ import android.view.ViewGroup;
 
 import com.henallux.dondesang.R;
 
-public class LoginFragment extends Fragment {
+public class RegisterFragment extends Fragment {
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_login,container,false);
+        return inflater.inflate(R.layout.fragment_register,container,false);
     }
 }

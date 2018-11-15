@@ -17,8 +17,8 @@
     <string name="tu_es_en_bonne_sant">Tu es en bonne santé ?</string>
     <string name="connexion">Connexion</string>
     <string name="login">Login\\Adresse mail</string>
-    <string name="password">Password</string>
-    <string name="exempleLogin">Ex : ArthurDu49</string>
+    <string name="password">password</string>
+    <string name="exempleLogin">user name</string>
     <string name="exemplePassword">Minimun 8 caractère</string>
     <string name="mdpOublie">Mot de passe oublié ?</string>
     <string name="buttonSeConnecter">Se connecter</string>

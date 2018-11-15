@@ -2,21 +2,17 @@ package com.henallux.dondesang.activity;
 
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 
 import com.henallux.dondesang.fragment.CarteFragment;
+import com.henallux.dondesang.fragment.fragmentLogin.EnregistrementFragment;
 import com.henallux.dondesang.fragment.FavoriteFragment;
 import com.henallux.dondesang.fragment.GroupFragment;
 import com.henallux.dondesang.fragment.MessageFragment;
-import com.henallux.dondesang.fragment.ProfileFragment;
 import com.henallux.dondesang.R;
-import com.henallux.dondesang.model.Application;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -30,10 +26,10 @@ public class MainActivity extends AppCompatActivity {
         bottomNav.setOnNavigationItemSelectedListener(navListener);
 
         //I added this if statement to keep the selected fragment when rotating the device
-        if (savedInstanceState == null) {
+        /*if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                     new CarteFragment()).commit();
-        }
+        }*/
 
     }
 
@@ -45,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
                     switch (item.getItemId()) {
                         case R.id.nav_profile:
-                            selectedFragment = new ProfileFragment();
+                            selectedFragment = new EnregistrementFragment();
                             break;
                         case R.id.nav_chat:
                             selectedFragment = new CarteFragment();

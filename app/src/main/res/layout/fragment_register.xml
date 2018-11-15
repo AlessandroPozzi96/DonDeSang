@@ -7,16 +7,18 @@
     tools:layout_editor_absoluteY="25dp">
 
     <TextView
-        android:id="@+id/connexionId"
+        android:id="@+id/inscriptionId"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
-        android:text="@string/connexion"
+        android:layout_height="0dp"
+        android:layout_marginTop="125dp"
+        android:layout_marginBottom="16dp"
+        android:text="Inscription"
         android:textColor="#81D4FA"
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/editLoginId"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/editLoginId"
@@ -24,20 +26,21 @@
         android:layout_height="wrap_content"
 
         android:layout_marginStart="8dp"
-        android:layout_marginTop="172dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginBottom="13dp"
         android:background="@drawable/login_edit"
         android:drawableLeft="@drawable/img_profil"
         android:ems="10"
-        android:hint="@string/exempleLogin"
-        android:inputType="textPersonName"
+        android:hint="enter username"
+        android:inputType="textPersonName|textWebEditText"
         android:padding="8dp"
         android:textColor="#8bc34a"
         android:textColorHint="#CFD8DC"
         android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/editPasswordId"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/inscriptionId" />
 
     <EditText
         android:id="@+id/editPasswordId"
@@ -45,40 +48,53 @@
         android:layout_height="wrap_content"
 
         android:layout_marginStart="8dp"
-        android:layout_marginTop="13dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginBottom="19dp"
         android:background="@drawable/login_edit"
         android:drawableLeft="@drawable/img_lock"
         android:ems="10"
-        android:hint="@string/password"
+        android:hint="enter password"
         android:inputType="textPassword"
         android:padding="8dp"
         android:textColor="#8bc34a"
         android:textColorHint="#CFD8DC"
         android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/editPasswordRepeatId"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editLoginId" />
 
-
-    <Button
-        android:id="@+id/buttonLogin"
-        android:layout_width="wrap_content"
+    <EditText
+        android:id="@+id/editPasswordRepeatId"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
 
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="4dp"
-        android:text="@string/buttonSeConnecter"
-        app:layout_constraintEnd_toStartOf="@+id/buttonMotDePasseOublier"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="17dp"
+        android:background="@drawable/login_edit"
+        android:drawableLeft="@drawable/img_lock"
+        android:ems="10"
+        android:hint="enter password repeat"
+        android:inputType="textPassword"
+        android:padding="8dp"
+        android:textColor="#8bc34a"
+        android:textColorHint="#CFD8DC"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editPasswordId" />
 
     <Button
-        android:id="@+id/buttonMotDePasseOublier"
+        android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:text="@string/mdpOublie"
-        android:textSize="10sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/buttonLogin"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:layout_marginBottom="154dp"
+        android:text="S'inscrire"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editPasswordRepeatId" />
+
 </android.support.constraint.ConstraintLayout>
