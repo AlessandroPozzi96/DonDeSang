@@ -5,7 +5,6 @@
     <string name="nav_header_title">Android Studio</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Settings</string>
     <string name="avant_de_donner_ton_sang">Avant de donner ton sang...</string>
     <string name="tu_ne_pr_sentes_aucun_risque_de_transmettre_des_maladies_par_le_sang">Tu ne présentes aucun risque de transmettre des maladies par le sang ?</string>
     <string name="bienvenue">Bienvenue !</string>
@@ -22,4 +21,7 @@
     <string name="exemplePassword">Minimun 8 caractère</string>
     <string name="mdpOublie">Mot de passe oublié ?</string>
     <string name="buttonSeConnecter">Se connecter</string>
+    <string name="pause">Pause Location Updates</string>
+    <string name="resume">Resume Location Updates</string>
+    <string name="action_settings">Settings</string>
 </resources>

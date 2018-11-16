@@ -49,7 +49,7 @@
         android:layout_marginStart="28dp"
         android:layout_marginTop="148dp"
         android:layout_marginBottom="8dp"
-        android:text="Entrer mon code postal :"
+        android:text="Entrer un code postal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -80,7 +80,7 @@
         android:layout_marginTop="102dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="70dp"
-        android:text="Partager ma position :"
+        android:text="Utiliser ma position"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.086"
@@ -100,7 +100,8 @@
         app:layout_constraintHorizontal_bias="0.95"
         app:layout_constraintStart_toEndOf="@+id/textView4"
         app:layout_constraintTop_toBottomOf="@+id/editText_CodePostale"
-        app:layout_constraintVertical_bias="0.348" />
+        app:layout_constraintVertical_bias="0.348"
+        android:onClick="toggleGPSUpdates" />
 
     <TextView
         android:id="@+id/textView6"
