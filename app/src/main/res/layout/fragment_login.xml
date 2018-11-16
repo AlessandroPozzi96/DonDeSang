@@ -7,24 +7,24 @@
     tools:layout_editor_absoluteY="25dp">
 
     <TextView
-        android:id="@+id/connexionId"
+        android:id="@+id/loginTextconnexion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="30dp"
         android:text="@string/connexion"
         android:textColor="#81D4FA"
         android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/editLoginId"
+        app:layout_constraintBottom_toTopOf="@+id/loginEditUserName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
-        android:id="@+id/editLoginId"
+        android:id="@+id/loginEditUserName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
 
         android:layout_marginStart="8dp"
-        android:layout_marginTop="172dp"
+        android:layout_marginTop="222dp"
         android:layout_marginEnd="8dp"
         android:background="@drawable/login_edit"
         android:drawableLeft="@drawable/img_profil"
@@ -40,12 +40,12 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/editPasswordId"
+        android:id="@+id/loginEditPassword"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
 
         android:layout_marginStart="8dp"
-        android:layout_marginTop="13dp"
+        android:layout_marginTop="14dp"
         android:layout_marginEnd="8dp"
         android:background="@drawable/login_edit"
         android:drawableLeft="@drawable/img_lock"
@@ -58,27 +58,26 @@
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editLoginId" />
+        app:layout_constraintTop_toBottomOf="@+id/loginEditUserName" />
 
 
     <Button
-        android:id="@+id/buttonLogin"
+        android:id="@+id/loginButtonSeConnecter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="4dp"
+        android:layout_marginTop="14dp"
         android:text="@string/buttonSeConnecter"
-        app:layout_constraintEnd_toStartOf="@+id/buttonMotDePasseOublier"
-        app:layout_constraintTop_toBottomOf="@+id/editPasswordId" />
+        app:layout_constraintEnd_toStartOf="@+id/loginButtonMDPOublier"
+        app:layout_constraintTop_toBottomOf="@+id/loginEditPassword" />
 
     <Button
-        android:id="@+id/buttonMotDePasseOublier"
+        android:id="@+id/loginButtonMDPOublier"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:text="@string/mdpOublie"
         android:textSize="10sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/buttonLogin"
+        app:layout_constraintBaseline_toBaselineOf="@+id/loginButtonSeConnecter"
         app:layout_constraintEnd_toEndOf="parent" />
 </android.support.constraint.ConstraintLayout>
