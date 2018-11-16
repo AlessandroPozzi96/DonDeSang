@@ -1,4 +1,4 @@
-package com.henallux.dondesang.fragment;
+package com.henallux.dondesang.fragment.trouverCollectes;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -18,6 +18,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,49 +31,39 @@ import android.widget.Switch;
 import android.widget.Toast;
 
 import com.henallux.dondesang.R;
-import com.henallux.dondesang.activity.MainActivity;
+import com.henallux.dondesang.exception.ModelException;
+import com.henallux.dondesang.fragment.fragmentLogin.RegisterFragment;
 import com.henallux.dondesang.model.Application;
 import com.henallux.dondesang.model.LocationViewModel;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
-public class CarteFragment extends Fragment {
+
+public class LocalisationFragment extends Fragment {
     private View view;
     private Button butCarte;
     private Application applicationObject;
     private EditText codePostale;
     private Switch sharePosition;
-    private ViewModel viewModel;
     private final int PERMISSION_LOCATION_GPS = 2;
     private LocationManager locationManager;
     private LocationListener locationListenerGPS;
     double longitudeGPS, latitudeGPS;
     private String tag = "LocationOnePlusOne";
+    private FragmentManager fragmentManager;
+    private LocationViewModel locationViewModel;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_carte, container, false);
-        viewModel = ViewModelProviders.of(getActivity()).get(LocationViewModel.class);
+        view = inflater.inflate(R.layout.fragment_localisation, container, false);
+        locationViewModel = ViewModelProviders.of(getActivity()).get(LocationViewModel.class);
 
-        return view;
-    }
+        fragmentManager = getFragmentManager();
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        //Récupération de la valeur du code postale
-        codePostale = (EditText) view.findViewById(R.id.editText_CodePostale);
-
-        //Lancement de la recherche de collecte lorsqu'on a une position valide
-        butCarte = (Button) getView().findViewById(R.id.but_RechercheCentre);
-        butCarte.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
+        //Récupération la localisation
         locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
 
         locationListenerGPS = new LocationListener()
@@ -81,14 +73,6 @@ public class CarteFragment extends Fragment {
                 latitudeGPS = location.getLatitude();
                 longitudeGPS = location.getLongitude();
                 Log.d(tag, "onLocatedChanged Lat : " + latitudeGPS + " long : " + longitudeGPS);
-                getActivity().runOnUiThread(new Runnable()
-                {
-                    @Override
-                    public void run() {
-                        //On peut afficher ici les coordonnées en temps réel
-                        Log.d(tag, "run !");
-                    }
-                });
             }
 
             @Override
@@ -101,11 +85,72 @@ public class CarteFragment extends Fragment {
 
             @Override
             public void onProviderDisabled(String s) {
+                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivity(intent);
             }
         };
+
         toggleGPSUpdates();
+
+        return view;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState)
+    {
+        super.onActivityCreated(savedInstanceState);
+
+        //Récupération de la valeur du code postale
+        codePostale = (EditText) view.findViewById(R.id.editText_CodePostale);
+
+        //Lancement de la recherche de collecte lorsqu'on a une position valide
+        butCarte = (Button) getView().findViewById(R.id.but_RechercheCentre);
+        butCarte.setOnClickListener(new View.OnClickListener()
+                                    {
+            @Override
+            public void onClick(View v)
+            {
+                //En fonction du choix de l'utilisateur on envoie le code postal ou les coordonnées
+                if (sharePosition.isChecked()) {
+                    locationViewModel.setLongitude(longitudeGPS);
+                    locationViewModel.setLatitude(latitudeGPS);
+                }
+                else
+                {
+                    try {
+                        locationViewModel.setCodePostal(codePostale.getText().toString());
+                    } catch (ModelException e) {
+                        Toast.makeText(getActivity(), "Le code postal doit être égal a 4, veuillez réessayer !", Toast.LENGTH_SHORT).show();
+                        codePostale.setText("");
+                    }
+                    finally {
+                        BufferedReader reader = null;
+                        try {
+                            reader = new BufferedReader(new FileReader("../../../../../../../../fichiers/zipcodes_num_fr.xls"));
+                            String textLu;
+                            textLu = reader.readLine();
+                            while (textLu != null) {
+                                textLu = reader.readLine();
+                            }
+                        } catch (IOException e) {
+                            Toast.makeText(getActivity(), "Erreur lecture fichier !", Toast.LENGTH_SHORT).show();
+                        }
+                        finally {
+                            if (reader != null) {
+                                try {
+                                    reader.close();
+                                } catch (IOException e) {
+                                    Toast.makeText(getActivity(), "Erreur fermeture fichier !", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        );
+
         sharePosition = (Switch) getView().findViewById(R.id.switch_sharePosition);
-        //On s'assure une première fois qu'on a bien les permissions
 
         sharePosition.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,7 +158,7 @@ public class CarteFragment extends Fragment {
                 if (sharePosition.isChecked())
                 {
                     codePostale.setEnabled(false);
-
+                    toggleGPSUpdates();
                     Log.d(tag, "onClick Switch Latitude : " + latitudeGPS + " Longitude : " + longitudeGPS);
                 }
                 else
