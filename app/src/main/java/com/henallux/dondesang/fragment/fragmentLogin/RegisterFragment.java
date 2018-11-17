@@ -1,7 +1,5 @@
 package com.henallux.dondesang.fragment.fragmentLogin;
 
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.henallux.dondesang.R;
+import com.henallux.dondesang.UtilTest;
 
 public class RegisterFragment extends Fragment {
 
@@ -44,25 +43,30 @@ public class RegisterFragment extends Fragment {
     }
 
     public void verificationDonnees(TextView editLogin,TextView editPassword, TextView editPasswordRepeat){
-        verificationLogin(editLogin);
-
+        if(
+                verificationLogin(editLogin)
+                && verificationPaswword(editPassword)
+                && verificationPasswordRepeat(editPassword,editPasswordRepeat)
+                ){
+            Toast.makeText(getActivity(),"Envoie a la BD de l'inscription",Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(getActivity(),"Données invalides",Toast.LENGTH_SHORT).show();
+        }
 
     }
 
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    // Verifier sur le login est déja présent dans la bd ou non.
     public boolean verificationLogin(TextView editLogin){ // Fait juste une vérification de longeur
-        if(editLogin.getText().length() > 4){
-            if(false){ // TESTER SI LOGIN PRESENT DANS LA BD
-                return true;
-            }else{
-                editLogin.setError("Pseudo non disponible");
-                return false;
-            }
+        return UtilTest.verificationLoginLongeur(editLogin);
+    }
+    public boolean verificationPaswword(TextView editPassword){
+        return UtilTest.verificationPassword(editPassword);
+    }
+    public boolean verificationPasswordRepeat(TextView editPassword,TextView editPasswordRepeat){
+        if(editPassword.getText().toString().equals(editPasswordRepeat.getText().toString())){
+            return true;
         }
         else{
-            editLogin.setError("Doit être supérieur à 4 caractère");
+            editPasswordRepeat.setError("Le password n'est pas le même");
             return false;
         }
     }

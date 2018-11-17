@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.henallux.dondesang.R;
+import com.henallux.dondesang.UtilTest;
 
 public class LoginFragment extends Fragment {
 
@@ -40,6 +41,7 @@ public class LoginFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getActivity(),editUserName.getText().toString()+" "+editPassword.getText().toString(),Toast.LENGTH_SHORT).show();
+                verificationDonnees();
                 }
         });
         loginButtonMDPOublier.setOnClickListener(new View.OnClickListener() {
@@ -54,4 +56,16 @@ public class LoginFragment extends Fragment {
             }
         });
     }
+
+    public void verificationDonnees(){
+        verificationLogin();
+        verificationPassword();
+    }
+    public boolean verificationLogin(){
+        return UtilTest.verificationLoginLongeur(editUserName);
+    }
+    public boolean verificationPassword(){
+        return UtilTest.verificationPassword(editPassword);
+    }
+
 }
