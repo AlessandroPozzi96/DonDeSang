@@ -30,6 +30,6 @@ public class CarteFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         textView = (TextView) getView().findViewById(R.id.textView_localisation);
 
-        textView.setText(textView.getText().toString() + locationViewModel.getCodePostal());
+        textView.setText(textView.getText().toString() + locationViewModel.getLocation());
     }
 }

@@ -68,7 +68,8 @@ public class LocalisationFragment extends Fragment {
 
         locationListenerGPS = new LocationListener()
         {
-            public void onLocationChanged(Location location)
+            @Override
+            public void onLocationChanged(final Location location)
             {
                 latitudeGPS = location.getLatitude();
                 longitudeGPS = location.getLongitude();
@@ -103,53 +104,6 @@ public class LocalisationFragment extends Fragment {
         //Récupération de la valeur du code postale
         codePostale = (EditText) view.findViewById(R.id.editText_CodePostale);
 
-        //Lancement de la recherche de collecte lorsqu'on a une position valide
-        butCarte = (Button) getView().findViewById(R.id.but_RechercheCentre);
-        butCarte.setOnClickListener(new View.OnClickListener()
-                                    {
-            @Override
-            public void onClick(View v)
-            {
-                //En fonction du choix de l'utilisateur on envoie le code postal ou les coordonnées
-                if (sharePosition.isChecked()) {
-                    locationViewModel.setLongitude(longitudeGPS);
-                    locationViewModel.setLatitude(latitudeGPS);
-                }
-                else
-                {
-                    try {
-                        locationViewModel.setCodePostal(codePostale.getText().toString());
-                    } catch (ModelException e) {
-                        Toast.makeText(getActivity(), "Le code postal doit être égal a 4, veuillez réessayer !", Toast.LENGTH_SHORT).show();
-                        codePostale.setText("");
-                    }
-                    finally {
-                        BufferedReader reader = null;
-                        try {
-                            reader = new BufferedReader(new FileReader("../../../../../../../../fichiers/zipcodes_num_fr.xls"));
-                            String textLu;
-                            textLu = reader.readLine();
-                            while (textLu != null) {
-                                textLu = reader.readLine();
-                            }
-                        } catch (IOException e) {
-                            Toast.makeText(getActivity(), "Erreur lecture fichier !", Toast.LENGTH_SHORT).show();
-                        }
-                        finally {
-                            if (reader != null) {
-                                try {
-                                    reader.close();
-                                } catch (IOException e) {
-                                    Toast.makeText(getActivity(), "Erreur fermeture fichier !", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        );
-
         sharePosition = (Switch) getView().findViewById(R.id.switch_sharePosition);
 
         sharePosition.setOnClickListener(new View.OnClickListener() {
@@ -158,8 +112,9 @@ public class LocalisationFragment extends Fragment {
                 if (sharePosition.isChecked())
                 {
                     codePostale.setEnabled(false);
-                    toggleGPSUpdates();
+                    Toast.makeText(getActivity(), "onClick Switch Latitude : " + latitudeGPS + " Longitude : " + longitudeGPS, Toast.LENGTH_SHORT).show();
                     Log.d(tag, "onClick Switch Latitude : " + latitudeGPS + " Longitude : " + longitudeGPS);
+
                 }
                 else
                     {
@@ -168,6 +123,36 @@ public class LocalisationFragment extends Fragment {
                 }
             }
         });
+
+        //Lancement de la recherche de collecte lorsqu'on a une position valide
+        butCarte = (Button) getView().findViewById(R.id.but_RechercheCentre);
+        butCarte.setOnClickListener(new View.OnClickListener()
+                                    {
+    @Override
+    public void onClick(View v)
+    {
+        //En fonction du choix de l'utilisateur on envoie le code postal ou les coordonnées
+        if (sharePosition.isChecked()) {
+            locationViewModel.setLocation(new com.henallux.dondesang.model.Location(longitudeGPS, latitudeGPS));
+
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            transaction.replace(R.id.fragment_container,new CarteFragment(),"replaceFragmentByCarteFragment");
+            transaction.commit();
+        }
+        else
+        {
+            try
+            {
+                locationViewModel.setCodePostal(codePostale.getText().toString());
+            } catch (ModelException e)
+            {
+                Toast.makeText(getActivity(), "Le code postal doit être égal a 4, veuillez réessayer !", Toast.LENGTH_SHORT).show();
+                codePostale.setText("");
+            }
+        }
+    }
+}
+        );
 
     }
 
@@ -234,8 +219,8 @@ public class LocalisationFragment extends Fragment {
 
     @SuppressLint("MissingPermission")
     public void locationGPS() {
-
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 60 * 1000, 10, locationListenerGPS);
+        //la position est directement mise à jour en mettant des petites valeurs
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 5000, locationListenerGPS);
 
         Log.d(tag, "GPS provider started running");
     }
