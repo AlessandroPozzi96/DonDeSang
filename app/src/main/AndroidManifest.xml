@@ -28,9 +28,6 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <activity android:name=".activity.CarteActivity"></activity>
-        
-        <service android:name=".service.GPS_Service" />
     </application>
 
 </manifest>
