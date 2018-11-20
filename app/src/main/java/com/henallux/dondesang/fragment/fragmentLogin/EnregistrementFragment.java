@@ -1,15 +1,18 @@
 package com.henallux.dondesang.fragment.fragmentLogin;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.henallux.dondesang.R;
 
@@ -50,6 +53,9 @@ public class EnregistrementFragment extends Fragment {
                 transaction.commit();
             }
         });
+
+
+
 
         /*LoginFragment loginFragment = new LoginFragment();
         FragmentTransaction transaction = fragmentManager.beginTransaction();

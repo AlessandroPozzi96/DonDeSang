@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:layout_editor_absoluteY="25dp">
+
+    <TextView
+        android:id="@+id/mDPOublieTextMDPOublie"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="26dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginBottom="20dp"
+        android:text="Mot de passe oublié"
+        android:textColor="#81D4FA"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/mDPOublieEditEmail"
+        app:layout_constraintStart_toStartOf="@+id/mDPOublieEditEmail"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <EditText
+        android:id="@+id/mDPOublieEditEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginEnd="39dp"
+        android:layout_marginBottom="17dp"
+        android:background="@drawable/login_edit"
+        android:drawableLeft="@drawable/img_email"
+        android:ems="10"
+        android:hint="Email"
+        android:inputType="textWebEmailAddress"
+        android:padding="8dp"
+        android:textColor="#8bc34a"
+        android:textColorHint="#CFD8DC"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/mDPOublieButtonReinitialiserMDP"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mDPOublieTextMDPOublie" />
+
+    <Button
+        android:id="@+id/mDPOublieButtonReinitialiserMDP"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginStart="26dp"
+        android:text="Réinitialiser mot de passe"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/mDPOublieEditEmail"
+        app:layout_constraintTop_toBottomOf="@+id/mDPOublieEditEmail" />
+
+
+</android.support.constraint.ConstraintLayout>
