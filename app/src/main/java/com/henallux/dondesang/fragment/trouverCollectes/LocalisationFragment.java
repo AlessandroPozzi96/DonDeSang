@@ -86,9 +86,8 @@ public class LocalisationFragment extends Fragment {
 
             @Override
             public void onProviderDisabled(String s) {
-                /*Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                 startActivity(intent);
-                */
             }
         };
 
@@ -232,6 +231,6 @@ public class LocalisationFragment extends Fragment {
         longitudeGPS = lastLocation.getLongitude();
         latitudeGPS = lastLocation.getLatitude();
 
-        Log.d(tag, "GPS provider started running");
+        Log.d(tag, "Network provider started running");
     }
 }
