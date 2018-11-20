@@ -86,12 +86,14 @@ public class LocalisationFragment extends Fragment {
 
             @Override
             public void onProviderDisabled(String s) {
-                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                /*Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                 startActivity(intent);
+                */
             }
         };
 
         toggleGPSUpdates();
+        //locationManager.removeUpdates(locationListenerGPS);
 
         return view;
     }
@@ -119,7 +121,6 @@ public class LocalisationFragment extends Fragment {
                 else
                     {
                     codePostale.setEnabled(true);
-                    locationManager.removeUpdates(locationListenerGPS);
                 }
             }
         });
@@ -183,8 +184,7 @@ public class LocalisationFragment extends Fragment {
     }
 
     private boolean isLocationEnabled() {
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) &&
-                locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        return locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
     }
 
     public void toggleGPSUpdates() {
@@ -192,11 +192,10 @@ public class LocalisationFragment extends Fragment {
             return;
 
         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) !=
-                PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) !=
                 PackageManager.PERMISSION_GRANTED)
         {
-            String tabPermission[] = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
-            ActivityCompat.requestPermissions(getActivity(), tabPermission, PERMISSION_LOCATION_GPS);
+            String tabPermission[] = {Manifest.permission.ACCESS_FINE_LOCATION};
+            ActivityCompat.requestPermissions(getActivity(), tabPermission, 1);
         }
         else
         {
@@ -207,20 +206,31 @@ public class LocalisationFragment extends Fragment {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case PERMISSION_LOCATION_GPS: {
-                if (grantResults.length != 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                {
-                    locationGPS();
-                }
+        if(hasAllPermissionsGranted(grantResults)){
+            locationGPS();
+        }else {
+            // some permission are denied.
+            showAlert();
+            Log.d(tag, "Une ou plusieurs permission are denied");
+        }
+    }
+
+    public boolean hasAllPermissionsGranted(@NonNull int[] grantResults) {
+        for (int grantResult : grantResults) {
+            if (grantResult == PackageManager.PERMISSION_DENIED) {
+                return false;
             }
         }
+        return true;
     }
 
     @SuppressLint("MissingPermission")
     public void locationGPS() {
         //la position est directement mise à jour en mettant des petites valeurs
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 5000, locationListenerGPS);
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListenerGPS);
+        Location lastLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        longitudeGPS = lastLocation.getLongitude();
+        latitudeGPS = lastLocation.getLatitude();
 
         Log.d(tag, "GPS provider started running");
     }
