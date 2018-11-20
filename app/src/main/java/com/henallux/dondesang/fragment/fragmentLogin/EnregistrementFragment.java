@@ -51,10 +51,10 @@ public class EnregistrementFragment extends Fragment {
             }
         });
 
-        LoginFragment loginFragment = new LoginFragment();
+        /*LoginFragment loginFragment = new LoginFragment();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.add(R.id.enregistrement_container,loginFragment,"loginFragment");
-        transaction.commit();
+        transaction.commit();*/
     }
 
 

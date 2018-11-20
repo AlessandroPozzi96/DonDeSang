@@ -10,13 +10,16 @@
         android:id="@+id/loginTextconnexion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="31dp"
         android:text="@string/connexion"
         android:textColor="#81D4FA"
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/loginEditUserName"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
 
     <EditText
         android:id="@+id/loginEditUserName"
@@ -24,8 +27,9 @@
         android:layout_height="wrap_content"
 
         android:layout_marginStart="8dp"
-        android:layout_marginTop="222dp"
+        android:layout_marginTop="165dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         android:background="@drawable/login_edit"
         android:drawableLeft="@drawable/img_profil"
         android:ems="10"
@@ -35,9 +39,11 @@
         android:textColor="#8bc34a"
         android:textColorHint="#CFD8DC"
         android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
     <EditText
         android:id="@+id/loginEditPassword"
@@ -45,8 +51,9 @@
         android:layout_height="wrap_content"
 
         android:layout_marginStart="8dp"
-        android:layout_marginTop="14dp"
+        android:layout_marginTop="15dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         android:background="@drawable/login_edit"
         android:drawableLeft="@drawable/img_lock"
         android:ems="10"
@@ -56,9 +63,11 @@
         android:textColor="#8bc34a"
         android:textColorHint="#CFD8DC"
         android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loginEditUserName" />
+        app:layout_constraintTop_toBottomOf="@+id/loginEditUserName"
+        app:layout_constraintVertical_bias="0.0" />
 
 
     <Button
@@ -66,10 +75,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
-        android:layout_marginTop="14dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp"
         android:text="@string/buttonSeConnecter"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/loginButtonMDPOublier"
-        app:layout_constraintTop_toBottomOf="@+id/loginEditPassword" />
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/loginEditPassword"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/loginButtonMDPOublier"

@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.henallux.dondesang.R;
-import com.henallux.dondesang.UtilTest;
+import com.henallux.dondesang.Util;
 
 public class LoginFragment extends Fragment {
 
@@ -40,8 +39,12 @@ public class LoginFragment extends Fragment {
         buttonSeConnecter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(),editUserName.getText().toString()+" "+editPassword.getText().toString(),Toast.LENGTH_SHORT).show();
-                verificationDonnees();
+
+                if(verificationDonnees()){
+                    Toast.makeText(getActivity(),"Faire la connection a " +editUserName.getText().toString()+" "+editPassword.getText().toString(),Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(getActivity(),"Mauvais info",Toast.LENGTH_SHORT).show();
+                }
                 }
         });
         loginButtonMDPOublier.setOnClickListener(new View.OnClickListener() {
@@ -57,15 +60,20 @@ public class LoginFragment extends Fragment {
         });
     }
 
-    public void verificationDonnees(){
-        verificationLogin();
-        verificationPassword();
+    public boolean verificationDonnees(){
+        // return (verificationLogin() && verificationPassword()); Exécute pas les 2 sinons
+        boolean loginOk = verificationLogin();
+        boolean passwordOk = verificationPassword();
+        return loginOk && passwordOk;
     }
     public boolean verificationLogin(){
-        return UtilTest.verificationLoginLongeur(editUserName);
+        if(Util.verificationLoginLongeur(editUserName)){
+            return Util.verificationLoginDisponible(editUserName);
+        }else{
+            return false;
+        }
     }
     public boolean verificationPassword(){
-        return UtilTest.verificationPassword(editPassword);
+        return Util.verificationPassword(editPassword);
     }
-
 }

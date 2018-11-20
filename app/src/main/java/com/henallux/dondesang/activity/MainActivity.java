@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.henallux.dondesang.fragment.fragmentLogin.LoginFragment;
 import com.henallux.dondesang.fragment.trouverCollectes.LocalisationFragment;
 import com.henallux.dondesang.fragment.fragmentLogin.EnregistrementFragment;
 import com.henallux.dondesang.fragment.FavoriteFragment;
@@ -43,7 +44,12 @@ public class MainActivity extends AppCompatActivity {
 
                     switch (item.getItemId()) {
                         case R.id.nav_profile:
-                            selectedFragment = new EnregistrementFragment();
+                            if(true) {    // SI pas connecter
+                                selectedFragment = new EnregistrementFragment();
+                            }else{   // Si connecter : afficher le profil
+                                selectedFragment = new LoginFragment();
+                            }
+
                             break;
                         case R.id.nav_chat:
                             selectedFragment = new LocalisationFragment();

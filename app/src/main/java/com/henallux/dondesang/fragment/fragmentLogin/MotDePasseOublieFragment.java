@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.henallux.dondesang.R;
+import com.henallux.dondesang.Util;
 
 public class MotDePasseOublieFragment extends Fragment {
 
@@ -33,7 +34,11 @@ public class MotDePasseOublieFragment extends Fragment {
         buttonMotDePasseOublie.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(),"Envoyer un mail a "+email.getText().toString(),Toast.LENGTH_SHORT).show();
+                if(Util.verificationEmail(email.getText().toString()) && Util.verificationEmailDansBD(email.getText().toString())) {  // TEST SUR LE MAIL --> regex OU voir dans la BD s'il existe
+                    Toast.makeText(getActivity(), "Envoyer un mail a " + email.getText().toString(), Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(getActivity(),"mauvais mail",Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
