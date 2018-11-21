@@ -21,15 +21,23 @@ public class CarteFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view =  inflater.inflate(R.layout.fragment_carte, container, false);
         locationViewModel = ViewModelProviders.of(getActivity()).get(LocationViewModel.class);
-        return inflater.inflate(R.layout.fragment_carte, container, false);
+        textView = (TextView) view.findViewById(R.id.textView_localisation);
+
+        if (locationViewModel.isUtiliseCodePostal()) {
+            textView.setText("Code postal : " + locationViewModel.getCodePostal() + " \n pour cette localite : " + locationViewModel.getLocalite());
+        }
+        else
+        {
+            textView.setText(locationViewModel.getLocation().toString());
+        }
+
+        return view;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        textView = (TextView) getView().findViewById(R.id.textView_localisation);
-
-        textView.setText(textView.getText().toString() + locationViewModel.getLocation());
     }
 }

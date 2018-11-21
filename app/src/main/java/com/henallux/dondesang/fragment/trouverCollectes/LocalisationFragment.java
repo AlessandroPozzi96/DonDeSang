@@ -2,7 +2,6 @@ package com.henallux.dondesang.fragment.trouverCollectes;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -32,28 +31,23 @@ import android.widget.Toast;
 
 import com.henallux.dondesang.R;
 import com.henallux.dondesang.exception.ModelException;
-import com.henallux.dondesang.fragment.fragmentLogin.RegisterFragment;
-import com.henallux.dondesang.model.Application;
 import com.henallux.dondesang.model.LocationViewModel;
-
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import com.henallux.dondesang.task.LoadLocalitiesAsyncTask;
 
 
 public class LocalisationFragment extends Fragment {
     private View view;
     private Button butCarte;
-    private Application applicationObject;
     private EditText codePostale;
     private Switch sharePosition;
     private final int PERMISSION_LOCATION_GPS = 2;
     private LocationManager locationManager;
     private LocationListener locationListenerGPS;
     double longitudeGPS, latitudeGPS;
-    private String tag = "LocationOnePlusOne";
+    private String tag = "LOCATION_FRAGMENT";
     private FragmentManager fragmentManager;
     private LocationViewModel locationViewModel;
+    private LoadLocalitiesAsyncTask loadLocalitiesAsyncTask;
 
     @Nullable
     @Override
@@ -134,6 +128,7 @@ public class LocalisationFragment extends Fragment {
         //En fonction du choix de l'utilisateur on envoie le code postal ou les coordonnées
         if (sharePosition.isChecked()) {
             locationViewModel.setLocation(new com.henallux.dondesang.model.Location(longitudeGPS, latitudeGPS));
+            ((LocationViewModel) locationViewModel).setUtiliseCodePostal(false);
 
             FragmentTransaction transaction = fragmentManager.beginTransaction();
             transaction.replace(R.id.fragment_container,new CarteFragment(),"replaceFragmentByCarteFragment");
@@ -141,13 +136,23 @@ public class LocalisationFragment extends Fragment {
         }
         else
         {
+            ((LocationViewModel) locationViewModel).setUtiliseCodePostal(true);
+            if (codePostale.getText().toString().length() != 4) {
+                Toast.makeText(getActivity(), "Le code postal doit être égal a 4, veuillez réessayer !", Toast.LENGTH_SHORT).show();
+                codePostale.setText("");
+                return;
+            }
             try
             {
                 locationViewModel.setCodePostal(codePostale.getText().toString());
             } catch (ModelException e)
             {
-                Toast.makeText(getActivity(), "Le code postal doit être égal a 4, veuillez réessayer !", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Impossible de récupérer le code postale !", Toast.LENGTH_SHORT).show();
                 codePostale.setText("");
+            }
+            finally {
+                loadLocalitiesAsyncTask = new LoadLocalitiesAsyncTask(fragmentManager);
+                loadLocalitiesAsyncTask.execute(codePostale.getText().toString());
             }
         }
     }
@@ -232,5 +237,13 @@ public class LocalisationFragment extends Fragment {
         latitudeGPS = lastLocation.getLatitude();
 
         Log.d(tag, "Network provider started running");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (loadLocalitiesAsyncTask != null) {
+            loadLocalitiesAsyncTask.cancel(true);
+        }
     }
 }

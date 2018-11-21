@@ -9,6 +9,9 @@ public class LocationViewModel extends ViewModel {
 
     private String codePostal;
     private Location location;
+    //Surement un type model Localite à l'avenir
+    private String localite;
+    private boolean utiliseCodePostal;
 
     public String getCodePostal() {
         return codePostal;
@@ -28,5 +31,21 @@ public class LocationViewModel extends ViewModel {
 
     public void setLocation(Location location) {
         this.location = location;
+    }
+
+    public String getLocalite() {
+        return localite;
+    }
+
+    public void setLocalite(String localite) {
+        this.localite = localite;
+    }
+
+    public boolean isUtiliseCodePostal() {
+        return utiliseCodePostal;
+    }
+
+    public void setUtiliseCodePostal(boolean utiliseCodePostal) {
+        this.utiliseCodePostal = utiliseCodePostal;
     }
 }
