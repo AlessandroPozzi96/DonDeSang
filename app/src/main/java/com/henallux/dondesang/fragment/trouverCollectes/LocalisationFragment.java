@@ -139,7 +139,6 @@ public class LocalisationFragment extends Fragment {
             ((LocationViewModel) locationViewModel).setUtiliseCodePostal(true);
             if (codePostale.getText().toString().length() != 4) {
                 Toast.makeText(getActivity(), "Le code postal doit être égal a 4, veuillez réessayer !", Toast.LENGTH_SHORT).show();
-                codePostale.setText("");
                 return;
             }
             try
