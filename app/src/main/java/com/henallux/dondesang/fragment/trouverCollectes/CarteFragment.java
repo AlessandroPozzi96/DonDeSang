@@ -78,6 +78,7 @@ public class CarteFragment extends Fragment implements OnMapReadyCallback {
                     .tilt(45)
                     .build();
         }
+
         googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(userPosition));
     }
 }
