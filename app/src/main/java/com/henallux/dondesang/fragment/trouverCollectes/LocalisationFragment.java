@@ -2,6 +2,7 @@ package com.henallux.dondesang.fragment.trouverCollectes;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -150,7 +151,7 @@ public class LocalisationFragment extends Fragment {
                 codePostale.setText("");
             }
             finally {
-                loadLocalitiesAsyncTask = new LoadLocalitiesAsyncTask(fragmentManager);
+                loadLocalitiesAsyncTask = new LoadLocalitiesAsyncTask(fragmentManager, getActivity());
                 loadLocalitiesAsyncTask.execute(codePostale.getText().toString());
             }
         }

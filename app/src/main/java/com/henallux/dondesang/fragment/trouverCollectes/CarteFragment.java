@@ -54,30 +54,29 @@ public class CarteFragment extends Fragment implements OnMapReadyCallback {
         MapsInitializer.initialize(getContext());
         mGoogleMap = googleMap;
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        //Normalement on va devoir boucler sur toutes les coordonnées reçu pour créer tous les markers
         googleMap
                 .addMarker(new MarkerOptions()
                         .position(new LatLng(50.200323, 4.897113))
                         .title("Collecte de Falmagne")
-                        .snippet("Horaires de cette collecte : \n Lundi : 10H00-15H00 \n Mardi ..."));
-        CameraPosition userPosition;
+                        .snippet("Horaires de cette collecte : Lundi : 10H00-15H00 Mardi ..."));
+        //Ici on définit la position de l'utilisateur, obtenue soit via le GPS soit via le code postal
+        LatLng userLtLng;
         if (locationViewModel.isUtiliseCodePostal()) {
             //Normalement l'API nous retourne le nom de la localité + ses coordonnées
-            userPosition = CameraPosition
-                    .builder()
-                    .target(new LatLng(50.200310, 4.897140))
-                    .zoom(15)
-                    .tilt(50)
-                    .build();
+            userLtLng = new LatLng(locationViewModel.getLocalite().getLocation().getLatitude(), locationViewModel.getLocalite().getLocation().getLongitude());
         }
         else
         {
-            userPosition = CameraPosition
-                    .builder()
-                    .target(new LatLng(locationViewModel.getLocation().getLatitude(), locationViewModel.getLocation().getLongitude()))
-                    .zoom(15)
-                    .tilt(45)
-                    .build();
+            //Position déterminée dans le fragment LocalisationFragment
+            userLtLng = new LatLng(locationViewModel.getLocation().getLatitude(), locationViewModel.getLocation().getLongitude());
         }
+        CameraPosition userPosition = CameraPosition
+                .builder()
+                .target(userLtLng)
+                .zoom(11)
+                .tilt(35)
+                .build();
 
         googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(userPosition));
     }
