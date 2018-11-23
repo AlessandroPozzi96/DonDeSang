@@ -30,7 +30,9 @@ import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import com.henallux.dondesang.Constants;
 import com.henallux.dondesang.R;
+import com.henallux.dondesang.Util;
 import com.henallux.dondesang.exception.ModelException;
 import com.henallux.dondesang.model.LocationViewModel;
 import com.henallux.dondesang.task.LoadLocalitiesAsyncTask;
@@ -41,7 +43,6 @@ public class LocalisationFragment extends Fragment {
     private Button butCarte;
     private EditText codePostale;
     private Switch sharePosition;
-    private final int PERMISSION_LOCATION_GPS = 2;
     private LocationManager locationManager;
     private LocationListener locationListenerGPS;
     double longitudeGPS, latitudeGPS;
@@ -50,16 +51,15 @@ public class LocalisationFragment extends Fragment {
     private LocationViewModel locationViewModel;
     private LoadLocalitiesAsyncTask loadLocalitiesAsyncTask;
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_localisation, container, false);
-        locationViewModel = ViewModelProviders.of(getActivity()).get(LocationViewModel.class);
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
         fragmentManager = getFragmentManager();
 
         //Récupération la localisation
         locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        //On initialise la variable au cas ou
 
         locationListenerGPS = new LocationListener()
         {
@@ -81,84 +81,89 @@ public class LocalisationFragment extends Fragment {
 
             @Override
             public void onProviderDisabled(String s) {
-                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                /*Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                 startActivity(intent);
+                */
             }
         };
-
-        toggleGPSUpdates();
-        //locationManager.removeUpdates(locationListenerGPS);
-
-        return view;
     }
 
+    @Nullable
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState)
-    {
-        super.onActivityCreated(savedInstanceState);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        view = inflater.inflate(R.layout.fragment_localisation, container, false);
+        locationViewModel = ViewModelProviders.of(getActivity()).get(LocationViewModel.class);
 
         //Récupération de la valeur du code postale
         codePostale = (EditText) view.findViewById(R.id.editText_CodePostale);
 
-        sharePosition = (Switch) getView().findViewById(R.id.switch_sharePosition);
+        sharePosition = (Switch) view.findViewById(R.id.switch_sharePosition);
 
         sharePosition.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (sharePosition.isChecked())
                 {
+                    toggleGPSUpdates();
                     codePostale.setEnabled(false);
                     Toast.makeText(getActivity(), "onClick Switch Latitude : " + latitudeGPS + " Longitude : " + longitudeGPS, Toast.LENGTH_SHORT).show();
                     Log.d(tag, "onClick Switch Latitude : " + latitudeGPS + " Longitude : " + longitudeGPS);
 
                 }
                 else
-                    {
+                {
                     codePostale.setEnabled(true);
+                    //locationManager.removeUpdates(locationListenerGPS);
                 }
             }
         });
 
         //Lancement de la recherche de collecte lorsqu'on a une position valide
-        butCarte = (Button) getView().findViewById(R.id.but_RechercheCentre);
+        butCarte = (Button) view.findViewById(R.id.but_RechercheCentre);
         butCarte.setOnClickListener(new View.OnClickListener()
-                                    {
-    @Override
-    public void onClick(View v)
-    {
-        //En fonction du choix de l'utilisateur on envoie le code postal ou les coordonnées
-        if (sharePosition.isChecked()) {
-            locationViewModel.setLocation(new com.henallux.dondesang.model.Location(longitudeGPS, latitudeGPS));
-            ((LocationViewModel) locationViewModel).setUtiliseCodePostal(false);
-
-            FragmentTransaction transaction = fragmentManager.beginTransaction();
-            transaction.replace(R.id.fragment_container,new CarteFragment(),"replaceFragmentByCarteFragment");
-            transaction.commit();
-        }
-        else
         {
-            ((LocationViewModel) locationViewModel).setUtiliseCodePostal(true);
-            if (codePostale.getText().toString().length() != 4) {
-                Toast.makeText(getActivity(), "Le code postal doit être égal a 4, veuillez réessayer !", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            try
+            @Override
+            public void onClick(View v)
+
             {
-                locationViewModel.setCodePostal(codePostale.getText().toString());
-            } catch (ModelException e)
-            {
-                Toast.makeText(getActivity(), "Impossible de récupérer le code postale !", Toast.LENGTH_SHORT).show();
-                codePostale.setText("");
+            //En fonction du choix de l'utilisateur on envoie le code postal ou les coordonnées
+            if (sharePosition.isChecked()) {
+                locationViewModel.setLocation(new com.henallux.dondesang.model.Location(longitudeGPS, latitudeGPS));
+                ((LocationViewModel) locationViewModel).setUtiliseCodePostal(false);
+
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.replace(R.id.fragment_container,new CarteFragment(),"replaceFragmentByCarteFragment");
+                transaction.commit();
             }
-            finally {
-                loadLocalitiesAsyncTask = new LoadLocalitiesAsyncTask(fragmentManager, getActivity());
-                loadLocalitiesAsyncTask.execute(codePostale.getText().toString());
+            else
+            {
+                ((LocationViewModel) locationViewModel).setUtiliseCodePostal(true);
+                if (Util.verificationCodePostal(codePostale)) {
+                    try
+                    {
+                        locationViewModel.setCodePostal(codePostale.getText().toString());
+                    } catch (ModelException e)
+                    {
+                        Toast.makeText(getActivity(), "Impossible de récupérer le code postale !", Toast.LENGTH_SHORT).show();
+                        codePostale.setText("");
+                    }
+                    finally {
+                        loadLocalitiesAsyncTask = new LoadLocalitiesAsyncTask(fragmentManager, getActivity());
+                        loadLocalitiesAsyncTask.execute(codePostale.getText().toString());
+                    }
+                }
             }
         }
     }
-}
         );
 
+        return view;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        //Sauvegarder ici les données au cas ou l'utilisateur quitte subitement le fragement
     }
 
     private boolean checkLocation() {
@@ -169,19 +174,20 @@ public class LocalisationFragment extends Fragment {
 
     private void showAlert() {
         final AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
-        dialog.setTitle("Enable Location")
-                .setMessage("Your Locations Settings is set to 'Off'.\nPlease Enable Location to " +
-                        "use this app")
-                .setPositiveButton("Location Settings", new DialogInterface.OnClickListener() {
+        dialog.setTitle("Activer la localisation")
+                .setMessage("Activer les services de localisation 'Haute précision' ou 'Economie d\'énergie' pour utiliser cette application \n (Le GPS seul ne suffit pas)")
+                .setPositiveButton("Paramètre de localisation", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface paramDialogInterface, int paramInt) {
                         Intent myIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                         startActivity(myIntent);
+                        sharePosition.setChecked(false);
                     }
                 })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                .setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                        sharePosition.setChecked(false);
                     }
                 });
         dialog.show();
@@ -199,7 +205,7 @@ public class LocalisationFragment extends Fragment {
                 PackageManager.PERMISSION_GRANTED)
         {
             String tabPermission[] = {Manifest.permission.ACCESS_FINE_LOCATION};
-            ActivityCompat.requestPermissions(getActivity(), tabPermission, 1);
+            ActivityCompat.requestPermissions(getActivity(), tabPermission, Constants.PERMISSION_LOCATION_NETWORK);
         }
         else
         {
@@ -210,12 +216,12 @@ public class LocalisationFragment extends Fragment {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if(hasAllPermissionsGranted(grantResults)){
-            locationGPS();
-        }else {
-            // some permission are denied.
-            showAlert();
-            Log.d(tag, "Une ou plusieurs permission are denied");
+        switch (requestCode) {
+            case Constants.PERMISSION_LOCATION_NETWORK: {
+                if (hasAllPermissionsGranted(grantResults)) {
+                    locationGPS();
+                }
+            }
         }
     }
 
@@ -230,11 +236,21 @@ public class LocalisationFragment extends Fragment {
 
     @SuppressLint("MissingPermission")
     public void locationGPS() {
-        //la position est directement mise à jour en mettant des petites valeurs
+        //Même en mettant des valeurs nulles, la position prends de 1 à 2 secondes pour être récupéré
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListenerGPS);
+
+        //On s'assure donc de récupéré directement la position la plus récente afin de ne pas faire planter l'appli
         Location lastLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-        longitudeGPS = lastLocation.getLongitude();
-        latitudeGPS = lastLocation.getLatitude();
+        if (lastLocation != null) {
+            longitudeGPS = lastLocation.getLongitude();
+            latitudeGPS = lastLocation.getLatitude();
+        }
+        else
+        {
+            //Si le téléphone ne récupère pas les coordonnées à temps on mets la position de la Belgique (Solution temporaire !)
+            longitudeGPS = 4.469936;
+            latitudeGPS = 50.503887;
+        }
 
         Log.d(tag, "Network provider started running");
     }
