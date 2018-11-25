@@ -9,14 +9,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.henallux.dondesang.fragment.FaqFragment;
 import com.henallux.dondesang.fragment.fragmentLogin.LoginFragment;
 import com.henallux.dondesang.fragment.trouverCollectes.LocalisationFragment;
 import com.henallux.dondesang.fragment.fragmentLogin.EnregistrementFragment;
 import com.henallux.dondesang.fragment.FavoriteFragment;
 import com.henallux.dondesang.fragment.GroupFragment;
-import com.henallux.dondesang.fragment.MessageFragment;
 import com.henallux.dondesang.R;
-import com.henallux.dondesang.model.LocationViewModel;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -51,14 +50,14 @@ public class MainActivity extends AppCompatActivity {
                             }
 
                             break;
-                        case R.id.nav_chat:
+                        case R.id.nav_map:
                             selectedFragment = new LocalisationFragment();
                             break;
                         case R.id.nav_group:
                             selectedFragment = new GroupFragment();
                             break;
-                        case R.id.nav_message:
-                            selectedFragment = new MessageFragment();
+                        case R.id.nav_faq:
+                            selectedFragment = new FaqFragment();
                             break;
                         case R.id.nav_favorite:
                             selectedFragment = new FavoriteFragment();
