@@ -59,7 +59,6 @@ public class LocalisationFragment extends Fragment {
 
         //Récupération la localisation
         locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-        //On initialise la variable au cas ou
 
         locationListenerGPS = new LocationListener()
         {
@@ -168,7 +167,10 @@ public class LocalisationFragment extends Fragment {
 
     private boolean checkLocation() {
         if (!isLocationEnabled())
+        {
             showAlert();
+            sharePosition.setChecked(false);
+        }
         return isLocationEnabled();
     }
 
@@ -194,6 +196,7 @@ public class LocalisationFragment extends Fragment {
     }
 
     private boolean isLocationEnabled() {
+
         return locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
     }
 
@@ -205,7 +208,8 @@ public class LocalisationFragment extends Fragment {
                 PackageManager.PERMISSION_GRANTED)
         {
             String tabPermission[] = {Manifest.permission.ACCESS_FINE_LOCATION};
-            ActivityCompat.requestPermissions(getActivity(), tabPermission, Constants.PERMISSION_LOCATION_NETWORK);
+            ActivityCompat.requestPermissions(getActivity(), tabPermission, Constants.PERMISSION_LOCATION);
+            sharePosition.setChecked(false);
         }
         else
         {
@@ -217,9 +221,13 @@ public class LocalisationFragment extends Fragment {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
-            case Constants.PERMISSION_LOCATION_NETWORK: {
+            case Constants.PERMISSION_LOCATION: {
                 if (hasAllPermissionsGranted(grantResults)) {
                     locationGPS();
+                }
+                else
+                {
+                    sharePosition.setChecked(false);
                 }
             }
         }
@@ -247,9 +255,7 @@ public class LocalisationFragment extends Fragment {
         }
         else
         {
-            //Si le téléphone ne récupère pas les coordonnées à temps on mets la position de la Belgique (Solution temporaire !)
-            longitudeGPS = 4.469936;
-            latitudeGPS = 50.503887;
+            sharePosition.setChecked(false);
         }
 
         Log.d(tag, "Network provider started running");
