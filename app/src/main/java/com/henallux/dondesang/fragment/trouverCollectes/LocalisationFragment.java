@@ -104,7 +104,6 @@ public class LocalisationFragment extends Fragment {
                 if (sharePosition.isChecked())
                 {
                     clientAddress.setEnabled(false);
-                    Toast.makeText(getActivity(), "onClick Switch Latitude : " + latitudeGPS + " Longitude : " + longitudeGPS, Toast.LENGTH_SHORT).show();
                     Log.d(tag, "onClick Switch Latitude : " + latitudeGPS + " Longitude : " + longitudeGPS);
 
                 }
