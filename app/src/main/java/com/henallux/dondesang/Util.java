@@ -54,4 +54,14 @@ public class Util {
     public static boolean verificationEmailDansBD(String email){
         return false; // VERIF SUR EMAIL DANS BD
     }
+
+    public static boolean verificationCodePostal(TextView codePostal){
+        if(codePostal.getText().length() == 4){
+            return true;
+        }
+        else{
+            codePostal.setError("Le code postal doit être égal à 4");
+            return false;
+        }
+    }
 }
