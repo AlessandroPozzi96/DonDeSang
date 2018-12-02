@@ -1,6 +1,5 @@
 package com.henallux.dondesang.fragment.trouverCollectes;
 
-import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProviders;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -66,11 +65,13 @@ public class CarteFragment extends Fragment implements OnMapReadyCallback {
                         .title("Collecte de Falmagne")
                         .snippet("Horaires de cette collecte : \n Lundi : 10H00-15H00 \n Mardi 13H00-17H00 \n Mercredi 8H00-12H00")
                         );
+
         MarkerOptions collecteDeNamur = new MarkerOptions()
                 .position(new LatLng(50.464920, 4.865060))
                 .title("Collecte de Namur")
                 .snippet("Horaires de cette collecte : \n Lundi : 10H00-15H00 \n Mardi 13H00-17H00 \n Mercredi 8H00-12H00");
         googleMap.addMarker(collecteDeNamur);
+
         googleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
             @Override
             public View getInfoWindow(Marker marker) {
@@ -102,14 +103,14 @@ public class CarteFragment extends Fragment implements OnMapReadyCallback {
 
         //Ici on définit la position de l'utilisateur, obtenue soit via le GPS soit via le code postal
         LatLng userLtLng;
-        if (locationViewModel.isUtiliseCodePostal()) {
+        if (locationViewModel.isUtiliseAddresse()) {
             //Normalement l'API nous retourne le nom de la localité + ses coordonnées
-            userLtLng = new LatLng(locationViewModel.getLocalite().getLocation().getLatitude(), locationViewModel.getLocalite().getLocation().getLongitude());
+            userLtLng = new LatLng(locationViewModel.getAddress().getLatitude(), locationViewModel.getAddress().getLongitude());
         }
         else
         {
             //Position déterminée dans le fragment LocalisationFragment
-            userLtLng = new LatLng(locationViewModel.getLocation().getLatitude(), locationViewModel.getLocation().getLongitude());
+            userLtLng = new LatLng(locationViewModel.getLocation().latitude, locationViewModel.getLocation().longitude);
         }
         CameraPosition userPosition = CameraPosition
                 .builder()
