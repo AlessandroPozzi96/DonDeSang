@@ -56,11 +56,11 @@ public class Util {
     }
 
     public static boolean verificationCodePostal(TextView codePostal){
-        if(codePostal.getText().length() == 4){
+        if(codePostal.getText().length() > 1){
             return true;
         }
         else{
-            codePostal.setError("Le code postal doit être égal à 4");
+            codePostal.setError("L'addresse ne peut être vide !");
             return false;
         }
     }

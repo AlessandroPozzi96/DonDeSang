@@ -2,7 +2,6 @@ package com.henallux.dondesang.fragment.trouverCollectes;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -30,18 +29,18 @@ import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.henallux.dondesang.Constants;
 import com.henallux.dondesang.R;
 import com.henallux.dondesang.Util;
-import com.henallux.dondesang.exception.ModelException;
 import com.henallux.dondesang.model.LocationViewModel;
-import com.henallux.dondesang.task.LoadLocalitiesAsyncTask;
+import com.henallux.dondesang.task.LoadAddressesAsyncTask;
 
 
 public class LocalisationFragment extends Fragment {
     private View view;
     private Button butCarte;
-    private EditText codePostale;
+    private EditText clientAddress;
     private Switch sharePosition;
     private LocationManager locationManager;
     private LocationListener locationListenerGPS;
@@ -49,7 +48,7 @@ public class LocalisationFragment extends Fragment {
     private String tag = "LOCATION_FRAGMENT";
     private FragmentManager fragmentManager;
     private LocationViewModel locationViewModel;
-    private LoadLocalitiesAsyncTask loadLocalitiesAsyncTask;
+    private LoadAddressesAsyncTask loadAddressesAsyncTask;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -85,6 +84,7 @@ public class LocalisationFragment extends Fragment {
                 */
             }
         };
+        toggleGPSUpdates();
     }
 
     @Nullable
@@ -94,7 +94,7 @@ public class LocalisationFragment extends Fragment {
         locationViewModel = ViewModelProviders.of(getActivity()).get(LocationViewModel.class);
 
         //Récupération de la valeur du code postale
-        codePostale = (EditText) view.findViewById(R.id.editText_CodePostale);
+        clientAddress = (EditText) view.findViewById(R.id.editText_CodePostale);
 
         sharePosition = (Switch) view.findViewById(R.id.switch_sharePosition);
 
@@ -103,15 +103,13 @@ public class LocalisationFragment extends Fragment {
             public void onClick(View v) {
                 if (sharePosition.isChecked())
                 {
-                    toggleGPSUpdates();
-                    codePostale.setEnabled(false);
-                    Toast.makeText(getActivity(), "onClick Switch Latitude : " + latitudeGPS + " Longitude : " + longitudeGPS, Toast.LENGTH_SHORT).show();
+                    clientAddress.setEnabled(false);
                     Log.d(tag, "onClick Switch Latitude : " + latitudeGPS + " Longitude : " + longitudeGPS);
 
                 }
                 else
                 {
-                    codePostale.setEnabled(true);
+                    clientAddress.setEnabled(true);
                     //locationManager.removeUpdates(locationListenerGPS);
                 }
             }
@@ -127,8 +125,8 @@ public class LocalisationFragment extends Fragment {
             {
             //En fonction du choix de l'utilisateur on envoie le code postal ou les coordonnées
             if (sharePosition.isChecked()) {
-                locationViewModel.setLocation(new com.henallux.dondesang.model.Location(longitudeGPS, latitudeGPS));
-                ((LocationViewModel) locationViewModel).setUtiliseCodePostal(false);
+                locationViewModel.setLocation(new LatLng(latitudeGPS, longitudeGPS));
+                ((LocationViewModel) locationViewModel).setUtiliseAddresse(false);
 
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.fragment_container,new CarteFragment(),"replaceFragmentByCarteFragment");
@@ -136,20 +134,10 @@ public class LocalisationFragment extends Fragment {
             }
             else
             {
-                ((LocationViewModel) locationViewModel).setUtiliseCodePostal(true);
-                if (Util.verificationCodePostal(codePostale)) {
-                    try
-                    {
-                        locationViewModel.setCodePostal(codePostale.getText().toString());
-                    } catch (ModelException e)
-                    {
-                        Toast.makeText(getActivity(), "Impossible de récupérer le code postale !", Toast.LENGTH_SHORT).show();
-                        codePostale.setText("");
-                    }
-                    finally {
-                        loadLocalitiesAsyncTask = new LoadLocalitiesAsyncTask(fragmentManager, getActivity());
-                        loadLocalitiesAsyncTask.execute(codePostale.getText().toString());
-                    }
+                ((LocationViewModel) locationViewModel).setUtiliseAddresse(true);
+                if (Util.verificationCodePostal(clientAddress)) {
+                    loadAddressesAsyncTask = new LoadAddressesAsyncTask(fragmentManager, getActivity());
+                    loadAddressesAsyncTask.execute(clientAddress.getText().toString());
                 }
             }
         }
@@ -264,8 +252,8 @@ public class LocalisationFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (loadLocalitiesAsyncTask != null) {
-            loadLocalitiesAsyncTask.cancel(true);
+        if (loadAddressesAsyncTask != null) {
+            loadAddressesAsyncTask.cancel(true);
         }
     }
 }

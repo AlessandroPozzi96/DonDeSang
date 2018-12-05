@@ -1,62 +1,49 @@
 package com.henallux.dondesang.model;
 
 import android.arch.lifecycle.ViewModel;
+import android.location.Address;
 
-import com.henallux.dondesang.Constants;
-import com.henallux.dondesang.exception.ModelException;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 
 public class LocationViewModel extends ViewModel {
 
-    private String codePostal;
-    private Location location;
-    //Surement un type model Localite à l'avenir
-    private Localite localite;
-    private boolean utiliseCodePostal;
-    private ArrayList<Localite> localities;
+    private LatLng location;
+    private boolean utiliseAddresse;
+    private ArrayList<Address> addresses;
+    private Address address;
 
-    public String getCodePostal() {
-        return codePostal;
+    public Address getAddress() {
+        return address;
     }
 
-    public void setCodePostal(String codePostal) throws ModelException
-    {
-        if (codePostal.length() != Constants.TAILLE_CODE_POSTAL_BELGIQUE) {
-            throw new ModelException("LocationViewModel", "CodePostal");
-        }
-        this.codePostal = codePostal;
+    public void setAddress(Address address) {
+        this.address = address;
     }
 
-    public Location getLocation() {
+    public ArrayList<Address> getAddresses() {
+        return addresses;
+    }
+
+    public void setAddresses(ArrayList<Address> addresses) {
+        this.addresses = addresses;
+    }
+
+    public LatLng getLocation() {
         return location;
     }
 
-    public void setLocation(Location location) {
+    public void setLocation(LatLng location) {
         this.location = location;
     }
 
-    public Localite getLocalite() {
-        return localite;
+    public boolean isUtiliseAddresse() {
+        return utiliseAddresse;
     }
 
-    public void setLocalite(Localite localite) {
-        this.localite = localite;
+    public void setUtiliseAddresse(boolean utiliseAddresse) {
+        this.utiliseAddresse = utiliseAddresse;
     }
 
-    public boolean isUtiliseCodePostal() {
-        return utiliseCodePostal;
-    }
-
-    public void setUtiliseCodePostal(boolean utiliseCodePostal) {
-        this.utiliseCodePostal = utiliseCodePostal;
-    }
-
-    public ArrayList<Localite> getLocalities() {
-        return localities;
-    }
-
-    public void setLocalities(ArrayList<Localite> localities) {
-        this.localities = localities;
-    }
 }
