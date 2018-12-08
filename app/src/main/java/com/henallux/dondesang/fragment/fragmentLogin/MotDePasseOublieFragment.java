@@ -34,7 +34,7 @@ public class MotDePasseOublieFragment extends Fragment {
         buttonMotDePasseOublie.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(Util.verificationEmail(email.getText().toString()) && Util.verificationEmailDansBD(email.getText().toString())) {  // TEST SUR LE MAIL --> regex OU voir dans la BD s'il existe
+                if(Util.verificationEmail(email) && Util.verificationEmailDansBD(email)) {  // TEST SUR LE MAIL --> regex OU voir dans la BD s'il existe
                     Toast.makeText(getActivity(), "Envoyer un mail a " + email.getText().toString(), Toast.LENGTH_SHORT).show();
                 }else{
                     Toast.makeText(getActivity(),"mauvais mail",Toast.LENGTH_SHORT).show();

@@ -1,7 +1,5 @@
 package com.henallux.dondesang.activity;
 
-import android.arch.lifecycle.ViewModel;
-import android.arch.lifecycle.ViewModelProviders;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -9,8 +7,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.facebook.AccessToken;
 import com.henallux.dondesang.fragment.FaqFragment;
-import com.henallux.dondesang.fragment.fragmentLogin.LoginFragment;
+import com.henallux.dondesang.fragment.ProfileFragment;
 import com.henallux.dondesang.fragment.trouverCollectes.LocalisationFragment;
 import com.henallux.dondesang.fragment.fragmentLogin.EnregistrementFragment;
 import com.henallux.dondesang.fragment.FavoriteFragment;
@@ -46,12 +45,13 @@ public class MainActivity extends AppCompatActivity {
 
                     switch (item.getItemId()) {
                         case R.id.nav_profile:
-                            if(true) {    // SI pas connecter
+                            AccessToken accessToken = AccessToken.getCurrentAccessToken();
+                            boolean isLogged = accessToken != null && !accessToken.isExpired();
+                            //if(isLogged) {    // SI pas connecter
+                            //    selectedFragment = new ProfileFragment();
+                            //}else{   // Si connecter : afficher le profil
                                 selectedFragment = new EnregistrementFragment();
-                            }else{   // Si connecter : afficher le profil
-                                selectedFragment = new LoginFragment();
-                            }
-
+                            //}
                             break;
                         case R.id.nav_map:
                             selectedFragment = new LocalisationFragment();

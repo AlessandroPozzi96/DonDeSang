@@ -34,4 +34,5 @@ dependencies {
     implementation "android.arch.lifecycle:viewmodel:1.1.1"
     implementation 'com.google.android.gms:play-services-maps:15.0.1'
     implementation 'com.google.code.gson:gson:2.8.0'
+    implementation 'com.facebook.android:facebook-login:[4,5)'
 }

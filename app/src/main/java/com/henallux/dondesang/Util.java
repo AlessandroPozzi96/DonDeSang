@@ -48,11 +48,12 @@ public class Util {
         }
     }
 
-    public static boolean verificationEmail(String email) {
-        return false; // REGEX VERIFICATION EMAIL
+    public static boolean verificationEmail(TextView email) {
+        String regex = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
+        return email.getText().toString().matches(regex);
     }
-    public static boolean verificationEmailDansBD(String email){
-        return false; // VERIF SUR EMAIL DANS BD
+    public static boolean verificationEmailDansBD(TextView email){
+        return true; // VERIF SUR EMAIL DANS BD
     }
 
     public static boolean verificationCodePostal(TextView codePostal){

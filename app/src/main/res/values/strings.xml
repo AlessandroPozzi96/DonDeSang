@@ -24,4 +24,6 @@
     <string name="pause">Pause Location Updates</string>
     <string name="resume">Resume Location Updates</string>
     <string name="action_settings">Settings</string>
+    <string name="facebook_app_id">719919561727444</string>
+    <string name="fb_login_protocol_scheme">fb719919561727444</string>
 </resources>

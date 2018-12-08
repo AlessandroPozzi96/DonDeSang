@@ -74,8 +74,8 @@ public class RegisterFragment extends Fragment {
         return Util.verificationPasswordRepeat(editPassword,editPasswordRepeat);
     }
     public boolean verificationEmail() {
-        if(Util.verificationEmail(editEmail.getText().toString())){
-            if(Util.verificationEmailDansBD(editEmail.getText().toString())){
+        if(Util.verificationEmail(editEmail)){
+            if(Util.verificationEmailDansBD(editEmail)){
                 return true;
             }else{
                 editEmail.setError("Email déja utilisé");
