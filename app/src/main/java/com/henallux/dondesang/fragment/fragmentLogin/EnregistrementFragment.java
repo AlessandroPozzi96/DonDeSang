@@ -1,7 +1,6 @@
 package com.henallux.dondesang.fragment.fragmentLogin;
 
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,34 +14,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
-import com.facebook.Profile;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
-import com.henallux.dondesang.ApiAuthentification;
+import com.henallux.dondesang.DataAcces.ApiAuthentification;
 import com.henallux.dondesang.R;
+import com.henallux.dondesang.model.Token;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
 import java.util.Arrays;
-import java.util.Iterator;
-
-import javax.net.ssl.HttpsURLConnection;
 
 public class EnregistrementFragment extends Fragment {
 
@@ -172,28 +159,30 @@ public class EnregistrementFragment extends Fragment {
 
     }
 
-    private  class getTokenFromAPI extends AsyncTask<String,Void,String>
+    private  class getTokenFromAPI extends AsyncTask<String,Void,Token>
     {
 
         protected void onPreExecute(){}
 
         @Override
-        protected String doInBackground(String... strings) {
-            String test="";
+        protected Token doInBackground(String... strings) {
+            Token token;
             ApiAuthentification apiAuthentification = new ApiAuthentification();
             try{
-                test = apiAuthentification.getUtilisateurPresent();
-                return test;
+                token = apiAuthentification.getUtilisateurPresent();
+                return token;
             }
             catch(Exception e){
-                return new String("Exception: " + e.getMessage());
+                //return new String("Exception: " + e.getMessage());
+                return null;
             }
 
         }
 
         @Override
-        protected void onPostExecute(String result) {
-            Log.i("tag",result);
+        protected void onPostExecute(Token result) {
+            Log.i("tag",result.getAccess_token());
         }
+        // log bien le token
     }
 }

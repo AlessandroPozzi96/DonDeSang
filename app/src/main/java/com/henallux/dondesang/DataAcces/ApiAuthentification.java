@@ -1,5 +1,6 @@
-package com.henallux.dondesang;
+package com.henallux.dondesang.DataAcces;
 
+import com.google.gson.Gson;
 import com.henallux.dondesang.model.Token;
 
 import org.json.JSONArray;
@@ -14,7 +15,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class ApiAuthentification {
-    public String getUtilisateurPresent() throws Exception{
+
+    public Token getUtilisateurPresent() throws Exception{
         URL url = new URL("https://croixrougeapi.azurewebsites.net/api/Jwt");
 
         JSONObject postData = new JSONObject();
@@ -51,10 +53,20 @@ public class ApiAuthentification {
                 break;
             }
             buffer.close();
-            return builder.toString();
+            //return builder.toString();
+            return convertJSONToToken(builder.toString());
         }else{
-            return new String("false "+responseCode);
+            //return new String("false "+responseCode);
+            return null;
         }
     }
+
+    public Token convertJSONToToken(String JSONString)
+    {
+        Gson g = new Gson();
+        Token token = g.fromJson(JSONString,Token.class);
+        return token;
+    }
+
 
 }
