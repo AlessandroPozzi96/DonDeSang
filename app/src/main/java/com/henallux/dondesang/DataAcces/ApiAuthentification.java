@@ -1,9 +1,12 @@
 package com.henallux.dondesang.DataAcces;
 
+import android.util.Log;
+import android.widget.Toast;
+
 import com.google.gson.Gson;
+import com.henallux.dondesang.exception.ErreurConnectionException;
 import com.henallux.dondesang.model.Token;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -16,12 +19,21 @@ import java.net.URL;
 
 public class ApiAuthentification {
 
-    public Token getUtilisateurPresent() throws Exception{
+    private String userName;
+    private String password;
+
+    public ApiAuthentification(String userName,String password)
+    {
+        this.userName = userName;
+        this.password = password;
+    }
+
+    public Token getToken() throws Exception, ErreurConnectionException {
         URL url = new URL("https://croixrougeapi.azurewebsites.net/api/Jwt");
 
         JSONObject postData = new JSONObject();
-        postData.put("UserName","Gwynbleidd");
-        postData.put("Password","MotDePasseNonHashé");
+        postData.put("UserName",userName);
+        postData.put("Password",password);
 
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("POST");
@@ -57,7 +69,8 @@ public class ApiAuthentification {
             return convertJSONToToken(builder.toString());
         }else{
             //return new String("false "+responseCode);
-            return null;
+            Log.i("tag",responseCode+"");
+            throw new ErreurConnectionException(responseCode);
         }
     }
 

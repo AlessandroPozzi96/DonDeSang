@@ -5,9 +5,11 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.facebook.AccessToken;
+import com.henallux.dondesang.IMyListener;
 import com.henallux.dondesang.fragment.FaqFragment;
 import com.henallux.dondesang.fragment.ProfileFragment;
 import com.henallux.dondesang.fragment.trouverCollectes.LocalisationFragment;
@@ -15,9 +17,13 @@ import com.henallux.dondesang.fragment.fragmentLogin.EnregistrementFragment;
 import com.henallux.dondesang.fragment.FavoriteFragment;
 import com.henallux.dondesang.fragment.GroupFragment;
 import com.henallux.dondesang.R;
+import com.henallux.dondesang.model.Token;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements IMyListener {
+
+    Token token;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,11 +53,11 @@ public class MainActivity extends AppCompatActivity {
                         case R.id.nav_profile:
                             AccessToken accessToken = AccessToken.getCurrentAccessToken();
                             boolean isLogged = accessToken != null && !accessToken.isExpired();
-                            //if(isLogged) {    // SI pas connecter
-                            //    selectedFragment = new ProfileFragment();
-                            //}else{   // Si connecter : afficher le profil
+                            if(token ==null) {    // SI pas connecter
                                 selectedFragment = new EnregistrementFragment();
-                            //}
+                            }else{   // Si connecter : afficher le profil
+                                selectedFragment = new ProfileFragment();
+                            }
                             break;
                         case R.id.nav_map:
                             selectedFragment = new LocalisationFragment();
@@ -73,4 +79,10 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 }
             };
+
+    @Override
+    public void setToken(Token tok) {
+        Log.i("tag","LE TOKEN : "+tok.getAccess_token());
+        this.token = tok;
+    }
 }

@@ -1,58 +1,271 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:layout_editor_absoluteY="25dp">
 
+    <EditText
+        android:id="@+id/editTextNumero"
+        android:layout_width="193dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/login_edit"
+        android:ems="10"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/VoirstatBoutton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextRue" />
+
+    <EditText
+        android:id="@+id/editTextAdresse"
+        android:layout_width="193dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="12dp"
+        android:background="@drawable/login_edit"
+        android:ems="10"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextDateNaissance" />
+
+    <EditText
+        android:id="@+id/editTextVille"
+        android:layout_width="193dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/login_edit"
+        android:ems="10"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextAdresse" />
+
+    <EditText
+        android:id="@+id/editTextRue"
+        android:layout_width="193dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/login_edit"
+        android:ems="10"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextVille" />
+
+    <TextView
+        android:id="@+id/numeroText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="Numéro :"
+        android:textColor="#81D4FA"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toStartOf="@+id/editTextRue"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rueText" />
+
+    <TextView
+        android:id="@+id/rueText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="Rue :"
+        android:textColor="#81D4FA"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toStartOf="@+id/editTextVille"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/VilleText" />
+
+    <TextView
+        android:id="@+id/VilleText"
+        android:layout_width="wrap_content"
+        android:layout_height="22dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="Ville :"
+        android:textColor="#81D4FA"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toStartOf="@+id/editTextAdresse"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/AdresseText" />
+
+    <TextView
+        android:id="@+id/AdresseText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="Adresse :"
+        android:textColor="#81D4FA"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.151"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/GSMText" />
+
+    <TextView
+        android:id="@+id/GSMText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="Numéro de GSM :"
+        android:textColor="#81D4FA"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toStartOf="@+id/editTextDateNaissance"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/DateNaissanceText" />
+
     <TextView
         android:id="@+id/loginTextconnexion"
         android:layout_width="wrap_content"
         android:layout_height="29dp"
-        android:text="Profil"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="Mon compte"
         android:textColor="#81D4FA"
         android:textSize="24sp"
-        tools:layout_editor_absoluteX="155dp"
-        tools:layout_editor_absoluteY="77dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/loginTextconnexion"
+        android:id="@+id/DateNaissanceText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/connexion"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="Date de naissance :"
         android:textColor="#81D4FA"
         android:textSize="20sp"
-        tools:layout_editor_absoluteX="41dp"
-        tools:layout_editor_absoluteY="299dp" />
+        app:layout_constraintEnd_toStartOf="@+id/editTextGroupeSanguin"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/groupeSanguinText" />
 
     <TextView
-        android:id="@+id/loginTextconnexion"
+        android:id="@+id/groupeSanguinText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/connexion"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Groupe sanguin :"
         android:textColor="#81D4FA"
         android:textSize="20sp"
-        tools:layout_editor_absoluteX="41dp"
-        tools:layout_editor_absoluteY="254dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mailText" />
 
     <TextView
-        android:id="@+id/loginTextconnexion"
+        android:id="@+id/mailText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/connexion"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="Adresse mail :"
         android:textColor="#81D4FA"
         android:textSize="20sp"
-        tools:layout_editor_absoluteX="41dp"
-        tools:layout_editor_absoluteY="201dp" />
+        app:layout_constraintEnd_toStartOf="@+id/editTexteMail"
+        app:layout_constraintHorizontal_bias="0.195"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/loginText" />
 
     <TextView
-        android:id="@+id/loginTextconnexion"
+        android:id="@+id/loginText"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/connexion"
+        android:layout_height="23dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="68dp"
+        android:layout_marginEnd="8dp"
+        android:text="Login :"
         android:textColor="#81D4FA"
         android:textSize="20sp"
-        tools:layout_editor_absoluteX="41dp"
-        tools:layout_editor_absoluteY="148dp" />
+        app:layout_constraintEnd_toStartOf="@+id/editTextLogin"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/VoirstatBoutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="56dp"
+        android:layout_marginEnd="8dp"
+        android:text="Voir mes stats"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextRue" />
+
+    <Button
+        android:id="@+id/SupprimerCompteButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="Supprimer mon compte"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/VoirstatBoutton" />
+
+    <EditText
+        android:id="@+id/editTextLogin"
+        android:layout_width="193dp"
+        android:layout_height="26dp"
+        android:layout_marginTop="68dp"
+        android:background="@drawable/login_edit"
+        android:ems="10"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/editTexteMail"
+        android:layout_width="191dp"
+        android:layout_height="28dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/login_edit"
+        android:ems="10"
+        android:inputType="textEmailAddress"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextLogin" />
+
+    <EditText
+        android:id="@+id/editTextGroupeSanguin"
+        android:layout_width="188dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="12dp"
+        android:background="@drawable/login_edit"
+        android:ems="10"
+        android:inputType="date"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTexteMail" />
+
+    <EditText
+        android:id="@+id/editTextDateNaissance"
+        android:layout_width="188dp"
+        android:layout_height="33dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/login_edit"
+        android:ems="10"
+        android:inputType="number"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextGroupeSanguin" />
 
 </android.support.constraint.ConstraintLayout>

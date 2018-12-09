@@ -1,11 +1,13 @@
 package com.henallux.dondesang.fragment.fragmentLogin;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,20 +15,29 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.henallux.dondesang.DataAcces.ApiAuthentification;
+import com.henallux.dondesang.IMyListener;
 import com.henallux.dondesang.R;
 import com.henallux.dondesang.Util;
+import com.henallux.dondesang.exception.ErreurConnectionException;
+import com.henallux.dondesang.fragment.ProfileFragment;
+import com.henallux.dondesang.model.Token;
 
 public class LoginFragment extends Fragment {
+    FragmentManager fragmentManager;
 
     Button buttonSeConnecter;
     Button loginButtonMDPOublier;
     TextView editUserName;
     TextView editPassword;
+    Token token;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_login,container,false);
+        fragmentManager = getFragmentManager();
+
+        return inflater.inflate(R.layout.fragment_login, container, false);
     }
 
     @Override
@@ -34,18 +45,21 @@ public class LoginFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         buttonSeConnecter = getView().findViewById(R.id.loginButtonSeConnecter);
         loginButtonMDPOublier = getView().findViewById(R.id.loginButtonMDPOublier);
-        editUserName      = getView().findViewById(R.id.loginEditUserName);
-        editPassword      = getView().findViewById(R.id.loginEditPassword);
+        editUserName = getView().findViewById(R.id.loginEditUserName);
+        editPassword = getView().findViewById(R.id.loginEditPassword);
         buttonSeConnecter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                if(verificationDonnees()){
-                    Toast.makeText(getActivity(),"Faire la connection a " +editUserName.getText().toString()+" "+editPassword.getText().toString(),Toast.LENGTH_SHORT).show();
-                }else{
-                    Toast.makeText(getActivity(),"Mauvais info",Toast.LENGTH_SHORT).show();
+                if (verificationDonnees()) {
+
+                    new getTokenFromAPI().execute();
+
+                    //Toast.makeText(getActivity(),"Faire la connection a " +editUserName.getText().toString()+" "+editPassword.getText().toString(),Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getActivity(), "Mauvais info", Toast.LENGTH_SHORT).show();
                 }
-                }
+            }
         });
         loginButtonMDPOublier.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,26 +68,72 @@ public class LoginFragment extends Fragment {
                 FragmentManager fragmentManager;
                 fragmentManager = getFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.replace(R.id.enregistrement_container,motDePasseOublieFragment,"replaceFragmentByMotDePasseOublieFragment");
+                transaction.replace(R.id.enregistrement_container, motDePasseOublieFragment, "replaceFragmentByMotDePasseOublieFragment");
                 transaction.commit();
             }
         });
     }
 
-    public boolean verificationDonnees(){
+    public boolean verificationDonnees() {
         // return (verificationLogin() && verificationPassword()); Exécute pas les 2 sinons
         boolean loginOk = verificationLogin();
         boolean passwordOk = verificationPassword();
         return loginOk && passwordOk;
     }
-    public boolean verificationLogin(){
-        if(Util.verificationLoginLongeur(editUserName)){
+
+    public boolean verificationLogin() {
+        if (Util.verificationLoginLongeur(editUserName)) {
             return Util.verificationLoginDisponible(editUserName);
-        }else{
+        } else {
             return false;
         }
     }
-    public boolean verificationPassword(){
+
+    public boolean verificationPassword() {
         return Util.verificationPassword(editPassword);
+    }
+
+
+    private class getTokenFromAPI extends AsyncTask<String, Void, Token> {
+
+        protected void onPreExecute() {
+        }
+
+        @Override
+        protected Token doInBackground(String... strings) {
+            Token token;
+            //ApiAuthentification apiAuthentification = new ApiAuthentification("Gwynbleidd","MotDePasseNonHashé");
+            ApiAuthentification apiAuthentification = new ApiAuthentification(editUserName.getText().toString(), editPassword.getText().toString());
+
+            try {
+                token = apiAuthentification.getToken();
+                return token;
+            } catch (Exception e) {
+                //return new String("Exception: " + e.getMessage());
+                Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                return null;
+            } catch (ErreurConnectionException e) {
+                Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Token result) {
+            if (result != null) {
+                IMyListener myListener = (IMyListener) getActivity();
+                myListener.setToken(result);
+
+                Toast.makeText(getContext(), result.getAccess_token(), Toast.LENGTH_LONG).show();
+                ProfileFragment profileFragment = new ProfileFragment();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.replace(R.id.fragment_container,profileFragment,"replaceFragmentByRegisterFragment");
+                transaction.commit();
+            } else {
+                Toast.makeText(getContext(), "Mauvais Login/MDP", Toast.LENGTH_LONG).show();
+            }
+        }
+
+
     }
 }

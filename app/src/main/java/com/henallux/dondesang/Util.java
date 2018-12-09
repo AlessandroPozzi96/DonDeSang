@@ -14,7 +14,7 @@ public class Util {
         }
     }
     public static boolean verificationLoginDisponible(TextView editLogin) {
-        if (false) { // Chercher en bd
+        if (true) { // Chercher en bd
             return true;
         } else {
             editLogin.setError("Le login n'est pas disponible");

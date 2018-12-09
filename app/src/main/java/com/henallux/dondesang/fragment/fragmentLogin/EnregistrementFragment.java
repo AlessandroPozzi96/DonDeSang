@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -24,6 +25,7 @@ import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.henallux.dondesang.DataAcces.ApiAuthentification;
 import com.henallux.dondesang.R;
+import com.henallux.dondesang.exception.ErreurConnectionException;
 import com.henallux.dondesang.model.Token;
 
 import org.json.JSONException;
@@ -39,6 +41,10 @@ public class EnregistrementFragment extends Fragment {
     Button buttonLogin;
     Button buttonRegister;
 
+    String idFacebook;
+    String emailFacebook;
+    String birthdayFacebook;
+    String nameFacbeook;
     CallbackManager callbackManager;
     /*
     !!!!!!!!!!!!
@@ -138,15 +144,11 @@ public class EnregistrementFragment extends Fragment {
 
                         // Application code
                         try {
-                            String email = object.getString("email");
-                            String birthday = object.getString("birthday"); // 01/31/1980 format
-                            Log.i("tag",object.getString("id"));
-                            Log.i("tag",object.getString("name"));
-                            Log.i("tag",birthday);
-                            Log.i("tag",email);
-                        }catch (JSONException jsE){
-
-                        }
+                            emailFacebook = object.getString("email");
+                            birthdayFacebook  = object.getString("birthday"); // 01/31/1980 format
+                            idFacebook = object.getString("email");
+                            nameFacbeook = object.getString("name");
+                        }catch (JSONException jsE){}
                     }
                 });
         Bundle parameters = new Bundle();
@@ -154,6 +156,7 @@ public class EnregistrementFragment extends Fragment {
         request.setParameters(parameters);
         request.executeAsync();
 
+        Log.i("tag",request.getAccessToken().getToken());
 
         new getTokenFromAPI().execute();
 
@@ -167,16 +170,18 @@ public class EnregistrementFragment extends Fragment {
         @Override
         protected Token doInBackground(String... strings) {
             Token token;
-            ApiAuthentification apiAuthentification = new ApiAuthentification();
+            ApiAuthentification apiAuthentification = new ApiAuthentification("Gwynbleidd","MotDePasseNonHashé");
             try{
-                token = apiAuthentification.getUtilisateurPresent();
+                token = apiAuthentification.getToken();
                 return token;
             }
             catch(Exception e){
                 //return new String("Exception: " + e.getMessage());
                 return null;
+            } catch (ErreurConnectionException e) {
+                Toast.makeText(getContext(),e.getMessage(),Toast.LENGTH_LONG);
+                return  null;
             }
-
         }
 
         @Override
