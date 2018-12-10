@@ -18,12 +18,13 @@ import com.henallux.dondesang.fragment.FavoriteFragment;
 import com.henallux.dondesang.fragment.GroupFragment;
 import com.henallux.dondesang.R;
 import com.henallux.dondesang.model.Token;
+import com.henallux.dondesang.model.Utilisateur;
 
 
 public class MainActivity extends AppCompatActivity implements IMyListener {
 
     Token token;
-
+    Utilisateur utilisateur;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,10 +53,10 @@ public class MainActivity extends AppCompatActivity implements IMyListener {
                     switch (item.getItemId()) {
                         case R.id.nav_profile:
                             AccessToken accessToken = AccessToken.getCurrentAccessToken();
-                            boolean isLogged = accessToken != null && !accessToken.isExpired();
-                            if(token ==null) {    // SI pas connecter
+                            if(token ==null) {
                                 selectedFragment = new EnregistrementFragment();
-                            }else{   // Si connecter : afficher le profil
+                                //selectedFragment = new ProfileFragment();
+                            }else{
                                 selectedFragment = new ProfileFragment();
                             }
                             break;
@@ -84,5 +85,14 @@ public class MainActivity extends AppCompatActivity implements IMyListener {
     public void setToken(Token tok) {
         Log.i("tag","LE TOKEN : "+tok.getAccess_token());
         this.token = tok;
+    }
+    public Token getToken()
+    {
+        return this.token;
+    }
+
+    @Override
+    public void setUtilisateur(Utilisateur result) {
+        this.utilisateur = result;
     }
 }

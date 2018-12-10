@@ -30,6 +30,7 @@ public class LoginFragment extends Fragment {
     Button loginButtonMDPOublier;
     TextView editUserName;
     TextView editPassword;
+    String erreurMessage;
     Token token;
 
     @Nullable
@@ -52,11 +53,8 @@ public class LoginFragment extends Fragment {
             public void onClick(View v) {
 
                 if (verificationDonnees()) {
-
                     new getTokenFromAPI().execute();
-
-                    //Toast.makeText(getActivity(),"Faire la connection a " +editUserName.getText().toString()+" "+editPassword.getText().toString(),Toast.LENGTH_SHORT).show();
-                } else {
+                    } else {
                     Toast.makeText(getActivity(), "Mauvais info", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -102,18 +100,16 @@ public class LoginFragment extends Fragment {
         @Override
         protected Token doInBackground(String... strings) {
             Token token;
-            //ApiAuthentification apiAuthentification = new ApiAuthentification("Gwynbleidd","MotDePasseNonHashé");
             ApiAuthentification apiAuthentification = new ApiAuthentification(editUserName.getText().toString(), editPassword.getText().toString());
 
             try {
                 token = apiAuthentification.getToken();
                 return token;
             } catch (Exception e) {
-                //return new String("Exception: " + e.getMessage());
-                Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                erreurMessage = e.getMessage();
                 return null;
             } catch (ErreurConnectionException e) {
-                Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                erreurMessage = e.getMessage();
                 return null;
             }
         }
@@ -130,10 +126,9 @@ public class LoginFragment extends Fragment {
                 transaction.replace(R.id.fragment_container,profileFragment,"replaceFragmentByRegisterFragment");
                 transaction.commit();
             } else {
-                Toast.makeText(getContext(), "Mauvais Login/MDP", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(),"Erreur :"+erreurMessage, Toast.LENGTH_LONG).show();
             }
         }
-
-
     }
+
 }

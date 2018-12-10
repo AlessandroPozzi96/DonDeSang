@@ -5,7 +5,7 @@ import android.widget.TextView;
 public class Util {
 
     public static boolean verificationLoginLongeur(TextView editLogin){
-        if(editLogin.getText().length() > 5){
+        if(editLogin.getText().length() > 1){
             return true;
         }
         else{

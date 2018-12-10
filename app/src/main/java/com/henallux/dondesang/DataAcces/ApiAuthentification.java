@@ -68,8 +68,6 @@ public class ApiAuthentification {
             //return builder.toString();
             return convertJSONToToken(builder.toString());
         }else{
-            //return new String("false "+responseCode);
-            Log.i("tag",responseCode+"");
             throw new ErreurConnectionException(responseCode);
         }
     }
