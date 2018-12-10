@@ -1,8 +1,10 @@
 package com.henallux.dondesang.activity;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,13 +19,16 @@ import com.henallux.dondesang.fragment.fragmentLogin.EnregistrementFragment;
 import com.henallux.dondesang.fragment.FavoriteFragment;
 import com.henallux.dondesang.fragment.GroupFragment;
 import com.henallux.dondesang.R;
+import com.henallux.dondesang.model.LocationViewModel;
 import com.henallux.dondesang.model.Token;
+import com.henallux.dondesang.task.LoadCollectesAsyncTask;
 import com.henallux.dondesang.model.Utilisateur;
 
 
 public class MainActivity extends AppCompatActivity implements IMyListener {
 
     Token token;
+    private LocationViewModel locationViewModel;
     Utilisateur utilisateur;
 
     @Override
@@ -40,7 +45,9 @@ public class MainActivity extends AppCompatActivity implements IMyListener {
                     new LocalisationFragment()).commit();
         }
 
-
+        locationViewModel = ViewModelProviders.of(this).get(LocationViewModel.class);
+        LoadCollectesAsyncTask loadCollectesAsyncTask = new LoadCollectesAsyncTask(this);
+        loadCollectesAsyncTask.execute();
 
     }
 

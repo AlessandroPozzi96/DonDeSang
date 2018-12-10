@@ -75,8 +75,7 @@ public class LoadAddressesAsyncTask extends AsyncTask<String, Void, ArrayList<Ad
         }
         else
         {
-            int size = strings.length;
-            if (size > 0) {
+            if (strings.length > 0) {
                 addresses = geoLocate(strings[0]);
                 Log.d(tag, "Search term : " + strings[0]);
             }
@@ -87,20 +86,24 @@ public class LoadAddressesAsyncTask extends AsyncTask<String, Void, ArrayList<Ad
 
     public ArrayList<Address> geoLocate(String searchString) {
         Geocoder geocoder = new Geocoder(activity);
+        if (geocoder.isPresent())
+        {
+            Log.d(tag, "GEOCODER IS PRESENT");
+        }
         List<Address> addressList = new ArrayList<Address>();
         try {
-            addressList = geocoder.getFromLocationName("" + searchString, Constants.MAX_RESULTS, 1, 1, 1, 1);
+            addressList = geocoder.getFromLocationName(searchString, Constants.MAX_RESULTS, 1, 1, 1, 1);
             Log.d(tag, "Taille de la liste : " + addressList.size());
         } catch (IOException e) {
             Log.d(tag, "ERREUR POUR RECUPERER LES ADDRESSES !");
         }
 
         ArrayList<Address> addresses;
-        if (addressList.size() == 0) {
-            Address address = new Address(new Locale("fr", "Belgique"));
-            address.setLocality("Pas d'addresses trouvé !");
-            address.setLatitude(50.503887);
-            address.setLongitude(4.469936);
+        if (addressList.size() < 1) {
+            Address address = new Address(new Locale("fr", "Namur (Belgique)"));
+            address.setLocality("Addresse introuvable ou connexion internet interrompue");
+            address.setLatitude(50.464920);
+            address.setLongitude(4.865060);
             addresses = new ArrayList<>(
                     Arrays.asList(address)
             );
