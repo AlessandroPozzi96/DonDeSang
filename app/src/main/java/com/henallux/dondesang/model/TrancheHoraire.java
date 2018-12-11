@@ -16,7 +16,7 @@ public class TrancheHoraire {
     }
 
     public String getHeureDebut() {
-        return heureDebut;
+        return heureFormate(this.heureDebut);
     }
 
     public void setHeureDebut(String heureDebut) {
@@ -24,7 +24,7 @@ public class TrancheHoraire {
     }
 
     public String getHeureFin() {
-        return heureFin;
+        return heureFormate(this.heureFin);
     }
 
     public void setHeureFin(String heureFin) {
@@ -38,5 +38,15 @@ public class TrancheHoraire {
                 ", heureDebut=" + heureDebut +
                 ", heureFin=" + heureFin +
                 '}';
+    }
+
+    public String heureFormate(String heure) {
+        String tmp;
+        tmp =  heure.substring(0, 5);
+
+        StringBuilder builder = new StringBuilder(tmp);
+        builder.setCharAt(2, 'H');
+
+        return builder.toString();
     }
 }

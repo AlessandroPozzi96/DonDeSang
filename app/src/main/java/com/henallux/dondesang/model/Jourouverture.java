@@ -1,5 +1,14 @@
 package com.henallux.dondesang.model;
 
+import android.util.Log;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
 public class Jourouverture {
     private Integer id;
     private String libelleJour;
@@ -25,6 +34,10 @@ public class Jourouverture {
 
     public String getDate() {
         return date;
+    }
+
+    public String getDateFormate() {
+        return dateFormate(this.date);
     }
 
     public void setDate(String date) {
@@ -56,5 +69,15 @@ public class Jourouverture {
                 ", fkCollecte=" + fkCollecte +
                 ", fkTrancheHoraireNavigation=" + fkTrancheHoraireNavigation +
                 '}';
+    }
+
+    public String dateFormate(String date) {
+        String tmp = date.substring(0, 10);
+
+        String year = tmp.substring(0, 4);
+        String month = tmp.substring(5, 7);
+        String day = tmp.substring(8, 10);
+
+        return day + "/" + month + "/" + year;
     }
 }

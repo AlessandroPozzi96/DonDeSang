@@ -76,13 +76,13 @@ public class CarteFragment extends Fragment implements OnMapReadyCallback {
                 horaires = "";
                 for (Jourouverture jourouverture : collecte.getJourouverture()) {
                     if (jourouverture.getDate() != null) {
-                        horaires += jourouverture.getDate();
+                        horaires += jourouverture.getDateFormate();
                     }
                     else
                     {
                         horaires += jourouverture.getLibelleJour();
                     }
-                    horaires += " : \n de " + jourouverture.getFkTrancheHoraireNavigation().getHeureDebut() + " à " + jourouverture.getFkTrancheHoraireNavigation().getHeureFin() + " \n";
+                    horaires += "\n \t De " + jourouverture.getFkTrancheHoraireNavigation().getHeureDebut() + " à " + jourouverture.getFkTrancheHoraireNavigation().getHeureFin() + " \n";
                 }
 
                 googleMap.addMarker(new MarkerOptions()
@@ -118,6 +118,9 @@ public class CarteFragment extends Fragment implements OnMapReadyCallback {
                 TextView snippet = new TextView(getContext());
                 snippet.setTextColor(Color.BLACK);
                 snippet.setText(marker.getSnippet());
+                snippet.setTypeface(null, Typeface.ITALIC);
+                snippet.setGravity(Gravity.LEFT);
+                snippet.setCursorVisible(true);
 
                 info.addView(title); //Adding title in your custom window
                 info.addView(snippet); //adding description
