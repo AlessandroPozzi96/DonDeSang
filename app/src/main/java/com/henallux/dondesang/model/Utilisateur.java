@@ -62,4 +62,8 @@ public class Utilisateur {
     public String getPrenom() {
         return prenom;
     }
+
+    public void setScore(Integer score) {
+        this.score = score;
+    }
 }

@@ -115,5 +115,53 @@ public class DataUtilisateur {
         Utilisateur utilisateur = g.fromJson(stringJSON,Utilisateur.class);
         return utilisateur;
     }
+    private String utilisateurToJson(Utilisateur utilisateur) {
+        Gson g = new Gson();
+        String stringJSON = g.toJson(utilisateur,Utilisateur.class);//  g.fromJson(stringJSON,Utilisateur.class);
+        return stringJSON;
+    }
 
+    public Utilisateur modificationUtilisateur(Utilisateur utilisateur) throws IOException, ErreurConnectionException {
+        URL url = new URL("https://croixrougeapi.azurewebsites.net/api/Utilisateurs/"+utilisateur.getLogin());
+        Log.i("tag","ici");
+
+        String stringJSON = utilisateurToJson(utilisateur);
+        Log.i("tag","la");
+
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("PUT");
+        connection.setRequestProperty("Content-Type", "application/json; charset=utf-8");
+        connection.setDoInput(true);
+        connection.setDoOutput(true);
+
+        OutputStream os = connection.getOutputStream();
+        BufferedWriter writer = new BufferedWriter(
+                new OutputStreamWriter(os,"UTF-8")
+        );
+
+        writer.write(stringJSON);
+
+        writer.flush();
+        writer.close();
+        os.close();
+
+        int responseCode = connection.getResponseCode();
+        Log.i("tag","Status code : "+responseCode);
+        if(responseCode == HttpURLConnection.HTTP_CREATED)
+        {
+            BufferedReader buffer = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            StringBuilder builder = new StringBuilder("");
+            String line = "";
+            while((line = buffer.readLine())!=null)
+            {
+                builder.append(line);
+                break;
+            }
+            buffer.close();
+            //return builder.toString();
+            return jsonToUtilisateur(builder.toString());
+        }else{
+            throw new ErreurConnectionException(responseCode);
+        }
+    }
 }
