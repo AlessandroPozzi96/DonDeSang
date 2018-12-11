@@ -10,4 +10,6 @@ public interface IMyListener {
     void setUtilisateur(Utilisateur result);
 
     Token getToken();
+
+    Utilisateur getUtilisateur();
 }

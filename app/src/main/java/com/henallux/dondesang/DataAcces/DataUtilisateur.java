@@ -7,10 +7,15 @@ import com.henallux.dondesang.exception.ErreurConnectionException;
 import com.henallux.dondesang.model.Token;
 import com.henallux.dondesang.model.Utilisateur;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -19,14 +24,14 @@ public class DataUtilisateur {
 
     public Utilisateur getUtilisateur(String login, Token token) throws IOException, ErreurConnectionException {
 
-        URL url = new URL("https://croixrougeapi.azurewebsites.net/api/Utilisateurs/"+login);
+        URL url = new URL("https://croixrougeapi.azurewebsites.net/api/Utilisateurs/" + login);
 
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.setRequestProperty("Authorization","Bearer "+token.getAccess_token());
+        connection.setRequestProperty("Authorization", "Bearer " + token.getAccess_token());
 
         int responseCode = connection.getResponseCode();
 
-        if(responseCode == HttpURLConnection.HTTP_OK) {
+        if (responseCode == HttpURLConnection.HTTP_OK) {
             BufferedReader bufferedReader = new BufferedReader((new InputStreamReader(connection.getInputStream())));
             StringBuilder builder = new StringBuilder();
             String stringJSON = "", line;
@@ -36,36 +41,78 @@ public class DataUtilisateur {
             bufferedReader.close();
             stringJSON = builder.toString();
             return jsonToUtilisateur(stringJSON);
-        }
-        else{
+        } else {
             throw new ErreurConnectionException(responseCode);
         }
     }
 
-    public boolean supprimerUtilisateur(String login,Token token) throws IOException, ErreurConnectionException {
+    public boolean supprimerUtilisateur(String login, Token token) throws IOException, ErreurConnectionException {
 
-        URL url = new URL("https://croixrougeapi.azurewebsites.net/api/Utilisateurs/"+login);
+        URL url = new URL("https://croixrougeapi.azurewebsites.net/api/Utilisateurs/" + login);
 
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("DELETE");
-        connection.setRequestProperty("Authorization","Bearer "+token.getAccess_token());
+        connection.setRequestProperty("Authorization", "Bearer " + token.getAccess_token());
 
         int responseCode = connection.getResponseCode();
 
-        if(responseCode == HttpURLConnection.HTTP_OK) {
+        if (responseCode == HttpURLConnection.HTTP_OK) {
             return true;
-        }
-        else{
+        } else {
             throw new ErreurConnectionException(responseCode);
         }
 
     }
 
+    public Utilisateur CreationUtilisateur(Utilisateur utilisateur) throws IOException, ErreurConnectionException, JSONException {
+        URL url = new URL("https://croixrougeapi.azurewebsites.net/api/Utilisateurs");
+
+        JSONObject postData = new JSONObject();
+        postData.put("login",utilisateur.getLogin());
+        postData.put("password",utilisateur.getPassword());
+        postData.put("mail",utilisateur.getMail());
+
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("POST");
+        connection.setRequestProperty("Content-Type", "application/json; charset=utf-8");
+        connection.setDoInput(true);
+        connection.setDoOutput(true);
+
+        OutputStream os = connection.getOutputStream();
+        BufferedWriter writer = new BufferedWriter(
+                new OutputStreamWriter(os,"UTF-8")
+        );
+
+        writer.write(postData.toString());
+
+        writer.flush();
+        writer.close();
+        os.close();
+
+        int responseCode = connection.getResponseCode();
+        Log.i("tag","Status code : "+responseCode);
+        if(responseCode == HttpURLConnection.HTTP_CREATED)
+        {
+            BufferedReader buffer = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            StringBuilder builder = new StringBuilder("");
+            String line = "";
+            while((line = buffer.readLine())!=null)
+            {
+                builder.append(line);
+                break;
+            }
+            buffer.close();
+            //return builder.toString();
+            return jsonToUtilisateur(builder.toString());
+        }else{
+            throw new ErreurConnectionException(responseCode);
+        }
+    }
+
+
     private Utilisateur jsonToUtilisateur(String stringJSON) {
         Gson g = new Gson();
-        Log.i("tag","OK : "+stringJSON);
         Utilisateur utilisateur = g.fromJson(stringJSON,Utilisateur.class);
-        Log.i("tag","login : "+utilisateur.getLogin());
         return utilisateur;
     }
 

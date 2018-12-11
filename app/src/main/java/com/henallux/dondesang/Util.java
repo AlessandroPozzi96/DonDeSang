@@ -22,10 +22,10 @@ public class Util {
         }
     }
     public static boolean verificationLoginPresent(TextView editLogin){
-        if(false){
+        if(false){ // vérif si login déja présent
             return true;
         }else{
-            editLogin.setError("Le login n'est pas présent dans la BD");
+            editLogin.setError("Le login est présent dans la BD");
             return false;
         }
     }

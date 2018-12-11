@@ -1,5 +1,6 @@
 package com.henallux.dondesang.model;
 
+import java.net.Inet4Address;
 import java.util.Date;
 
 public class Utilisateur {
@@ -9,12 +10,12 @@ public class Utilisateur {
     private String prenom;
     private String password;
     private String mail;
-    private int numGsm;
+    private Integer numGsm;
     private String dateNaissance;
-    private boolean isMale;
-    private int score;
+    private Boolean isMale;
+    private Integer score;
     private String fkRole;
-    private int fkAdresse;
+    private Integer fkAdresse;
     private String fkGroupesanguin;
     private String rv;
 
@@ -42,11 +43,11 @@ public class Utilisateur {
         this.mail = mail;
     }
 
-    public int getNumGsm() {
+    public Integer getNumGsm() {
         return numGsm;
     }
 
-    public int getScore() {
+    public Integer getScore() {
         return score;
     }
 
