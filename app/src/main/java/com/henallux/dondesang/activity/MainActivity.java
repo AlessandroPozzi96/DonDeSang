@@ -4,7 +4,6 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,7 +16,7 @@ import com.henallux.dondesang.fragment.ProfileFragment;
 import com.henallux.dondesang.fragment.trouverCollectes.LocalisationFragment;
 import com.henallux.dondesang.fragment.fragmentLogin.EnregistrementFragment;
 import com.henallux.dondesang.fragment.FavoriteFragment;
-import com.henallux.dondesang.fragment.GroupFragment;
+import com.henallux.dondesang.fragment.ScoreFragment;
 import com.henallux.dondesang.R;
 import com.henallux.dondesang.model.LocationViewModel;
 import com.henallux.dondesang.model.Token;
@@ -71,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements IMyListener {
                             selectedFragment = new LocalisationFragment();
                             break;
                         case R.id.nav_group:
-                            selectedFragment = new GroupFragment();
+                            selectedFragment = new ScoreFragment();
                             break;
                         case R.id.nav_faq:
                             selectedFragment = new FaqFragment();
