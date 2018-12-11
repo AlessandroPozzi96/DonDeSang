@@ -4,6 +4,8 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.henallux.dondesang.exception.DeserialisationException;
+import com.henallux.dondesang.exception.ErreurConnectionException;
 import com.henallux.dondesang.model.Collecte;
 import com.henallux.dondesang.model.Jourouverture;
 import com.henallux.dondesang.model.TrancheHoraire;
@@ -20,7 +22,7 @@ import java.util.ArrayList;
 
 public class CollecteDAO {
     private String tag = "CollecteDAO";
-    public ArrayList<Collecte> getAllCollectes() throws Exception
+    public ArrayList<Collecte> getAllCollectes() throws DeserialisationException, Exception
     {
         URL urlAPI = new URL("https://croixrougeapi.azurewebsites.net/api/Collectes");
         HttpURLConnection connection = (HttpURLConnection) urlAPI.openConnection();
@@ -38,17 +40,24 @@ public class CollecteDAO {
         return jsonToCollectes(stringJson);
     }
 
-    public ArrayList<Collecte> jsonToCollectes(String stringJson) throws Exception {
+    public ArrayList<Collecte> jsonToCollectes(String stringJson) throws DeserialisationException {
         ArrayList<Collecte> collectes = new ArrayList<>();
         Collecte collecte;
         JSONObject jsonObject;
         Gson gson = new GsonBuilder().create();
 
-        JSONArray collectesJSON = new JSONArray(stringJson);
-        for (int i = 0; i < collectesJSON.length(); i++) {
-            jsonObject = collectesJSON.getJSONObject(i);
-            collecte = gson.fromJson(jsonObject.toString(), Collecte.class);
-            collectes.add(collecte);
+        try
+        {
+            JSONArray collectesJSON = new JSONArray(stringJson);
+            for (int i = 0; i < collectesJSON.length(); i++) {
+                jsonObject = collectesJSON.getJSONObject(i);
+                collecte = gson.fromJson(jsonObject.toString(), Collecte.class);
+                collectes.add(collecte);
+            }
+        }
+        catch (JSONException e)
+        {
+            throw new DeserialisationException("JSON", e.getMessage());
         }
 
         return collectes;

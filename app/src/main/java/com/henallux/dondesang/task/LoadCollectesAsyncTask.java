@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 
 import com.henallux.dondesang.DataAcces.CollecteDAO;
+import com.henallux.dondesang.exception.DeserialisationException;
 import com.henallux.dondesang.model.Collecte;
 import com.henallux.dondesang.model.LocationViewModel;
 
@@ -52,8 +53,10 @@ public class LoadCollectesAsyncTask extends AsyncTask<Void, Void, ArrayList<Coll
         ArrayList<Collecte> collectes = new ArrayList<>();
         try {
             collectes = collecteDAO.getAllCollectes();
+        } catch (DeserialisationException e) {
+            Log.d("CollecteDAO", e.getMessage());
         } catch (Exception e) {
-            Log.d("CollecteDAO", "JSONException " + e.getMessage());
+            Log.d("CollecteDAO", "Exception " + e.getMessage());
         }
 
         return collectes;
