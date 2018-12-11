@@ -13,6 +13,7 @@ public class LocationViewModel extends ViewModel {
     private boolean utiliseAddresse;
     private ArrayList<Address> addresses;
     private Address address;
+    private ArrayList<Collecte> collectes;
 
     public Address getAddress() {
         return address;
@@ -46,4 +47,11 @@ public class LocationViewModel extends ViewModel {
         this.utiliseAddresse = utiliseAddresse;
     }
 
+    public ArrayList<Collecte> getCollectes() {
+        return collectes;
+    }
+
+    public void setCollectes(ArrayList<Collecte> collectes) {
+        this.collectes = collectes;
+    }
 }

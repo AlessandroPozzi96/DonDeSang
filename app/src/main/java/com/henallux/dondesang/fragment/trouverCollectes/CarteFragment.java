@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,13 +25,17 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.henallux.dondesang.R;
+import com.henallux.dondesang.model.Collecte;
 import com.henallux.dondesang.model.LocationViewModel;
+
+import java.util.ArrayList;
 
 public class CarteFragment extends Fragment implements OnMapReadyCallback {
     private LocationViewModel locationViewModel;
     private GoogleMap mGoogleMap;
     private MapView mapView;
     private View view;
+    private String tag = "CarteFragment";
 
     @Nullable
     @Override
@@ -59,19 +64,33 @@ public class CarteFragment extends Fragment implements OnMapReadyCallback {
         mGoogleMap = googleMap;
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         //Normalement on va devoir boucler sur toutes les coordonnées reçu pour créer tous les markers
-        googleMap
-                .addMarker(new MarkerOptions()
-                        .position(new LatLng(50.200323, 4.897113))
-                        .title("Collecte de Falmagne")
-                        .snippet("Horaires de cette collecte : \n Lundi : 10H00-15H00 \n Mardi 13H00-17H00 \n Mercredi 8H00-12H00")
-                        );
+//        googleMap
+//                .addMarker(new MarkerOptions()
+//                        .position(new LatLng(50.200323, 4.897113))
+//                        .title("Collecte de Falmagne")
+//                        .snippet("Horaires de cette collecte : \n Lundi : 10H00-15H00 \n Mardi 13H00-17H00 \n Mercredi 8H00-12H00")
+//                        );
+//
+//        MarkerOptions collecteDeNamur = new MarkerOptions()
+//                .position(new LatLng(50.464920, 4.865060))
+//                .title("Collecte de Namur")
+//                .snippet("Horaires de cette collecte : \n Lundi : 10H00-15H00 \n Mardi 13H00-17H00 \n Mercredi 8H00-12H00");
+//        googleMap.addMarker(collecteDeNamur);
 
-        MarkerOptions collecteDeNamur = new MarkerOptions()
-                .position(new LatLng(50.464920, 4.865060))
-                .title("Collecte de Namur")
-                .snippet("Horaires de cette collecte : \n Lundi : 10H00-15H00 \n Mardi 13H00-17H00 \n Mercredi 8H00-12H00");
-        googleMap.addMarker(collecteDeNamur);
-
+        if (locationViewModel.getCollectes() != null) {
+            ArrayList<Collecte> collectes = locationViewModel.getCollectes();
+            for (Collecte collecte : collectes) {
+                googleMap.addMarker(new MarkerOptions()
+                .position(new LatLng(collecte.getLatitude(), collecte.getLongitude()))
+                .title(collecte.getNom())
+                .snippet("Pas disponible pour l'instant !"));
+            }
+        }
+        else
+        {
+            Log.d(tag, "Pas de collectes disponibles !");
+        }
+        
         googleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
             @Override
             public View getInfoWindow(Marker marker) {
