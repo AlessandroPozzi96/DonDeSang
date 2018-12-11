@@ -53,7 +53,7 @@ public class LoadCollectesAsyncTask extends AsyncTask<Void, Void, ArrayList<Coll
         try {
             collectes = collecteDAO.getAllCollectes();
         } catch (Exception e) {
-            Log.d(tag, e.getMessage());
+            Log.d("CollecteDAO", "JSONException " + e.getMessage());
         }
 
         return collectes;

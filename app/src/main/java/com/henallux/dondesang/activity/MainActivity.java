@@ -28,7 +28,6 @@ import com.henallux.dondesang.model.Utilisateur;
 public class MainActivity extends AppCompatActivity implements IMyListener {
 
     Token token;
-    private LocationViewModel locationViewModel;
     Utilisateur utilisateur;
 
     @Override
@@ -44,11 +43,9 @@ public class MainActivity extends AppCompatActivity implements IMyListener {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                     new LocalisationFragment()).commit();
         }
-
-        locationViewModel = ViewModelProviders.of(this).get(LocationViewModel.class);
+        //Récupération des collectes depuis l'API
         LoadCollectesAsyncTask loadCollectesAsyncTask = new LoadCollectesAsyncTask(this);
         loadCollectesAsyncTask.execute();
-
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
