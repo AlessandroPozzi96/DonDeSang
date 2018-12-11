@@ -1,12 +1,16 @@
 package com.henallux.dondesang.activity;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
 
@@ -17,12 +21,15 @@ import com.henallux.dondesang.fragment.ProfileFragment;
 import com.henallux.dondesang.fragment.trouverCollectes.LocalisationFragment;
 import com.henallux.dondesang.fragment.fragmentLogin.EnregistrementFragment;
 import com.henallux.dondesang.fragment.FavoriteFragment;
-import com.henallux.dondesang.fragment.GroupFragment;
+import com.henallux.dondesang.fragment.ScoreFragment;
 import com.henallux.dondesang.R;
 import com.henallux.dondesang.model.LocationViewModel;
 import com.henallux.dondesang.model.Token;
 import com.henallux.dondesang.task.LoadCollectesAsyncTask;
 import com.henallux.dondesang.model.Utilisateur;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 
 public class MainActivity extends AppCompatActivity implements IMyListener {
@@ -32,6 +39,9 @@ public class MainActivity extends AppCompatActivity implements IMyListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // génére la clé de hash pour facebook
+        //printKeyHash();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //On configure le menu
@@ -47,6 +57,24 @@ public class MainActivity extends AppCompatActivity implements IMyListener {
         LoadCollectesAsyncTask loadCollectesAsyncTask = new LoadCollectesAsyncTask(this);
         loadCollectesAsyncTask.execute();
     }
+
+    /*private void printKeyHash() {
+        Log.i("tag","oui");
+
+        try{
+            PackageInfo info = getPackageManager().getPackageInfo("com.henallux.dondesang.activity",
+                    PackageManager.GET_SIGNATURES);
+            for(Signature signature : info.signatures){
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                Log.i("tag",Base64.encodeToString(md.digest(),Base64.DEFAULT));
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+    }*/
 
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
             new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -68,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements IMyListener {
                             selectedFragment = new LocalisationFragment();
                             break;
                         case R.id.nav_group:
-                            selectedFragment = new GroupFragment();
+                            selectedFragment = new ScoreFragment();
                             break;
                         case R.id.nav_faq:
                             selectedFragment = new FaqFragment();
