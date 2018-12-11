@@ -103,7 +103,7 @@ public class ScoreFragment extends Fragment {
                 shareDialog.registerCallback(callbackManager, new FacebookCallback<Sharer.Result>() {
                     @Override
                     public void onSuccess(Sharer.Result result) {
-                        // augmenter le score
+                        // augmenter le scorek
                         new changerLesDonneesAsyncTask(utilisateur,getActivity()).execute();
                         Toast.makeText(getActivity(),"share succes",Toast.LENGTH_LONG).show();
                         Log.i("tag","sucess");
