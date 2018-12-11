@@ -1,13 +1,18 @@
 package com.henallux.dondesang.model;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Collecte {
+
     private Integer id;
     private String nom;
     private Double latitude;
     private Double longitude;
     private Integer telephone;
+    private List<Jourouverture> jourouverture;
 
     public Integer getId() {
         return id;
@@ -47,5 +52,29 @@ public class Collecte {
 
     public void setTelephone(Integer telephone) {
         this.telephone = telephone;
+    }
+
+    public List<Jourouverture> getJourouverture() {
+        return jourouverture;
+    }
+
+    public void setJourouverture(ArrayList<Jourouverture> jourouverture) {
+        this.jourouverture = jourouverture;
+    }
+
+    public void setJourouverture(List<Jourouverture> jourouverture) {
+        this.jourouverture = jourouverture;
+    }
+
+    @Override
+    public String toString() {
+        return "Collecte{" +
+                "id=" + id +
+                ", nom='" + nom + '\'' +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                ", telephone=" + telephone +
+                ", jourouverture=" + jourouverture +
+                '}';
     }
 }

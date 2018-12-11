@@ -6,6 +6,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.Gravity;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -26,6 +28,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.henallux.dondesang.R;
 import com.henallux.dondesang.model.Collecte;
+import com.henallux.dondesang.model.Jourouverture;
 import com.henallux.dondesang.model.LocationViewModel;
 
 import java.util.ArrayList;
@@ -63,31 +66,34 @@ public class CarteFragment extends Fragment implements OnMapReadyCallback {
         MapsInitializer.initialize(getContext());
         mGoogleMap = googleMap;
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        //Normalement on va devoir boucler sur toutes les coordonnées reçu pour créer tous les markers
-//        googleMap
-//                .addMarker(new MarkerOptions()
-//                        .position(new LatLng(50.200323, 4.897113))
-//                        .title("Collecte de Falmagne")
-//                        .snippet("Horaires de cette collecte : \n Lundi : 10H00-15H00 \n Mardi 13H00-17H00 \n Mercredi 8H00-12H00")
-//                        );
-//
-//        MarkerOptions collecteDeNamur = new MarkerOptions()
-//                .position(new LatLng(50.464920, 4.865060))
-//                .title("Collecte de Namur")
-//                .snippet("Horaires de cette collecte : \n Lundi : 10H00-15H00 \n Mardi 13H00-17H00 \n Mercredi 8H00-12H00");
-//        googleMap.addMarker(collecteDeNamur);
+        String telephone;
+        String horaires;
 
-        if (locationViewModel.getCollectes() != null) {
+        if (locationViewModel.getCollectes()!= null && locationViewModel.getCollectes().size() > 0) {
             ArrayList<Collecte> collectes = locationViewModel.getCollectes();
             for (Collecte collecte : collectes) {
+                telephone = (collecte.getTelephone() == null)? "Pas de numéro de téléphone" : "Tél: " + collecte.getTelephone();
+                horaires = "";
+                for (Jourouverture jourouverture : collecte.getJourouverture()) {
+                    if (jourouverture.getDate() != null) {
+                        horaires += jourouverture.getDate();
+                    }
+                    else
+                    {
+                        horaires += jourouverture.getLibelleJour();
+                    }
+                    horaires += " : \n de " + jourouverture.getFkTrancheHoraireNavigation().getHeureDebut() + " à " + jourouverture.getFkTrancheHoraireNavigation().getHeureFin() + " \n";
+                }
+
                 googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(collecte.getLatitude(), collecte.getLongitude()))
                 .title(collecte.getNom())
-                .snippet("Pas disponible pour l'instant !"));
+                .snippet(horaires + "\n" + telephone));
             }
         }
         else
         {
+            Toast.makeText(getActivity(), "Pas de collectes disponibles, veuillez vérifier votre connexion internet", Toast.LENGTH_LONG).show();
             Log.d(tag, "Pas de collectes disponibles !");
         }
         
@@ -134,7 +140,7 @@ public class CarteFragment extends Fragment implements OnMapReadyCallback {
         CameraPosition userPosition = CameraPosition
                 .builder()
                 .target(userLtLng)
-                .zoom(11)
+                .zoom(12)
                 .tilt(35)
                 .build();
 

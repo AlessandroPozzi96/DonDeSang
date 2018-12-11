@@ -35,6 +35,7 @@ import com.henallux.dondesang.R;
 import com.henallux.dondesang.Util;
 import com.henallux.dondesang.model.LocationViewModel;
 import com.henallux.dondesang.task.LoadAddressesAsyncTask;
+import com.henallux.dondesang.task.LoadCollectesAsyncTask;
 
 
 public class LocalisationFragment extends Fragment {
@@ -123,23 +124,23 @@ public class LocalisationFragment extends Fragment {
             public void onClick(View v)
 
             {
-            //En fonction du choix de l'utilisateur on envoie le code postal ou les coordonnées
-            if (sharePosition.isChecked()) {
-                locationViewModel.setLocation(new LatLng(latitudeGPS, longitudeGPS));
-                ((LocationViewModel) locationViewModel).setUtiliseAddresse(false);
+                //En fonction du choix de l'utilisateur on envoie le code postal ou les coordonnées
+                if (sharePosition.isChecked()) {
+                    locationViewModel.setLocation(new LatLng(latitudeGPS, longitudeGPS));
+                    ((LocationViewModel) locationViewModel).setUtiliseAddresse(false);
 
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.replace(R.id.fragment_container,new CarteFragment(),"replaceFragmentByCarteFragment");
-                transaction.commit();
-            }
-            else
-            {
-                ((LocationViewModel) locationViewModel).setUtiliseAddresse(true);
-                if (Util.verificationCodePostal(clientAddress)) {
-                    loadAddressesAsyncTask = new LoadAddressesAsyncTask(fragmentManager, getActivity());
-                    loadAddressesAsyncTask.execute(clientAddress.getText().toString());
+                    FragmentTransaction transaction = fragmentManager.beginTransaction();
+                    transaction.replace(R.id.fragment_container,new CarteFragment(),"replaceFragmentByCarteFragment");
+                    transaction.commit();
                 }
-            }
+                else
+                {
+                    ((LocationViewModel) locationViewModel).setUtiliseAddresse(true);
+                    if (Util.verificationCodePostal(clientAddress)) {
+                        loadAddressesAsyncTask = new LoadAddressesAsyncTask(fragmentManager, getActivity());
+                        loadAddressesAsyncTask.execute(clientAddress.getText().toString());
+                    }
+                }
         }
     }
         );
