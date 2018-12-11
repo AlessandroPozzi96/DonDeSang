@@ -92,6 +92,11 @@ public class MainActivity extends AppCompatActivity implements IMyListener {
     }
 
     @Override
+    public Utilisateur getUtilisateur() {
+        return this.utilisateur;
+    }
+
+    @Override
     public void setUtilisateur(Utilisateur result) {
         this.utilisateur = result;
     }

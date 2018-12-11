@@ -135,7 +135,7 @@ public class ProfileFragment extends Fragment {
 
             try {
                 IMyListener myListener = (IMyListener)getActivity();
-                utilisateur = dataUtilisateur.getUtilisateur("Gwynbleidd",myListener.getToken());
+                utilisateur = dataUtilisateur.getUtilisateur(myListener.getUtilisateur().getLogin(),myListener.getToken());
                 return utilisateur;
             } catch (Exception e) {
                 erreurMessage = e.getMessage();

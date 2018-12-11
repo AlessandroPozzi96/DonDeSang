@@ -21,7 +21,10 @@ import com.henallux.dondesang.R;
 import com.henallux.dondesang.Util;
 import com.henallux.dondesang.exception.ErreurConnectionException;
 import com.henallux.dondesang.fragment.ProfileFragment;
+import com.henallux.dondesang.model.Login;
 import com.henallux.dondesang.model.Token;
+import com.henallux.dondesang.model.Utilisateur;
+import com.henallux.dondesang.task.GetTokenFromApiAsyncTask;
 
 public class LoginFragment extends Fragment {
     FragmentManager fragmentManager;
@@ -53,7 +56,10 @@ public class LoginFragment extends Fragment {
             public void onClick(View v) {
 
                 if (verificationDonnees()) {
-                    new getTokenFromAPI().execute();
+                    Utilisateur utilisateur = new Utilisateur();
+                    utilisateur.setLogin(editUserName.getText().toString());
+                    utilisateur.setPassword(editPassword.getText().toString());
+                    new GetTokenFromApiAsyncTask(utilisateur,getActivity(),getContext(),fragmentManager).execute();
                     } else {
                     Toast.makeText(getActivity(), "Mauvais info", Toast.LENGTH_SHORT).show();
                 }
@@ -89,46 +95,6 @@ public class LoginFragment extends Fragment {
 
     public boolean verificationPassword() {
         return Util.verificationPassword(editPassword);
-    }
-
-
-    private class getTokenFromAPI extends AsyncTask<String, Void, Token> {
-
-        protected void onPreExecute() {
-        }
-
-        @Override
-        protected Token doInBackground(String... strings) {
-            Token token;
-            ApiAuthentification apiAuthentification = new ApiAuthentification(editUserName.getText().toString(), editPassword.getText().toString());
-
-            try {
-                token = apiAuthentification.getToken();
-                return token;
-            } catch (Exception e) {
-                erreurMessage = e.getMessage();
-                return null;
-            } catch (ErreurConnectionException e) {
-                erreurMessage = e.getMessage();
-                return null;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(Token result) {
-            if (result != null) {
-                IMyListener myListener = (IMyListener) getActivity();
-                myListener.setToken(result);
-
-                Toast.makeText(getContext(), result.getAccess_token(), Toast.LENGTH_LONG).show();
-                ProfileFragment profileFragment = new ProfileFragment();
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.replace(R.id.fragment_container,profileFragment,"replaceFragmentByRegisterFragment");
-                transaction.commit();
-            } else {
-                Toast.makeText(getContext(),"Erreur :"+erreurMessage, Toast.LENGTH_LONG).show();
-            }
-        }
     }
 
 }

@@ -1,10 +1,13 @@
 package com.henallux.dondesang.fragment.fragmentLogin;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,8 +16,16 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.henallux.dondesang.DataAcces.ApiAuthentification;
+import com.henallux.dondesang.DataAcces.DataUtilisateur;
+import com.henallux.dondesang.IMyListener;
 import com.henallux.dondesang.R;
 import com.henallux.dondesang.Util;
+import com.henallux.dondesang.exception.ErreurConnectionException;
+import com.henallux.dondesang.fragment.ProfileFragment;
+import com.henallux.dondesang.model.Token;
+import com.henallux.dondesang.model.Utilisateur;
+import com.henallux.dondesang.task.CreateUserAsyncTask;
 
 public class RegisterFragment extends Fragment {
 
@@ -23,6 +34,7 @@ public class RegisterFragment extends Fragment {
     TextView editPassword;
     TextView editPasswordRepeat;
     TextView editEmail;
+    String erreurMessage;
 
     @Nullable
     @Override
@@ -53,7 +65,12 @@ public class RegisterFragment extends Fragment {
                 && verificationPasswordRepeat()
                 && verificationEmail()
                 ){
-            Toast.makeText(getActivity(),"Envoie a la BD de l'inscription",Toast.LENGTH_SHORT).show();
+            //INSCRIPTION
+            Utilisateur utilisateur = new Utilisateur();
+            utilisateur.setLogin(editLogin.getText().toString());
+            utilisateur.setMail(editEmail.getText().toString());
+            utilisateur.setPassword(editPassword.getText().toString());
+            new CreateUserAsyncTask(utilisateur,getActivity(),getFragmentManager(),getContext()).execute();
         }else{
             Toast.makeText(getActivity(),"Données invalides",Toast.LENGTH_SHORT).show();
         }
@@ -62,7 +79,7 @@ public class RegisterFragment extends Fragment {
 
     public boolean verificationLogin(){ // Fait juste une vérification de longeur
         if(Util.verificationLoginLongeur(editLogin)){
-            return Util.verificationLoginPresent(editLogin);
+            return Util.verificationLoginDisponible(editLogin);
         }else{
             return false;
         }
@@ -149,4 +166,53 @@ public class RegisterFragment extends Fragment {
 
         super.onDetach();
     }
+
+
+    private class CreationUtilisateur extends AsyncTask<String, Void, Utilisateur> {
+
+
+        Utilisateur nouvelUtilisateur;
+
+        public CreationUtilisateur(Utilisateur utilisateur)
+        {
+            this.nouvelUtilisateur = utilisateur;
+        }
+
+        protected void onPreExecute() {
+        }
+
+        @Override
+        protected Utilisateur doInBackground(String... strings) {
+            Utilisateur utilisateur;
+            DataUtilisateur dataUtilisateur = new DataUtilisateur();
+            try {
+                utilisateur = dataUtilisateur.CreationUtilisateur(this.nouvelUtilisateur);
+                return utilisateur;
+            } catch (Exception e) {
+                erreurMessage = e.getMessage();
+                return null;
+            } catch (ErreurConnectionException e) {
+                erreurMessage = e.getMessage();
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Utilisateur utilisateur) {
+            if (utilisateur != null) {
+                IMyListener myListener = (IMyListener) getActivity();
+                myListener.setUtilisateur(utilisateur);
+                FragmentManager fragmentManager = getFragmentManager();
+                Toast.makeText(getContext(), utilisateur.getLogin(), Toast.LENGTH_LONG).show();
+                ProfileFragment profileFragment = new ProfileFragment();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.replace(R.id.fragment_container,profileFragment,"replaceFragmentByRegisterFragment");
+                transaction.commit();
+            } else {
+                Toast.makeText(getContext(),"Erreur :"+erreurMessage, Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+
 }
