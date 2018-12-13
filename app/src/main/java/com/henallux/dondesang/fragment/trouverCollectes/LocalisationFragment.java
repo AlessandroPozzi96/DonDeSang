@@ -118,6 +118,12 @@ public class LocalisationFragment extends Fragment {
 
         //Lancement de la recherche de collecte lorsqu'on a une position valide
         butCarte = (Button) view.findViewById(R.id.but_RechercheCentre);
+
+        //Récupération des collectes depuis l'API
+        LoadCollectesAsyncTask loadCollectesAsyncTask = new LoadCollectesAsyncTask(getActivity(), butCarte);
+        loadCollectesAsyncTask.execute();
+        butCarte.setEnabled(false);
+
         butCarte.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -131,6 +137,7 @@ public class LocalisationFragment extends Fragment {
 
                     FragmentTransaction transaction = fragmentManager.beginTransaction();
                     transaction.replace(R.id.fragment_container,new CarteFragment(),"replaceFragmentByCarteFragment");
+                    transaction.addToBackStack("LocalisationFragment");
                     transaction.commit();
                 }
                 else

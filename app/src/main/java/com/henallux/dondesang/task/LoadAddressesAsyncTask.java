@@ -47,6 +47,7 @@ public class LoadAddressesAsyncTask extends AsyncTask<String, Void, ArrayList<Ad
         ChoixAddresseFragment choixAddresseFragment = new ChoixAddresseFragment();
         locationViewModel.setAddresses(addresses);
         transaction.replace(R.id.fragment_container, choixAddresseFragment,"replaceFragmentByChoixAddresseFragment");
+        transaction.addToBackStack("ChoixAdresseFragment");
         transaction.commit();
     }
 

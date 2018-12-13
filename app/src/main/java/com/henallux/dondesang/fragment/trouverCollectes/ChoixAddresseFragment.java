@@ -52,6 +52,7 @@ public class ChoixAddresseFragment extends Fragment {
 
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.fragment_container,new CarteFragment(),"replaceFragmentByCarteFragment");
+                transaction.addToBackStack("CarteFragment");
                 transaction.commit();
             }
         });

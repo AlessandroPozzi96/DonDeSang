@@ -5,8 +5,10 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.os.AsyncTask;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.widget.Button;
 
 import com.henallux.dondesang.DataAcces.CollecteDAO;
+import com.henallux.dondesang.R;
 import com.henallux.dondesang.exception.DeserialisationException;
 import com.henallux.dondesang.model.Collecte;
 import com.henallux.dondesang.model.LocationViewModel;
@@ -16,10 +18,14 @@ import java.util.ArrayList;
 public class LoadCollectesAsyncTask extends AsyncTask<Void, Void, ArrayList<Collecte>> {
     private String tag = "LoadCollectesAsyncTask";
     private LocationViewModel locationViewModel;
+    private Activity activity;
+    private Button butCarte;
 
-    public LoadCollectesAsyncTask(Activity activity) {
+    public LoadCollectesAsyncTask(Activity activity, Button butCarte) {
         super();
-        locationViewModel = ViewModelProviders.of((FragmentActivity) activity).get(LocationViewModel.class);
+        this.activity = activity;
+        this.butCarte = butCarte;
+        locationViewModel = ViewModelProviders.of((FragmentActivity) this.activity).get(LocationViewModel.class);
     }
 
     @Override
@@ -30,6 +36,7 @@ public class LoadCollectesAsyncTask extends AsyncTask<Void, Void, ArrayList<Coll
     @Override
     protected void onPostExecute(ArrayList<Collecte> collectes) {
         locationViewModel.setCollectes(collectes);
+        butCarte.setEnabled(true);
     }
 
     @Override

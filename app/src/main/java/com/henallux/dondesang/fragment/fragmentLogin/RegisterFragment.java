@@ -207,6 +207,7 @@ public class RegisterFragment extends Fragment {
                 ProfileFragment profileFragment = new ProfileFragment();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.fragment_container,profileFragment,"replaceFragmentByRegisterFragment");
+                transaction.addToBackStack("RegisterFragment");
                 transaction.commit();
             } else {
                 Toast.makeText(getContext(),"Erreur :"+erreurMessage, Toast.LENGTH_LONG).show();

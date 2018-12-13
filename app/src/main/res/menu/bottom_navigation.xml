@@ -14,5 +14,5 @@
         android:title="Group" />
     <item android:id="@+id/nav_faq"
         android:icon="@drawable/ic_faq"
-        android:title="F.A.Q" />
+        android:title="Infos" />
 </menu>

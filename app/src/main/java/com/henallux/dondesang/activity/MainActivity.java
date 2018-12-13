@@ -1,35 +1,26 @@
 package com.henallux.dondesang.activity;
 
-import android.arch.lifecycle.ViewModelProviders;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
-import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
 
 import com.facebook.AccessToken;
 import com.henallux.dondesang.IMyListener;
-import com.henallux.dondesang.fragment.FaqFragment;
+import com.henallux.dondesang.fragment.InfosFragment;
 import com.henallux.dondesang.fragment.ProfileFragment;
 import com.henallux.dondesang.fragment.trouverCollectes.LocalisationFragment;
 import com.henallux.dondesang.fragment.fragmentLogin.EnregistrementFragment;
 import com.henallux.dondesang.fragment.FavoriteFragment;
 import com.henallux.dondesang.fragment.ScoreFragment;
 import com.henallux.dondesang.R;
-import com.henallux.dondesang.model.LocationViewModel;
 import com.henallux.dondesang.model.Token;
-import com.henallux.dondesang.task.LoadCollectesAsyncTask;
 import com.henallux.dondesang.model.Utilisateur;
-
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 
 public class MainActivity extends AppCompatActivity implements IMyListener {
@@ -50,12 +41,10 @@ public class MainActivity extends AppCompatActivity implements IMyListener {
 
         //I added this if statement to keep the selected fragment when rotating the device
         if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction().addToBackStack("FirstFragment");
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                     new LocalisationFragment()).commit();
         }
-        //Récupération des collectes depuis l'API
-        LoadCollectesAsyncTask loadCollectesAsyncTask = new LoadCollectesAsyncTask(this);
-        loadCollectesAsyncTask.execute();
     }
 
     /*private void printKeyHash() {
@@ -99,15 +88,16 @@ public class MainActivity extends AppCompatActivity implements IMyListener {
                             selectedFragment = new ScoreFragment();
                             break;
                         case R.id.nav_faq:
-                            selectedFragment = new FaqFragment();
+                            selectedFragment = new InfosFragment();
                             break;
                         case R.id.nav_favorite:
                             selectedFragment = new FavoriteFragment();
                             break;
                     }
-
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                            selectedFragment).commit();
+                    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                    transaction.replace(R.id.fragment_container, selectedFragment);
+                    transaction.addToBackStack("FirstFragment");
+                    transaction.commit();
 
                     return true;
                 }
@@ -131,5 +121,17 @@ public class MainActivity extends AppCompatActivity implements IMyListener {
     @Override
     public void setUtilisateur(Utilisateur result) {
         this.utilisateur = result;
+    }
+
+    @Override
+    public void onBackPressed() {
+        int count = getFragmentManager().getBackStackEntryCount();
+
+        if (count == 0) {
+            super.onBackPressed();
+            //additional code
+        } else {
+            getFragmentManager().popBackStack();
+        }
     }
 }

@@ -73,6 +73,7 @@ public class LoginFragment extends Fragment {
                 fragmentManager = getFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.enregistrement_container, motDePasseOublieFragment, "replaceFragmentByMotDePasseOublieFragment");
+                transaction.addToBackStack("MotDePasseOublieFragment");
                 transaction.commit();
             }
         });
