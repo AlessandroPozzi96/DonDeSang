@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements IMyListener {
                     }
                     FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                     transaction.replace(R.id.fragment_container, selectedFragment);
-                    transaction.addToBackStack("FirstFragment");
+                    //transaction.addToBackStack("FirstFragment");
                     transaction.commit();
 
                     return true;
