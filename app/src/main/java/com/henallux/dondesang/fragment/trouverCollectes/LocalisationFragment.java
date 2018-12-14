@@ -81,8 +81,8 @@ public class LocalisationFragment extends Fragment {
             @Override
             public void onProviderDisabled(String s) {
                 /*Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                startActivity(intent);
-                */
+                startActivity(intent);*/
+
             }
         };
         toggleGPSUpdates();
