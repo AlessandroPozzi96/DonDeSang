@@ -73,13 +73,13 @@
         android:layout_marginTop="28dp"
         android:layout_marginEnd="8dp"
         android:text="Autoriser les notifications \n pour les plaquettes ? "
-        app:layout_constraintEnd_toStartOf="@+id/switch2"
+        app:layout_constraintEnd_toStartOf="@+id/switch_autorisationPlaquettes"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView16" />
 
     <Switch
-        android:id="@+id/switch2"
+        android:id="@+id/switch_autorisationPlaquettes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
@@ -95,19 +95,19 @@
         android:layout_marginTop="20dp"
         android:layout_marginEnd="8dp"
         android:text="Autoriser les notifications \n pour le plasma ?"
-        app:layout_constraintEnd_toStartOf="@+id/switch3"
+        app:layout_constraintEnd_toStartOf="@+id/switch_autorisationPlasma"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView17" />
 
     <Switch
-        android:id="@+id/switch3"
+        android:id="@+id/switch_autorisationPlasma"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/switch2" />
+        app:layout_constraintTop_toBottomOf="@+id/switch_autorisationPlaquettes" />
 
     <TextView
         android:id="@+id/textView19"
@@ -127,14 +127,15 @@
 
     <Spinner
         android:id="@+id/combobox_groupesanguin"
-        android:layout_width="56dp"
-        android:layout_height="32dp"
+        android:layout_width="79dp"
+        android:layout_height="35dp"
         android:layout_marginTop="36dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
+        android:background="@color/white_greyish"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/switch3"
+        app:layout_constraintTop_toBottomOf="@+id/switch_autorisationPlasma"
         app:layout_constraintVertical_bias="0.0" />
 
     <Button

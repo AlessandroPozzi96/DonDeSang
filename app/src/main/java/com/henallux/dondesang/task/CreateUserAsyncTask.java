@@ -57,6 +57,7 @@ public class CreateUserAsyncTask extends AsyncTask<String, Void, Utilisateur> {
             ProfileFragment profileFragment = new ProfileFragment();
             FragmentTransaction transaction = fragmentManager.beginTransaction();
             transaction.replace(R.id.fragment_container,profileFragment,"replaceFragmentByRegisterFragment");
+            transaction.addToBackStack("CreateUserFragment");
             transaction.commit();
         } else {
             Toast.makeText(context,"Erreur :"+erreurMessage, Toast.LENGTH_LONG).show();

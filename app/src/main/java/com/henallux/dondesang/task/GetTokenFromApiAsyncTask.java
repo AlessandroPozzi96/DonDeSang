@@ -60,6 +60,7 @@ public class GetTokenFromApiAsyncTask extends AsyncTask<String, Void, Token> {
                 ProfileFragment profileFragment = new ProfileFragment();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.fragment_container,profileFragment,"replaceFragmentByRegisterFragment");
+                transaction.addToBackStack("LoginFragment");
                 transaction.commit();
             } else {
                 Toast.makeText(context,"Erreur :"+erreurMessage, Toast.LENGTH_LONG).show();
