@@ -5,12 +5,10 @@ import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 
 import com.facebook.AccessToken;
@@ -21,7 +19,7 @@ import com.henallux.dondesang.fragment.InfosFragment;
 import com.henallux.dondesang.fragment.ProfileFragment;
 import com.henallux.dondesang.fragment.trouverCollectes.LocalisationFragment;
 import com.henallux.dondesang.fragment.fragmentLogin.EnregistrementFragment;
-import com.henallux.dondesang.fragment.FavoriteFragment;
+import com.henallux.dondesang.fragment.NotificationsFragment;
 import com.henallux.dondesang.fragment.ScoreFragment;
 import com.henallux.dondesang.R;
 import com.henallux.dondesang.model.Collecte;
@@ -99,8 +97,8 @@ public class MainActivity extends AppCompatActivity implements IMyListener {
                         case R.id.nav_faq:
                             selectedFragment = new InfosFragment();
                             break;
-                        case R.id.nav_favorite:
-                            selectedFragment = new FavoriteFragment();
+                        case R.id.nav_notifications:
+                            selectedFragment = new NotificationsFragment();
                             break;
                     }
                     FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();

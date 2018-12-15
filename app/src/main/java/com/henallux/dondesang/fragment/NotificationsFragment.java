@@ -9,11 +9,15 @@ import android.view.ViewGroup;
 
 import com.henallux.dondesang.R;
 
-public class FavoriteFragment extends Fragment {
+public class NotificationsFragment extends Fragment {
+    private View view;
+
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_favorite, container, false);
+        view =  inflater.inflate(R.layout.fragment_notifications, container, false);
+
+        return view;
     }
 }
