@@ -10,6 +10,10 @@ public class Token {
         this.access_token=access_token;
         this.expires_in=expires_in;
     }
+    public Token()
+    {
+
+    }
 
     public int getExpires_in() {
         return expires_in;

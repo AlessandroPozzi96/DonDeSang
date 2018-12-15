@@ -1,5 +1,7 @@
 package com.henallux.dondesang.activity;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -12,7 +14,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.facebook.AccessToken;
+import com.google.gson.Gson;
 import com.henallux.dondesang.IMyListener;
+import com.henallux.dondesang.Util;
 import com.henallux.dondesang.fragment.InfosFragment;
 import com.henallux.dondesang.fragment.ProfileFragment;
 import com.henallux.dondesang.fragment.trouverCollectes.LocalisationFragment;
@@ -20,19 +24,42 @@ import com.henallux.dondesang.fragment.fragmentLogin.EnregistrementFragment;
 import com.henallux.dondesang.fragment.FavoriteFragment;
 import com.henallux.dondesang.fragment.ScoreFragment;
 import com.henallux.dondesang.R;
+import com.henallux.dondesang.model.Collecte;
+import com.henallux.dondesang.model.Login;
 import com.henallux.dondesang.model.Token;
 import com.henallux.dondesang.model.Utilisateur;
+import com.henallux.dondesang.services.CollecteService;
+import com.henallux.dondesang.services.ServiceBuilder;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class MainActivity extends AppCompatActivity implements IMyListener {
 
     Token token;
     Utilisateur utilisateur;
-
+    Login login;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // génére la clé de hash pour facebook
-        //printKeyHash();
+
+        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+
+        String utilisateurJSONString = sharedPref.getString("utilisateurJSONString",null);
+        String tokenAccessJSONString = sharedPref.getString("tokenAccessJSONString",null);
+        Gson gson = new Gson();
+
+        if(utilisateurJSONString != null){
+            utilisateur = gson.fromJson(utilisateurJSONString,Utilisateur.class);
+                Log.i("tag", "Voici utilisateur : " + utilisateur.getLogin());
+                Log.i("tag", "Voici utilisateur : " + utilisateur.getPassword());
+        }
+
+        if(tokenAccessJSONString != null){
+            token = gson.fromJson(tokenAccessJSONString,Token.class);
+                Log.i("tag", "Voici token : " + token.getAccess_token());
+        }
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -48,24 +75,6 @@ public class MainActivity extends AppCompatActivity implements IMyListener {
         }
     }
 
-    /*private void printKeyHash() {
-        Log.i("tag","oui");
-
-        try{
-            PackageInfo info = getPackageManager().getPackageInfo("com.henallux.dondesang.activity",
-                    PackageManager.GET_SIGNATURES);
-            for(Signature signature : info.signatures){
-                MessageDigest md = MessageDigest.getInstance("SHA");
-                md.update(signature.toByteArray());
-                Log.i("tag",Base64.encodeToString(md.digest(),Base64.DEFAULT));
-            }
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-    }*/
-
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
             new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
@@ -74,8 +83,7 @@ public class MainActivity extends AppCompatActivity implements IMyListener {
 
                     switch (item.getItemId()) {
                         case R.id.nav_profile:
-                            AccessToken accessToken = AccessToken.getCurrentAccessToken();
-                            if(token ==null) {
+                            if(utilisateur == null) {
                                 selectedFragment = new EnregistrementFragment();
                                 //selectedFragment = new ProfileFragment();
                             }else{
@@ -106,7 +114,6 @@ public class MainActivity extends AppCompatActivity implements IMyListener {
 
     @Override
     public void setToken(Token tok) {
-        Log.i("tag","LE TOKEN : "+tok.getAccess_token());
         this.token = tok;
     }
     public Token getToken()

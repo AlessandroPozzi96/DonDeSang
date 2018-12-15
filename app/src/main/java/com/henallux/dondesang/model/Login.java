@@ -2,22 +2,28 @@ package com.henallux.dondesang.model;
 
 public class Login {
 
-    private String login;
-    private String password;
+    private String UserName;
+    private String Password;
+
+    public Login(String login,String password)
+    {
+        this.UserName = login;
+        this.Password = password;
+    }
 
     public String getPassword() {
-        return password;
+        return Password;
     }
 
     public String getLogin() {
-        return login;
+        return UserName;
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        this.Password = password;
     }
 
     public void setLogin(String login) {
-        this.login = login;
+        this.UserName = login;
     }
 }

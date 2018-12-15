@@ -1,6 +1,7 @@
 package com.henallux.dondesang.fragment.fragmentLogin;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -16,6 +17,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.henallux.dondesang.DataAcces.ApiAuthentification;
 import com.henallux.dondesang.DataAcces.DataUtilisateur;
 import com.henallux.dondesang.IMyListener;
@@ -23,9 +25,18 @@ import com.henallux.dondesang.R;
 import com.henallux.dondesang.Util;
 import com.henallux.dondesang.exception.ErreurConnectionException;
 import com.henallux.dondesang.fragment.ProfileFragment;
+import com.henallux.dondesang.model.Login;
 import com.henallux.dondesang.model.Token;
 import com.henallux.dondesang.model.Utilisateur;
+import com.henallux.dondesang.services.AuthenticationService;
+import com.henallux.dondesang.services.ServiceBuilder;
+import com.henallux.dondesang.services.UtilisateurService;
 import com.henallux.dondesang.task.CreateUserAsyncTask;
+
+import javax.security.auth.callback.Callback;
+
+import retrofit2.Call;
+import retrofit2.Response;
 
 public class RegisterFragment extends Fragment {
 
@@ -66,11 +77,68 @@ public class RegisterFragment extends Fragment {
                 && verificationEmail()
                 ){
             //INSCRIPTION
-            Utilisateur utilisateur = new Utilisateur();
-            utilisateur.setLogin(editLogin.getText().toString());
-            utilisateur.setMail(editEmail.getText().toString());
-            utilisateur.setPassword(editPassword.getText().toString());
-            new CreateUserAsyncTask(utilisateur,getActivity(),getFragmentManager(),getContext()).execute();
+            Utilisateur newUtilisateur = new Utilisateur();
+            newUtilisateur.setLogin(editLogin.getText().toString());
+            newUtilisateur.setMail(editEmail.getText().toString());
+            newUtilisateur.setPassword(editPassword.getText().toString());
+            //new CreateUserAsyncTask(utilisateur,getActivity(),getFragmentManager(),getContext()).execute();
+            UtilisateurService utilisateurService = ServiceBuilder.buildService(UtilisateurService.class);
+            Call<Utilisateur> createRequest = utilisateurService.createUtilisateur(newUtilisateur);
+            createRequest.enqueue(new retrofit2.Callback<Utilisateur>() {
+                @Override
+                public void onResponse(Call<Utilisateur> call, Response<Utilisateur> response) {
+                    // Inscription faite, dirige vers le profil
+                    Utilisateur utilisateur = response.body(); // RECUP l'utilisateur => l'enregistrer.
+
+                    Gson gson = new Gson();
+                    String utilisateurJSON = gson.toJson(utilisateur,Utilisateur.class);
+
+                    SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.putString("utilisateurJSONString", utilisateurJSON);
+                    editor.commit();
+
+                    ((IMyListener)getActivity()).setUtilisateur(utilisateur);
+
+
+                    // on c'est inscrit il faut le token.
+                    Login login = new Login(utilisateur.getLogin(),utilisateur.getPassword());
+                    AuthenticationService authenticationService = ServiceBuilder.buildService(AuthenticationService.class);
+                    final Call<Token> requete = authenticationService.getToken(login);
+                    requete.enqueue(new retrofit2.Callback<Token>() {
+                        @Override
+                        public void onResponse(Call<Token> call, Response<Token> response) {
+                            Token token = response.body();
+
+                            Gson gson = new Gson();
+                            String tokenJSON = gson.toJson(token,Token.class);
+
+                            SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedPref.edit();
+                            editor.putString("tokenAccessJSONString", tokenJSON);
+                            editor.commit();
+
+                            ((IMyListener)getActivity()).setToken(token);
+
+
+                            ProfileFragment profileFragment = new ProfileFragment();
+                            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                            transaction.replace(R.id.fragment_container,profileFragment,"replaceFragmentByRegisterFragment");
+                            transaction.addToBackStack("RegisterFragment");
+                            transaction.commit();
+                        }
+
+                        @Override
+                        public void onFailure(Call<Token> call, Throwable t) {
+
+                        }
+                    });
+                }
+                @Override
+                public void onFailure(Call<Utilisateur> call, Throwable t) {
+                    Toast.makeText(getContext(),"Erreur d'inscription",Toast.LENGTH_LONG).show();
+                }
+            });
         }else{
             Toast.makeText(getActivity(),"Données invalides",Toast.LENGTH_SHORT).show();
         }

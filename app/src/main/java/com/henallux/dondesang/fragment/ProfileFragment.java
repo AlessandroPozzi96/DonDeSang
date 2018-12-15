@@ -1,6 +1,8 @@
 package com.henallux.dondesang.fragment;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -26,15 +28,22 @@ import com.henallux.dondesang.DataAcces.ApiAuthentification;
 import com.henallux.dondesang.DataAcces.DataUtilisateur;
 import com.henallux.dondesang.IMyListener;
 import com.henallux.dondesang.R;
+import com.henallux.dondesang.activity.MainActivity;
 import com.henallux.dondesang.exception.ErreurConnectionException;
 import com.henallux.dondesang.fragment.fragmentLogin.EnregistrementFragment;
 import com.henallux.dondesang.model.Token;
 import com.henallux.dondesang.model.Utilisateur;
+import com.henallux.dondesang.services.ServiceBuilder;
+import com.henallux.dondesang.services.UtilisateurService;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Arrays;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ProfileFragment extends Fragment {
 
@@ -60,10 +69,11 @@ public class ProfileFragment extends Fragment {
     EditText editTextNom;
     Button buttonVoirstat;
     Button buttonSupprimerCompte;
-
+    Button buttonDeco;
 
     String erreurMessage;
     Utilisateur utilisateur;
+    Token token;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         dataUtilisateur = new DataUtilisateur();
@@ -80,7 +90,9 @@ public class ProfileFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initialize();
-        new getUtilisateur().execute();
+        utilisateur = ((IMyListener) getActivity()).getUtilisateur();
+        token = ((IMyListener) getActivity()).getToken();
+        chargementDesChamps();
     }
 
     private void initialize() {
@@ -98,11 +110,52 @@ public class ProfileFragment extends Fragment {
         editTextNom             = getView().findViewById(R.id.editTextNom);
         buttonVoirstat          = getView().findViewById(R.id.buttonVoirstat);
         buttonSupprimerCompte   = getView().findViewById(R.id.buttonSupprimerCompte);
+        buttonDeco = getView().findViewById(R.id.buttonDeco);
+        buttonDeco.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.remove("tokenAccessJSONString");
+                editor.remove("utilisateurJSONString");
+                editor.commit();
 
+                ((IMyListener)getActivity()).setUtilisateur(null);
+                ((IMyListener)getActivity()).setToken(null);
+
+                Intent intent = new Intent(getContext(),MainActivity.class);
+                startActivity(intent);
+            }
+        });
         buttonSupprimerCompte.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new SupprimerCompte().execute();
+                UtilisateurService utilisateurService = ServiceBuilder.buildService(UtilisateurService.class);
+                Call<Void> requete = utilisateurService.deleteUtilisateur("Bearer "+token.getAccess_token(), utilisateur.getLogin());
+                requete.enqueue(new Callback<Void>() {
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                        if(response.isSuccessful()){
+                            Toast.makeText(getContext(),"CompteSupprimer",Toast.LENGTH_LONG).show();
+                            SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedPref.edit();
+                            editor.remove("tokenAccessJSONString");
+                            editor.remove("utilisateurJSONString");
+                            editor.commit();
+
+
+                            Intent intent = new Intent(getContext(),MainActivity.class);
+                            startActivity(intent);
+                        }else{
+                            Toast.makeText(getContext(),"Pas supprimer",Toast.LENGTH_LONG).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Void> call, Throwable t) {
+
+                    }
+                });
             }
         });
         buttonVoirstat.setOnClickListener(new View.OnClickListener() {
@@ -115,7 +168,6 @@ public class ProfileFragment extends Fragment {
 
     public void chargementDesChamps()
     {
-        Toast.makeText(getContext(),utilisateur.getNumGsm()+"mail : "+utilisateur.getMail(),Toast.LENGTH_LONG).show();
         editTextLogin.setText(utilisateur.getLogin());
         editTextPrenom.setText(utilisateur.getPrenom());
         editTextNumGSM.setText(utilisateur.getNumGsm()+"");
@@ -125,68 +177,6 @@ public class ProfileFragment extends Fragment {
     }
 
 
-    private class getUtilisateur extends AsyncTask<String, Void, Utilisateur> {
-        protected void onPreExecute() {
-        }
-
-        @Override
-        protected Utilisateur doInBackground(String... strings) {
-            Utilisateur utilisateur;
-
-            try {
-                IMyListener myListener = (IMyListener)getActivity();
-                utilisateur = dataUtilisateur.getUtilisateur(myListener.getUtilisateur().getLogin(),myListener.getToken());
-                return utilisateur;
-            } catch (Exception e) {
-                erreurMessage = e.getMessage();
-                return null;
-            } catch (ErreurConnectionException e) {
-                erreurMessage = e.getMessage();
-                return null;
-            }
-        }
-        @Override
-        protected void onPostExecute(Utilisateur result) {
-            if (result != null) {
-                IMyListener myListener = (IMyListener) getActivity();
-                myListener.setUtilisateur(result);
-                utilisateur = result;
-                chargementDesChamps();
-            } else {
-                Toast.makeText(getContext(),erreurMessage, Toast.LENGTH_LONG).show();
-            }
-        }
-    }
-
-
-    private class SupprimerCompte extends AsyncTask<String, Void, Boolean> {
-        protected void onPreExecute() {
-        }
-        @Override
-        protected Boolean doInBackground(String... strings) {
-
-            try {
-                IMyListener myListener = (IMyListener) getActivity();
-                return dataUtilisateur.supprimerUtilisateur("Gwynbleidd",myListener.getToken());
-            } catch (Exception e) {
-                erreurMessage = e.getMessage();
-                return false;
-            } catch (ErreurConnectionException e) {
-                erreurMessage = e.getMessage();
-                return false;
-            }
-        }
-        @Override
-        protected void onPostExecute(Boolean result) {
-            if (result) {
-                Toast.makeText(getContext(),"Votre Compte a été supprimer",Toast.LENGTH_LONG).show();
-                IMyListener myListener = (IMyListener) getActivity();
-                myListener.setToken(null);
-              } else {
-                Toast.makeText(getContext(),erreurMessage, Toast.LENGTH_LONG).show();
-            }
-        }
-    }
 
 
 
