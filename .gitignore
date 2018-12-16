@@ -11,3 +11,4 @@
 /captures
 .externalNativeBuild
 app\src\main\res\values-v21\google_maps_api.xml
+app\google-services.json
