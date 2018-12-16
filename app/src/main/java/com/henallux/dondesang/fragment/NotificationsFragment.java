@@ -94,7 +94,11 @@ public class NotificationsFragment extends Fragment {
                 editor.putBoolean("notifications", autoriserNotifications.isChecked());
                 editor.commit();
                 if (autoriserNotifications.isChecked()) {
-                    FirebaseMessaging.getInstance().subscribeToTopic("ALERTE");
+                    FirebaseMessaging.getInstance().subscribeToTopic("ALERTES");
+                }
+                else
+                {
+                    FirebaseMessaging.getInstance().unsubscribeFromTopic("ALERTES");
                 }
             }
         });
