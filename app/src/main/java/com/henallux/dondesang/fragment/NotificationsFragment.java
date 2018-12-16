@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.Toast;
 
 import com.henallux.dondesang.R;
 import com.henallux.dondesang.model.GroupeSanguin;
@@ -45,6 +46,10 @@ public class NotificationsFragment extends Fragment {
         autoriserPlaquettes = (Switch) view.findViewById(R.id.switch_autorisationPlaquettes);
         autoriserPlasma = (Switch) view.findViewById(R.id.switch_autorisationPlasma);
 
+        //Fonctionnalités non implémentées
+        autoriserPlaquettes.setEnabled(false);
+        autoriserPlasma.setEnabled(false);
+
         ArrayAdapter<GroupeSanguin> adapter = new ArrayAdapter<GroupeSanguin>(getContext(),  android.R.layout.simple_spinner_dropdown_item, groupesSanguins);
         adapter.setDropDownViewResource( android.R.layout.simple_spinner_dropdown_item);
         spinnerGroupesSanguins.setAdapter(adapter);
@@ -63,19 +68,18 @@ public class NotificationsFragment extends Fragment {
             }
         });
 
+        autoriserNotifications.setChecked(sharedPreferences.getBoolean("notifications", true));
+        desactiverParametres(!sharedPreferences.getBoolean("notifications", false));
+
         autoriserNotifications.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!autoriserNotifications.isChecked()) {
-                    autoriserPlaquettes.setEnabled(false);
-                    autoriserPlasma.setEnabled(false);
-                    spinnerGroupesSanguins.setEnabled(false);
+                    desactiverParametres(true);
                 }
                 else
                 {
-                    autoriserPlaquettes.setEnabled(true);
-                    autoriserPlasma.setEnabled(true);
-                    spinnerGroupesSanguins.setEnabled(true);
+                    desactiverParametres(false);
                 }
             }
         });
@@ -84,15 +88,8 @@ public class NotificationsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 editor.putString("groupeSanguin", groupeChoisi);
+                editor.putBoolean("notifications", autoriserNotifications.isChecked());
                 editor.commit();
-
-                if (autoriserNotifications.isChecked()) {
-
-                }
-                else
-                {
-
-                }
             }
         });
 
@@ -125,5 +122,10 @@ public class NotificationsFragment extends Fragment {
             }
         }
         return index;
+    }
+
+    public void desactiverParametres(Boolean desactiver) {
+
+        spinnerGroupesSanguins.setEnabled(!desactiver);
     }
 }
