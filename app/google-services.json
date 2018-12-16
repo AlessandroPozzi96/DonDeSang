@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "208104946095",
+    "firebase_url": "https://dondesang-ca450.firebaseio.com",
+    "project_id": "dondesang-ca450",
+    "storage_bucket": "dondesang-ca450.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:208104946095:android:8de03d768cc02af3",
+        "android_client_info": {
+          "package_name": "com.henallux.dondesang"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "208104946095-rckub4c7m221mpnrt2caaib0ni0eqe8h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.henallux.dondesang",
+            "certificate_hash": "44fb7c102a9f4e173633d2b6546ac8422f7cde69"
+          }
+        },
+        {
+          "client_id": "208104946095-v8d585fs4cdvfr6hi4svtd506uapvds5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDUtblwgo2nx5FnBMvGMRbDqLX2cSzqECc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "208104946095-v8d585fs4cdvfr6hi4svtd506uapvds5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

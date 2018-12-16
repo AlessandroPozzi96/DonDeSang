@@ -16,8 +16,11 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import com.google.firebase.messaging.FirebaseMessagingService;
 import com.henallux.dondesang.R;
 import com.henallux.dondesang.model.GroupeSanguin;
+import com.henallux.dondesang.services.FireBaseMessengingService;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -90,6 +93,9 @@ public class NotificationsFragment extends Fragment {
                 editor.putString("groupeSanguin", groupeChoisi);
                 editor.putBoolean("notifications", autoriserNotifications.isChecked());
                 editor.commit();
+                if (autoriserNotifications.isChecked()) {
+                    FirebaseMessaging.getInstance().subscribeToTopic("ALERTE");
+                }
             }
         });
 

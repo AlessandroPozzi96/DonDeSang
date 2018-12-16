@@ -27,6 +27,7 @@ import com.henallux.dondesang.model.Login;
 import com.henallux.dondesang.model.Token;
 import com.henallux.dondesang.model.Utilisateur;
 import com.henallux.dondesang.services.CollecteService;
+import com.henallux.dondesang.services.FireBaseMessengingService;
 import com.henallux.dondesang.services.ServiceBuilder;
 
 import retrofit2.Call;
