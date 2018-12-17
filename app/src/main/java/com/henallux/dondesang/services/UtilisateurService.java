@@ -8,6 +8,7 @@ import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 public interface UtilisateurService {
@@ -22,4 +23,6 @@ public interface UtilisateurService {
     @DELETE("Utilisateurs/{login}")
     Call<Void> deleteUtilisateur(@Header("Authorization") String tokenAcces, @Path("login")String login);
 
+    @PUT("Utilisateurs/{login}")
+    Call<Utilisateur> putUtilisateur(@Header("Authorization") String tokenAcces, @Path("login")String login, @Body Utilisateur utilisateurModif);
 }

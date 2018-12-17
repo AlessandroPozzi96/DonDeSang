@@ -1,13 +1,19 @@
 package com.henallux.dondesang.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
 
@@ -29,6 +35,9 @@ import com.henallux.dondesang.model.Utilisateur;
 import com.henallux.dondesang.services.CollecteService;
 import com.henallux.dondesang.services.FireBaseMessengingService;
 import com.henallux.dondesang.services.ServiceBuilder;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 import retrofit2.Call;
 import retrofit2.Callback;

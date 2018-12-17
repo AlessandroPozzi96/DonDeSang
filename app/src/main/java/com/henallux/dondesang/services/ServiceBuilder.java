@@ -7,7 +7,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ServiceBuilder {
 // ON définit l'url de base
-    private  static final String URL ="https://croixrougeapi.azurewebsites.net/api//";
+    private  static final String URL ="https://croixrougeapi.azurewebsites.net/api/";
 
    // créer le logger
     private static HttpLoggingInterceptor loffer =

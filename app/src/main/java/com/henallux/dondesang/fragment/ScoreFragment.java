@@ -29,10 +29,17 @@ import com.henallux.dondesang.IMyListener;
 import com.henallux.dondesang.R;
 import com.henallux.dondesang.fragment.fragmentLogin.EnregistrementFragment;
 import com.henallux.dondesang.fragment.fragmentLogin.LoginFragment;
+import com.henallux.dondesang.model.Token;
 import com.henallux.dondesang.model.Utilisateur;
+import com.henallux.dondesang.services.ServiceBuilder;
+import com.henallux.dondesang.services.UtilisateurService;
 import com.henallux.dondesang.task.changerLesDonneesAsyncTask;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ScoreFragment extends Fragment {
     CallbackManager callbackManager;
@@ -45,6 +52,7 @@ public class ScoreFragment extends Fragment {
     TextView textViewPartagerImage;
     IMyListener myListener;
     Utilisateur utilisateur;
+    Token token;
     Target target = new Target() {
         @Override
         public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
@@ -104,7 +112,26 @@ public class ScoreFragment extends Fragment {
                     @Override
                     public void onSuccess(Sharer.Result result) {
                         // augmenter le scorek
-                        new changerLesDonneesAsyncTask(utilisateur,getActivity()).execute();
+                        //new changerLesDonneesAsyncTask(utilisateur,getActivity()).execute();
+                        utilisateur.setScore(utilisateur.getScore()+50);
+                        UtilisateurService utilisateurService = ServiceBuilder.buildService(UtilisateurService.class);
+                        Call<Utilisateur> requete = utilisateurService.putUtilisateur(token.getAccess_token(),utilisateur.getLogin(),utilisateur);
+                        requete.enqueue(new Callback<Utilisateur>() {
+                            @Override
+                            public void onResponse(Call<Utilisateur> call, Response<Utilisateur> response) {
+                                if(response.isSuccessful()){
+                                    Toast.makeText(getContext(),"Vous avez gagné 50 points",Toast.LENGTH_LONG).show();
+                                }else{
+                                    Toast.makeText(getContext(),"erreur dans le put",Toast.LENGTH_LONG).show();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<Utilisateur> call, Throwable t) {
+                                Toast.makeText(getContext(),"erreur dans le partage",Toast.LENGTH_LONG).show();
+                            }
+                        });
+
                         Toast.makeText(getActivity(),"share succes",Toast.LENGTH_LONG).show();
                         Log.i("tag","sucess");
                     }

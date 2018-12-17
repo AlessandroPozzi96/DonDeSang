@@ -94,8 +94,7 @@ public class LoginFragment extends Fragment {
                             requete.enqueue(new Callback<Utilisateur>() {
                                 @Override
                                 public void onResponse(Call<Utilisateur> call, Response<Utilisateur> response) {
-                                    Log.i("tag", response.toString());
-                                    if (response.code() == 200) {
+                                    if (response.isSuccessful()) {
                                         Utilisateur utilisateur = response.body();
 
                                         Gson gson = new Gson();
@@ -113,8 +112,9 @@ public class LoginFragment extends Fragment {
                                         transaction.replace(R.id.fragment_container, profileFragment, "replaceFragmentByRegisterFragment");
                                         transaction.addToBackStack("RegisterFragment");
                                         transaction.commit();
+                                    }else{
+                                        Toast.makeText(getContext(),response.message()+"non",Toast.LENGTH_LONG).show();
                                     }
-
                                 }
 
                                 @Override

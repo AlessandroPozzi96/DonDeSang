@@ -12,11 +12,9 @@ public class Utilisateur {
     private String mail;
     private Integer numGsm;
     private String dateNaissance;
-    private Boolean isMale;
     private Integer score;
-    private String fkRole;
-    private Integer fkAdresse;
-    private String fkGroupesanguin;
+    private Adresse fkAdresseNavigation;
+    private GroupeSanguin fkGroupesanguinNavigation;
     private String rv;
 
     public String getLogin() {
@@ -65,5 +63,41 @@ public class Utilisateur {
 
     public void setScore(Integer score) {
         this.score = score;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
+    public void setPrenom(String prenom) {
+        this.prenom = prenom;
+    }
+
+    public void setDateNaissance(String dateNaissance) {
+        this.dateNaissance = dateNaissance;
+    }
+
+    public void setNumGsm(Integer numGsm) {
+        this.numGsm = numGsm;
+    }
+
+    public void setAdresse(Adresse adresse) {
+        this.fkAdresseNavigation = adresse;
+    }
+
+    public void setGroupeSanguin(GroupeSanguin groupeSanguin) {
+        this.fkGroupesanguinNavigation = groupeSanguin;
+    }
+
+    public void setRv(String rv) {
+        rv = rv;
+    }
+
+    public String getRv() {
+        return rv;
+    }
+
+    public Adresse getFkAdresseNavigation() {
+        return fkAdresseNavigation;
     }
 }
