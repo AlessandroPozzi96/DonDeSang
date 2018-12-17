@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements IMyListener {
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
 
-        //I added this if statement to keep the selected fragment when rotating the device
+        //Permet de rester sur le fragment sélectionner lorsqu'on change l'orientation de l'écran
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                     new LocalisationFragment()).commit();

@@ -35,8 +35,14 @@ public class LoadCollectesAsyncTask extends AsyncTask<Void, Void, ArrayList<Coll
 
     @Override
     protected void onPostExecute(ArrayList<Collecte> collectes) {
-        locationViewModel.setCollectes(collectes);
-        butCarte.setEnabled(true);
+        if (collectes.isEmpty()) {
+            butCarte.setEnabled(false);
+        }
+        else
+        {
+            locationViewModel.setCollectes(collectes);
+            butCarte.setEnabled(true);
+        }
     }
 
     @Override
