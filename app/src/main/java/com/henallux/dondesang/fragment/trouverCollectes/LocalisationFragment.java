@@ -85,7 +85,6 @@ public class LocalisationFragment extends Fragment {
 
             }
         };
-        toggleGPSUpdates();
     }
 
     @Nullable
@@ -105,6 +104,7 @@ public class LocalisationFragment extends Fragment {
                 if (sharePosition.isChecked())
                 {
                     clientAddress.setEnabled(false);
+                    toggleGPSUpdates();
                     Log.d(tag, "onClick Switch Latitude : " + latitudeGPS + " Longitude : " + longitudeGPS);
 
                 }

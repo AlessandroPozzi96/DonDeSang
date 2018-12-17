@@ -42,6 +42,8 @@ public class MainActivity extends AppCompatActivity implements IMyListener {
     Login login;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
         SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
 
@@ -60,15 +62,12 @@ public class MainActivity extends AppCompatActivity implements IMyListener {
                 Log.i("tag", "Voici token : " + token.getAccess_token());
         }
 
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
         //On configure le menu
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
 
         //I added this if statement to keep the selected fragment when rotating the device
         if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction().addToBackStack("FirstFragment");
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                     new LocalisationFragment()).commit();
         }
@@ -104,7 +103,6 @@ public class MainActivity extends AppCompatActivity implements IMyListener {
                     }
                     FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                     transaction.replace(R.id.fragment_container, selectedFragment);
-                    //transaction.addToBackStack("FirstFragment");
                     transaction.commit();
 
                     return true;
