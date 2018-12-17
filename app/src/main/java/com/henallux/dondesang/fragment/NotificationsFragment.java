@@ -29,11 +29,12 @@ public class NotificationsFragment extends Fragment {
     private View view;
     private Spinner spinnerGroupesSanguins;
     private ArrayList<GroupeSanguin> groupesSanguins;
-    private String groupeChoisi = "O-", tag = "NotificationsFragment";
+    private String tag = "NotificationsFragment", topicGeneral = "ALERTES";
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
     private Button buttonValiderPreferences;
     private Switch autoriserNotifications, autoriserPlaquettes, autoriserPlasma;
+    private int groupeChoisi;
 
     @Nullable
     @Override
@@ -56,14 +57,15 @@ public class NotificationsFragment extends Fragment {
         ArrayAdapter<GroupeSanguin> adapter = new ArrayAdapter<GroupeSanguin>(getContext(),  android.R.layout.simple_spinner_dropdown_item, groupesSanguins);
         adapter.setDropDownViewResource( android.R.layout.simple_spinner_dropdown_item);
         spinnerGroupesSanguins.setAdapter(adapter);
-        spinnerGroupesSanguins.setSelection(getGroupeSanguin(sharedPreferences.getString("groupeSanguin", "AB+")));
+        groupeChoisi = sharedPreferences.getInt("indexGroupeSanguin", 0);
+        spinnerGroupesSanguins.setSelection(groupeChoisi);
 
         editor = sharedPreferences.edit();
 
         spinnerGroupesSanguins.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                groupeChoisi = parent.getItemAtPosition(position).toString();
+                groupeChoisi = position;
             }
 
             @Override
@@ -73,6 +75,13 @@ public class NotificationsFragment extends Fragment {
 
         autoriserNotifications.setChecked(sharedPreferences.getBoolean("notifications", true));
         desactiverParametres(!sharedPreferences.getBoolean("notifications", false));
+
+        if (sharedPreferences.getBoolean("notifications", true)) {
+            autoriserNotifications.setChecked(true);
+            desactiverParametres(false);
+            subscribeFromOneTopic(topicGeneral);
+            subscribeFromOneTopic(topicGeneral + "_" + groupeChoisi);
+        }
 
         autoriserNotifications.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,20 +99,26 @@ public class NotificationsFragment extends Fragment {
         buttonValiderPreferences.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                editor.putString("groupeSanguin", groupeChoisi);
-                editor.putBoolean("notifications", autoriserNotifications.isChecked());
-                editor.commit();
+
                 if (autoriserNotifications.isChecked()) {
-                    FirebaseMessaging.getInstance().subscribeToTopic("ALERTES");
+                    subscribeFromOneTopic(topicGeneral);
+                    subscribeFromOneTopic(topicGeneral + "_" + groupeChoisi);
                 }
                 else
                 {
-                    FirebaseMessaging.getInstance().unsubscribeFromTopic("ALERTES");
+                    unsubscribeFromOneTopic(topicGeneral);
+                    unsubscribeFromAllGroupesSanguins();
                 }
+
+                //editor.putString("groupeSanguin", groupeChoisi);
+                editor.putInt("indexGroupeSanguin", groupeChoisi);
+                editor.putBoolean("notifications", autoriserNotifications.isChecked());
+                editor.commit();
+                Toast.makeText(getContext(), "Préférences mises à jour", Toast.LENGTH_SHORT).show();
             }
         });
 
-        Log.d(tag, "Preference : " + sharedPreferences.getString("groupeSanguin", "O-"));
+        Log.d(tag, "Preference : " + getGroupesSanguins().get(sharedPreferences.getInt("indexGroupeSanguin", 0)));
 
         return view;
     }
@@ -115,6 +130,8 @@ public class NotificationsFragment extends Fragment {
                 Arrays.asList(
                         new GroupeSanguin("O-"),
                         new GroupeSanguin("O+"),
+                        new GroupeSanguin("B-"),
+                        new GroupeSanguin("B+"),
                         new GroupeSanguin("A-"),
                         new GroupeSanguin("A+"),
                         new GroupeSanguin("AB-"),
@@ -125,6 +142,7 @@ public class NotificationsFragment extends Fragment {
     }
 
     public int getGroupeSanguin(String groupe) {
+        //Pas top comme solution
         int index = 0;
         for (int i = 0; i < getGroupesSanguins().size(); i++) {
             if (getGroupesSanguins().get(i).getNom().equals(groupe)) {
@@ -137,5 +155,19 @@ public class NotificationsFragment extends Fragment {
     public void desactiverParametres(Boolean desactiver) {
 
         spinnerGroupesSanguins.setEnabled(!desactiver);
+    }
+
+    public void unsubscribeFromAllGroupesSanguins() {
+        for (int i = 0; i < getGroupesSanguins().size(); i++) {
+            FirebaseMessaging.getInstance().unsubscribeFromTopic(topicGeneral + "_" + i);
+        }
+    }
+
+    public void subscribeFromOneTopic(String topic) {
+        FirebaseMessaging.getInstance().subscribeToTopic(topic);
+    }
+
+    public void unsubscribeFromOneTopic(String topic) {
+        FirebaseMessaging.getInstance().unsubscribeFromTopic(topic);
     }
 }
