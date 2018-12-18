@@ -157,6 +157,7 @@ public class ProfileFragment extends Fragment {
         });
 
         buttonSupprimerCompte   = getView().findViewById(R.id.buttonSupprimerCompte);
+
         buttonChangerDonne.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -167,7 +168,8 @@ public class ProfileFragment extends Fragment {
                 if(! editTextNumGSM.getText().toString().equals("")){
                     utilisateur.setNumGsm(Integer.parseInt(editTextNumGSM.getText().toString()));
                 }
-                utilisateur.setDateNaissance(datePicker.getYear()+"-"+datePicker.getMonth()+1+"-"+datePicker.getDayOfMonth());
+                int mois = datePicker.getMonth()+1;
+                utilisateur.setDateNaissance(datePicker.getYear()+"-"+mois+"-"+datePicker.getDayOfMonth());
 
                 Adresse adresse = new Adresse();
                 adresse.setRue(editTextRue.getText().toString());
@@ -176,17 +178,20 @@ public class ProfileFragment extends Fragment {
 
                 utilisateur.setAdresse(adresse);
                 //utilisateur.setGroupeSanguin(groupeSanguin);
-                UtilisateurService utilisateurService = ServiceBuilder.buildService(UtilisateurService.class);
+                final UtilisateurService utilisateurService = ServiceBuilder.buildService(UtilisateurService.class);
 
                 Call<Utilisateur> requete = utilisateurService.putUtilisateur("Bearer "+token.getAccess_token(), utilisateur.getLogin(),utilisateur);
                 requete.enqueue(new Callback<Utilisateur>() {
                     @Override
                     public void onResponse(Call<Utilisateur> call, Response<Utilisateur> response) {
+                        Gson g = new GsonBuilder().disableHtmlEscaping().create();
+                        String utilisateurJSON = g.toJson(utilisateur);
+                        Log.i("tag",utilisateurJSON);
+
                         if(response.isSuccessful()) {
                             utilisateur = response.body();
 
-                            Gson g = new GsonBuilder().disableHtmlEscaping().create();
-                            String utilisateurJSON = g.toJson(utilisateur);
+                            Log.i("tag",token.getAccess_token());
 
                             SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
                             SharedPreferences.Editor editor = sharedPref.edit();
@@ -198,7 +203,9 @@ public class ProfileFragment extends Fragment {
                             Toast.makeText(getContext(),"Mise a jour effectuée",Toast.LENGTH_LONG).show();
                         }else{
                             Log.i("tag",response.toString());
-                            Toast.makeText(getContext(),"Erreur dans la mise a jour",Toast.LENGTH_LONG).show();
+                            Toast.makeText(getContext(),response.message(),Toast.LENGTH_LONG).show();
+                            Log.i("tag",utilisateur.getRv());
+                            Log.i("tag",utilisateur.getLogin());
                         }
                     }
 
@@ -325,10 +332,6 @@ public class ProfileFragment extends Fragment {
                         new GroupeSanguin("AB-"),
                         new GroupeSanguin("AB+"))
         );
-
         return groupesSanguins;
     }
-
-
-
 }

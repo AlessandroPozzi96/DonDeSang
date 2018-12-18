@@ -1,6 +1,8 @@
 package com.henallux.dondesang.fragment;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.opengl.Visibility;
@@ -26,6 +28,7 @@ import com.facebook.share.Sharer;
 import com.facebook.share.model.SharePhoto;
 import com.facebook.share.model.SharePhotoContent;
 import com.facebook.share.widget.ShareDialog;
+import com.google.gson.Gson;
 import com.henallux.dondesang.IMyListener;
 import com.henallux.dondesang.R;
 import com.henallux.dondesang.fragment.fragmentLogin.EnregistrementFragment;
@@ -54,7 +57,6 @@ public class ScoreFragment extends Fragment {
     IMyListener myListener;
     Utilisateur utilisateur;
     Token token;
-    com.facebook.share.widget.ShareButton fb_share_button;
     Target target = new Target() {
         @Override
         public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
@@ -85,8 +87,11 @@ public class ScoreFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         myListener =  (IMyListener) getActivity();
+        FacebookSdk.sdkInitialize(getActivity().getApplicationContext());
+        callbackManager = CallbackManager.Factory.create();
+        shareDialog = new ShareDialog(this);
         utilisateur = myListener.getUtilisateur();
-        FacebookSdk.sdkInitialize(getActivity().getBaseContext());
+        token = myListener.getToken();
     }
 
     @Nullable
@@ -103,8 +108,11 @@ public class ScoreFragment extends Fragment {
         buttonSharePhoto = getView().findViewById(R.id.buttonSharePhoto);
 
         // INIT FB
-        callbackManager = CallbackManager.Factory.create();
-        shareDialog = new ShareDialog(getActivity());
+
+        //shareDialog.registerCallback(callbackManager,callBack);
+
+
+
 
         buttonSharePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -114,18 +122,33 @@ public class ScoreFragment extends Fragment {
                     @Override
                     public void onSuccess(Sharer.Result result) {
 
-                        // augmenter le score
                         //new changerLesDonneesAsyncTask(utilisateur,getActivity()).execute();
+
                         utilisateur.setScore(utilisateur.getScore()+50);
+                        Log.i("tag",utilisateur.getScore()+" oui");
                         UtilisateurService utilisateurService = ServiceBuilder.buildService(UtilisateurService.class);
-                        Call<Utilisateur> requete = utilisateurService.putUtilisateur(token.getAccess_token(),utilisateur.getLogin(),utilisateur);
+                        Call<Utilisateur> requete = utilisateurService.putUtilisateur("Bearer "+token.getAccess_token(),utilisateur.getLogin(),utilisateur);
                         requete.enqueue(new Callback<Utilisateur>() {
+
                             @Override
                             public void onResponse(Call<Utilisateur> call, Response<Utilisateur> response) {
+                                Log.i("tag",token.getAccess_token());
                                 if(response.isSuccessful()){
+                                    utilisateur = response.body();
+
                                     Toast.makeText(getContext(),"Vous avez gagné 50 points",Toast.LENGTH_LONG).show();
+                                    progressBar.setProgress(utilisateur.getScore());
+                                    myListener.setUtilisateur(utilisateur);
+
+                                    Gson gson = new Gson();
+                                    String utilisateurJSON = gson.toJson(utilisateur, Utilisateur.class);
+                                    SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+                                    SharedPreferences.Editor editor = sharedPref.edit();
+                                    editor.putString("utilisateurJSONString", utilisateurJSON);
+                                    editor.commit();
+
                                 }else{
-                                    Toast.makeText(getContext(),"erreur dans le put",Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getContext(),response.message(),Toast.LENGTH_LONG).show();
                                 }
                             }
 
@@ -197,6 +220,6 @@ public class ScoreFragment extends Fragment {
         textViewPartagerImage = getView().findViewById(R.id.textViewPartagerImage);
         buttonSharePhoto = getView().findViewById(R.id.buttonSharePhoto);
         buttonSeLoger = getView().findViewById(R.id.buttonSeLoger);
-        fb_share_button = getView().findViewById(R.id.fb_share_button);
     }
+
 }
