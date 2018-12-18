@@ -89,7 +89,7 @@ public class Utilisateur {
         this.fkGroupesanguinNavigation = groupeSanguin;
     }
 
-    public void setRv(String rv) {
+    public void setRv(String  rv) {
         rv = rv;
     }
 

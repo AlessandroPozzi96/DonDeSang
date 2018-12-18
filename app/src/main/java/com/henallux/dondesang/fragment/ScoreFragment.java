@@ -1,5 +1,6 @@
 package com.henallux.dondesang.fragment;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.opengl.Visibility;
@@ -53,6 +54,7 @@ public class ScoreFragment extends Fragment {
     IMyListener myListener;
     Utilisateur utilisateur;
     Token token;
+    com.facebook.share.widget.ShareButton fb_share_button;
     Target target = new Target() {
         @Override
         public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
@@ -84,7 +86,7 @@ public class ScoreFragment extends Fragment {
         super.onCreate(savedInstanceState);
         myListener =  (IMyListener) getActivity();
         utilisateur = myListener.getUtilisateur();
-        FacebookSdk.sdkInitialize(getContext());
+        FacebookSdk.sdkInitialize(getActivity().getBaseContext());
     }
 
     @Nullable
@@ -111,7 +113,8 @@ public class ScoreFragment extends Fragment {
                 shareDialog.registerCallback(callbackManager, new FacebookCallback<Sharer.Result>() {
                     @Override
                     public void onSuccess(Sharer.Result result) {
-                        // augmenter le scorek
+
+                        // augmenter le score
                         //new changerLesDonneesAsyncTask(utilisateur,getActivity()).execute();
                         utilisateur.setScore(utilisateur.getScore()+50);
                         UtilisateurService utilisateurService = ServiceBuilder.buildService(UtilisateurService.class);
@@ -181,6 +184,12 @@ public class ScoreFragment extends Fragment {
 
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+    }
+
     private void initialisationVue() {
         imageToShare = getView().findViewById(R.id.imageToShare);
         progressBar = getView().findViewById(R.id.progressBar);
@@ -188,5 +197,6 @@ public class ScoreFragment extends Fragment {
         textViewPartagerImage = getView().findViewById(R.id.textViewPartagerImage);
         buttonSharePhoto = getView().findViewById(R.id.buttonSharePhoto);
         buttonSeLoger = getView().findViewById(R.id.buttonSeLoger);
+        fb_share_button = getView().findViewById(R.id.fb_share_button);
     }
 }

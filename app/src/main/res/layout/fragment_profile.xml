@@ -315,7 +315,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:layout_marginEnd="8dp"
-            android:text="Déconection"
+            android:text="Déconexion"
             app:layout_constraintEnd_toStartOf="@+id/editTextNumero"
             app:layout_constraintTop_toBottomOf="@+id/numeroText" />
 

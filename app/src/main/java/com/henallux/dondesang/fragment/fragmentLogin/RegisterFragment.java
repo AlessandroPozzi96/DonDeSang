@@ -88,51 +88,61 @@ public class RegisterFragment extends Fragment {
                 @Override
                 public void onResponse(Call<Utilisateur> call, Response<Utilisateur> response) {
                     // Inscription faite, dirige vers le profil
-                    Utilisateur utilisateur = response.body(); // RECUP l'utilisateur => l'enregistrer.
+                    if (response.isSuccessful())
+                    {
+
+                        Utilisateur utilisateur = response.body(); // RECUP l'utilisateur => l'enregistrer.
 
                     Gson gson = new Gson();
-                    String utilisateurJSON = gson.toJson(utilisateur,Utilisateur.class);
+                    String utilisateurJSON = gson.toJson(utilisateur, Utilisateur.class);
 
                     SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPref.edit();
                     editor.putString("utilisateurJSONString", utilisateurJSON);
                     editor.commit();
 
-                    ((IMyListener)getActivity()).setUtilisateur(utilisateur);
+                    ((IMyListener) getActivity()).setUtilisateur(utilisateur);
 
 
                     // on c'est inscrit il faut le token.
-                    Login login = new Login(utilisateur.getLogin(),utilisateur.getPassword());
+                    Login login = new Login(utilisateur.getLogin(), utilisateur.getPassword());
                     AuthenticationService authenticationService = ServiceBuilder.buildService(AuthenticationService.class);
                     final Call<Token> requete = authenticationService.getToken(login);
                     requete.enqueue(new retrofit2.Callback<Token>() {
                         @Override
                         public void onResponse(Call<Token> call, Response<Token> response) {
-                            Token token = response.body();
+                            if (response.isSuccessful()) {
+                                Token token = response.body();
 
-                            Gson gson = new Gson();
-                            String tokenJSON = gson.toJson(token,Token.class);
+                                Gson gson = new Gson();
+                                String tokenJSON = gson.toJson(token, Token.class);
 
-                            SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
-                            SharedPreferences.Editor editor = sharedPref.edit();
-                            editor.putString("tokenAccessJSONString", tokenJSON);
-                            editor.commit();
+                                SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPref.edit();
+                                editor.putString("tokenAccessJSONString", tokenJSON);
+                                editor.commit();
 
-                            ((IMyListener)getActivity()).setToken(token);
+                                ((IMyListener) getActivity()).setToken(token);
 
 
-                            ProfileFragment profileFragment = new ProfileFragment();
-                            FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                            transaction.replace(R.id.fragment_container,profileFragment,"replaceFragmentByRegisterFragment");
-                            transaction.addToBackStack("RegisterFragment");
-                            transaction.commit();
+                                ProfileFragment profileFragment = new ProfileFragment();
+                                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                                transaction.replace(R.id.fragment_container, profileFragment, "replaceFragmentByRegisterFragment");
+                                transaction.addToBackStack("RegisterFragment");
+                                transaction.commit();
+                            } else {
+                                Toast.makeText(getContext(), response.message(), Toast.LENGTH_LONG).show();
+                            }
                         }
 
                         @Override
                         public void onFailure(Call<Token> call, Throwable t) {
-
+                            Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_LONG).show();
                         }
                     });
+                }else{
+                        Toast.makeText(getContext(),response.message(),Toast.LENGTH_LONG).show();
+                    }
                 }
                 @Override
                 public void onFailure(Call<Utilisateur> call, Throwable t) {

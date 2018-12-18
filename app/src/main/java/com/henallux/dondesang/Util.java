@@ -5,11 +5,11 @@ import android.widget.TextView;
 public class Util {
 
     public static boolean verificationLoginLongeur(TextView editLogin){
-        if(editLogin.getText().length() > 1){
+        if(editLogin.getText().length() > 2){
             return true;
         }
         else{
-            editLogin.setError("Minimun 6 caractères");
+            editLogin.setError("Minimun 3 caractères");
             return false;
         }
     }
