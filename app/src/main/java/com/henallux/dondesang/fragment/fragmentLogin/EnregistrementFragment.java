@@ -64,7 +64,6 @@ public class EnregistrementFragment extends Fragment {
                 RegisterFragment registerFragment = new RegisterFragment();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.enregistrement_container,registerFragment,"replaceFragmentByRegisterFragment");
-                transaction.addToBackStack("RegisterFragment");
                 transaction.commit();
             }
         });
@@ -76,7 +75,6 @@ public class EnregistrementFragment extends Fragment {
                 LoginFragment loginFragment = new LoginFragment();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.enregistrement_container,loginFragment,"replaceFragmentByLoginFragment");
-                transaction.addToBackStack("LoginFragment");
                 transaction.commit();
             }
         });

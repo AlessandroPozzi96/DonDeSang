@@ -110,7 +110,6 @@ public class LoginFragment extends Fragment {
                                         ProfileFragment profileFragment = new ProfileFragment();
                                         FragmentTransaction transaction = getFragmentManager().beginTransaction();
                                         transaction.replace(R.id.fragment_container, profileFragment, "replaceFragmentByRegisterFragment");
-                                        transaction.addToBackStack("RegisterFragment");
                                         transaction.commit();
                                     }else{
                                         Toast.makeText(getContext(),response.message()+"non",Toast.LENGTH_LONG).show();

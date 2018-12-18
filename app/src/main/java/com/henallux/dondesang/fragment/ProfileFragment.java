@@ -10,6 +10,7 @@ import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -229,8 +230,10 @@ public class ProfileFragment extends Fragment {
                 ((IMyListener)getActivity()).setUtilisateur(null);
                 ((IMyListener)getActivity()).setToken(null);
 
-                Intent intent = new Intent(getContext(),MainActivity.class);
+                Intent intent = new Intent(getContext(), MainActivity.class);
                 startActivity(intent);
+                //Supprimer tous les fragments dans le backstack
+                getActivity().getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
             }
         });
         buttonSupprimerCompte.setOnClickListener(new View.OnClickListener() {

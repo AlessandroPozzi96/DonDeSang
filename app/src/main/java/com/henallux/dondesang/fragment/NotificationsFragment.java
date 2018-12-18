@@ -17,6 +17,7 @@ import android.widget.Switch;
 import android.widget.Toast;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
+import com.henallux.dondesang.Constants;
 import com.henallux.dondesang.R;
 import com.henallux.dondesang.model.GroupeSanguin;
 import com.henallux.dondesang.services.FireBaseMessengingService;
@@ -29,7 +30,7 @@ public class NotificationsFragment extends Fragment {
     private View view;
     private Spinner spinnerGroupesSanguins;
     private ArrayList<GroupeSanguin> groupesSanguins;
-    private String tag = "NotificationsFragment", topicGeneral = "ALERTES";
+    private String tag = "NotificationsFragment";
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
     private Button buttonValiderPreferences;
@@ -79,8 +80,8 @@ public class NotificationsFragment extends Fragment {
         if (sharedPreferences.getBoolean("notifications", true)) {
             autoriserNotifications.setChecked(true);
             desactiverParametres(false);
-            subscribeFromOneTopic(topicGeneral);
-            subscribeFromOneTopic(topicGeneral + "_" + groupeChoisi);
+            subscribeFromOneTopic(Constants.TOPIC_GENERAL);
+            subscribeFromOneTopic(Constants.TOPIC_GENERAL + "_" + groupeChoisi);
         }
 
         autoriserNotifications.setOnClickListener(new View.OnClickListener() {
@@ -101,12 +102,12 @@ public class NotificationsFragment extends Fragment {
             public void onClick(View v) {
 
                 if (autoriserNotifications.isChecked()) {
-                    subscribeFromOneTopic(topicGeneral);
-                    subscribeFromOneTopic(topicGeneral + "_" + groupeChoisi);
+                    subscribeFromOneTopic(Constants.TOPIC_GENERAL);
+                    subscribeFromOneTopic(Constants.TOPIC_GENERAL + "_" + groupeChoisi);
                 }
                 else
                 {
-                    unsubscribeFromOneTopic(topicGeneral);
+                    unsubscribeFromOneTopic(Constants.TOPIC_GENERAL);
                     unsubscribeFromAllGroupesSanguins();
                 }
 
@@ -159,7 +160,7 @@ public class NotificationsFragment extends Fragment {
 
     public void unsubscribeFromAllGroupesSanguins() {
         for (int i = 0; i < getGroupesSanguins().size(); i++) {
-            FirebaseMessaging.getInstance().unsubscribeFromTopic(topicGeneral + "_" + i);
+            FirebaseMessaging.getInstance().unsubscribeFromTopic(Constants.TOPIC_GENERAL + "_" + i);
         }
     }
 
