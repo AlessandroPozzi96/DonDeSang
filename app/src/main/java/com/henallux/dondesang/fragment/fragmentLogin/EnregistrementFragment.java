@@ -43,6 +43,13 @@ public class EnregistrementFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         fragmentManager = getFragmentManager();
+
+        LoginFragment loginFragment = new LoginFragment();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.enregistrement_container,loginFragment,"replaceFragmentByLoginFragment");
+        transaction.addToBackStack("LoginFragment");
+        transaction.commit();
+
         return inflater.inflate(R.layout.fragment_enregistrement,container,false);
     }
 
