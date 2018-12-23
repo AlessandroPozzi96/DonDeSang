@@ -50,6 +50,7 @@ public class InfosFragment extends Fragment {
 
 
         butFaq = view.findViewById(R.id.button_FAQ);
+        butFaq.setEnabled(false);
         button_Question1 = view.findViewById(R.id.button_Question1);
         button_Question2 = view.findViewById(R.id.button_Question2);
         button_Question3 = view.findViewById(R.id.button_Question3);
@@ -91,11 +92,19 @@ public class InfosFragment extends Fragment {
 
                 //On garnit le viewModel pour le fragment FAQ
                 informationViewModel.setInformations(informations);
+                butFaq.setEnabled(true);
             }
 
             @Override
             public void onFailure(Call<List<Information>> call, Throwable t) {
-                Toast.makeText(getContext(), Constants.MSG_ERREUR_REPONSE + " ( " + t.getMessage() + " )", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), Constants.MSG_ERREUR_REPONSE, Toast.LENGTH_SHORT).show();
+                if (informationViewModel.getInformations() == null || informationViewModel.getInformations().isEmpty()) {
+                    butFaq.setEnabled(false);
+                }
+                else
+                {
+                    butFaq.setEnabled(true);
+                }
             }
         });
 

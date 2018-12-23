@@ -32,7 +32,7 @@ public class FaqFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_faq, container, false);
         linearLayout = view.findViewById(R.id.layout_faq);
         informationViewModel = ViewModelProviders.of(getActivity()).get(InformationViewModel.class);
-
+        //On ne veut pas réafficher les 3 questions du fragment précédent
         List<Information> faq = informationViewModel.getInformations().subList(3, informationViewModel.getInformations().size());
         genererFaq(faq);
 
