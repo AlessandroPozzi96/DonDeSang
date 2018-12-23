@@ -29,10 +29,9 @@
             android:visibility="invisible" />
 
         <Button
-            android:id="@+id/button_Qui_Peut_Donner_Sang"
+            android:id="@+id/button_Question1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Qui peut donner son sang ?"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Button"
             android:textSize="18sp"
@@ -40,16 +39,15 @@
             android:typeface="normal" />
 
         <LinearLayout
-            android:id="@+id/linearLayout_QuiPeutDonnerSang"
+            android:id="@+id/linearLayout_Question1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"></LinearLayout>
 
         <Button
-            android:id="@+id/button_Déroulement_Don_Sang"
+            android:id="@+id/button_Question2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Déroulement du don de sang"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Button"
             android:textSize="18sp"
@@ -57,16 +55,15 @@
             android:typeface="normal" />
 
         <LinearLayout
-            android:id="@+id/linearLayout_Deroulement"
+            android:id="@+id/linearLayout_Question2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"></LinearLayout>
 
         <Button
-            android:id="@+id/button_Qui_Peut_Recevoir_Sang3"
+            android:id="@+id/button_Question3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Qui peut recevoir du sang ?"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Button"
             android:textSize="18sp"
@@ -74,7 +71,7 @@
             android:typeface="normal" />
 
         <LinearLayout
-            android:id="@+id/linearLayout_QuiPeutRecevoirSang"
+            android:id="@+id/linearLayout_Question3"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"></LinearLayout>

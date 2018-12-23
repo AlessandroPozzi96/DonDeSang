@@ -75,7 +75,7 @@ public class NotificationsFragment extends Fragment {
         });
 
         autoriserNotifications.setChecked(sharedPreferences.getBoolean("notifications", true));
-        desactiverParametres(!sharedPreferences.getBoolean("notifications", false));
+        desactiverParametres(sharedPreferences.getBoolean("notifications", false));
 
         if (sharedPreferences.getBoolean("notifications", true)) {
             autoriserNotifications.setChecked(true);
