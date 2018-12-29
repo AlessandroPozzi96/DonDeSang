@@ -77,8 +77,13 @@ public class MainActivity extends AppCompatActivity implements IMyListener {
 
         //Permet de rester sur le fragment sélectionner lorsqu'on change l'orientation de l'écran
         if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                    new LocalisationFragment()).commit();
+            if(utilisateur == null) {
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        new EnregistrementFragment()).commit();
+            }else{
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        new ProfileFragment()).commit();
+            }
         }
     }
 
@@ -149,4 +154,5 @@ public class MainActivity extends AppCompatActivity implements IMyListener {
 
         }
     }
+
 }
