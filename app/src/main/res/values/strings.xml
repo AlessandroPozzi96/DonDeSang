@@ -109,4 +109,6 @@
     <string name="erreur_serveur_statusCode">Erreur du serveur, Status code : </string>
     <string name="exception_model">Exception levée ! Model : </string>
     <string name="exception_model_variable"> variable : </string>
+    <string name="erreur_groupeSanguin">Impossible de charger les groupes sanguins</string>
+    <string name="groupe_sanguin_aucun">Aucun</string>
 </resources>

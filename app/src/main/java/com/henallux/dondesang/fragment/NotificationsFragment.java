@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.telecom.Call;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,9 +23,15 @@ import com.henallux.dondesang.R;
 import com.henallux.dondesang.model.GroupeSanguin;
 import com.henallux.dondesang.services.FireBaseMessengingService;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.henallux.dondesang.services.GroupeSanguinService;
+import com.henallux.dondesang.services.ServiceBuilder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class NotificationsFragment extends Fragment {
     private View view;
@@ -43,8 +50,6 @@ public class NotificationsFragment extends Fragment {
         view =  inflater.inflate(R.layout.fragment_notifications, container, false);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
 
-        this.groupesSanguins = getGroupesSanguins();
-
         spinnerGroupesSanguins = (Spinner) view.findViewById(R.id.combobox_groupesanguin);
         buttonValiderPreferences = (Button) view.findViewById(R.id.button_majPreferences);
         autoriserNotifications = (Switch) view.findViewById(R.id.switch_autoiserNotifications);
@@ -55,11 +60,37 @@ public class NotificationsFragment extends Fragment {
         autoriserPlaquettes.setEnabled(false);
         autoriserPlasma.setEnabled(false);
 
-        ArrayAdapter<GroupeSanguin> adapter = new ArrayAdapter<GroupeSanguin>(getContext(),  android.R.layout.simple_spinner_dropdown_item, groupesSanguins);
-        adapter.setDropDownViewResource( android.R.layout.simple_spinner_dropdown_item);
-        spinnerGroupesSanguins.setAdapter(adapter);
-        groupeChoisi = sharedPreferences.getInt("indexGroupeSanguin", 0);
-        spinnerGroupesSanguins.setSelection(groupeChoisi);
+        groupesSanguins = new ArrayList<>();
+        groupesSanguins.add(new GroupeSanguin(getResources().getString(R.string.groupe_sanguin_aucun)));
+        groupeChoisi = 0;
+
+        //Récupération des groupes sanguins via retrofit afin de ne pas hardcoder
+        final GroupeSanguinService groupeSanguinService = ServiceBuilder.buildService(GroupeSanguinService.class);
+        retrofit2.Call<ArrayList<GroupeSanguin>> listCall = groupeSanguinService.getGroupesSanguins();
+        listCall.enqueue(new Callback<ArrayList<GroupeSanguin>>() {
+            @Override
+            public void onResponse(retrofit2.Call<ArrayList<GroupeSanguin>> call, Response<ArrayList<GroupeSanguin>> response) {
+                if (!response.isSuccessful()) {
+                    Toast.makeText(getContext(), R.string.erreur_groupeSanguin, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                for (GroupeSanguin groupeSanguin : response.body()) {
+                    groupesSanguins.add(groupeSanguin);
+                }
+
+                ArrayAdapter<GroupeSanguin> adapter = new ArrayAdapter<GroupeSanguin>(getContext(),  android.R.layout.simple_spinner_dropdown_item, groupesSanguins);
+                adapter.setDropDownViewResource( android.R.layout.simple_spinner_dropdown_item);
+                spinnerGroupesSanguins.setAdapter(adapter);
+                groupeChoisi = sharedPreferences.getInt("indexGroupeSanguin", 0);
+                spinnerGroupesSanguins.setSelection(groupeChoisi);
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<ArrayList<GroupeSanguin>> call, Throwable t) {
+                Toast.makeText(getContext(), R.string.erreur_groupeSanguin, Toast.LENGTH_SHORT).show();
+            }
+        });
 
         editor = sharedPreferences.edit();
 
@@ -75,24 +106,27 @@ public class NotificationsFragment extends Fragment {
         });
 
         autoriserNotifications.setChecked(sharedPreferences.getBoolean("notifications", true));
-        desactiverParametres(sharedPreferences.getBoolean("notifications", false));
+        desactiverParametres(!autoriserNotifications.isChecked());
 
-        if (sharedPreferences.getBoolean("notifications", true)) {
-            autoriserNotifications.setChecked(true);
-            desactiverParametres(false);
+        if (autoriserNotifications.isChecked()) {
             subscribeFromOneTopic(Constants.TOPIC_GENERAL);
             subscribeFromOneTopic(Constants.TOPIC_GENERAL + "_" + groupeChoisi);
+        }
+        else
+        {
+            unsubscribeFromOneTopic(Constants.TOPIC_GENERAL);
+            unsubscribeFromAllGroupesSanguins();
         }
 
         autoriserNotifications.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!autoriserNotifications.isChecked()) {
-                    desactiverParametres(true);
+                if (autoriserNotifications.isChecked()) {
+                    desactiverParametres(false);
                 }
                 else
                 {
-                    desactiverParametres(false);
+                    desactiverParametres(true);
                 }
             }
         });
@@ -119,39 +153,11 @@ public class NotificationsFragment extends Fragment {
             }
         });
 
-        Log.d(tag, "Preference : " + getGroupesSanguins().get(sharedPreferences.getInt("indexGroupeSanguin", 0)));
+        Log.d(tag, "Preference groupe sanguin : " + sharedPreferences.getInt("indexGroupeSanguin", 0));
 
         return view;
     }
 
-
-    public ArrayList<GroupeSanguin> getGroupesSanguins()
-    {
-        ArrayList<GroupeSanguin> groupesSanguins = new ArrayList<>(
-                Arrays.asList(
-                        new GroupeSanguin("O-"),
-                        new GroupeSanguin("O+"),
-                        new GroupeSanguin("B-"),
-                        new GroupeSanguin("B+"),
-                        new GroupeSanguin("A-"),
-                        new GroupeSanguin("A+"),
-                        new GroupeSanguin("AB-"),
-                        new GroupeSanguin("AB+"))
-        );
-
-        return groupesSanguins;
-    }
-
-    public int getGroupeSanguin(String groupe) {
-        //Pas top comme solution
-        int index = 0;
-        for (int i = 0; i < getGroupesSanguins().size(); i++) {
-            if (getGroupesSanguins().get(i).getNom().equals(groupe)) {
-                index = i;
-            }
-        }
-        return index;
-    }
 
     public void desactiverParametres(Boolean desactiver) {
 
@@ -159,7 +165,7 @@ public class NotificationsFragment extends Fragment {
     }
 
     public void unsubscribeFromAllGroupesSanguins() {
-        for (int i = 0; i < getGroupesSanguins().size(); i++) {
+        for (int i = 0; i < getGroupesSanguins().size() + 1; i++) {
             FirebaseMessaging.getInstance().unsubscribeFromTopic(Constants.TOPIC_GENERAL + "_" + i);
         }
     }
@@ -170,5 +176,13 @@ public class NotificationsFragment extends Fragment {
 
     public void unsubscribeFromOneTopic(String topic) {
         FirebaseMessaging.getInstance().unsubscribeFromTopic(topic);
+    }
+
+    public ArrayList<GroupeSanguin> getGroupesSanguins() {
+        return groupesSanguins;
+    }
+
+    public void setGroupesSanguins(ArrayList<GroupeSanguin> groupesSanguins) {
+        this.groupesSanguins = groupesSanguins;
     }
 }
