@@ -146,11 +146,11 @@ public class RegisterFragment extends Fragment {
                 }
                 @Override
                 public void onFailure(Call<Utilisateur> call, Throwable t) {
-                    Toast.makeText(getContext(),"Erreur d'inscription",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(),R.string.erreur_inscription,Toast.LENGTH_LONG).show();
                 }
             });
         }else{
-            Toast.makeText(getActivity(),"Données invalides",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(),R.string.champs_invalide,Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -173,11 +173,11 @@ public class RegisterFragment extends Fragment {
             if(Util.verificationEmailDansBD(editEmail)){
                 return true;
             }else{
-                editEmail.setError("Email déja utilisé");
+                editEmail.setError("" + R.string.erreur_mail_exist);
                 return false;
             }
         }else{
-            editEmail.setError("Mauvais email");
+            editEmail.setError("" + R.string.mauvais_mail);
             return false;
         }
     }
@@ -285,10 +285,9 @@ public class RegisterFragment extends Fragment {
                 ProfileFragment profileFragment = new ProfileFragment();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.fragment_container,profileFragment,"replaceFragmentByRegisterFragment");
-                transaction.addToBackStack("RegisterFragment");
                 transaction.commit();
             } else {
-                Toast.makeText(getContext(),"Erreur :"+erreurMessage, Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(),R.string.erreur_enregistrement, Toast.LENGTH_LONG).show();
             }
         }
     }

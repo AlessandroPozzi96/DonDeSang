@@ -72,7 +72,7 @@ public class CarteFragment extends Fragment implements OnMapReadyCallback {
         if (locationViewModel.getCollectes()!= null && locationViewModel.getCollectes().size() > 0) {
             ArrayList<Collecte> collectes = locationViewModel.getCollectes();
             for (Collecte collecte : collectes) {
-                telephone = (collecte.getTelephone() == null)? "Pas de numéro de téléphone" : "Tél: " + collecte.getTelephone();
+                telephone = (collecte.getTelephone() == null)? "" + R.string.pas_de_numero : "" + R.string.tel + collecte.getTelephone();
                 horaires = "";
                 for (Jourouverture jourouverture : collecte.getJourouverture()) {
                     if (jourouverture.getDate() != null) {
@@ -82,7 +82,7 @@ public class CarteFragment extends Fragment implements OnMapReadyCallback {
                     {
                         horaires += jourouverture.getLibelleJour();
                     }
-                    horaires += "\n \t De " + jourouverture.getFkTrancheHoraireNavigation().getHeureDebut() + " à " + jourouverture.getFkTrancheHoraireNavigation().getHeureFin() + " \n";
+                    horaires += R.string.de + jourouverture.getFkTrancheHoraireNavigation().getHeureDebut() + R.string.a + jourouverture.getFkTrancheHoraireNavigation().getHeureFin() + " \n";
                 }
 
                 googleMap.addMarker(new MarkerOptions()
@@ -93,7 +93,7 @@ public class CarteFragment extends Fragment implements OnMapReadyCallback {
         }
         else
         {
-            Toast.makeText(getActivity(), "Pas de collectes disponibles, veuillez vérifier votre connexion internet", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), R.string.collectes_indisponible, Toast.LENGTH_LONG).show();
             Log.d(tag, "Pas de collectes disponibles !");
         }
         

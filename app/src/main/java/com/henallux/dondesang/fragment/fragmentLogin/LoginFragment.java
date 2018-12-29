@@ -112,7 +112,7 @@ public class LoginFragment extends Fragment {
                                         transaction.replace(R.id.fragment_container, profileFragment, "replaceFragmentByRegisterFragment");
                                         transaction.commit();
                                     }else{
-                                        Toast.makeText(getContext(),response.message()+"non",Toast.LENGTH_LONG).show();
+                                        Toast.makeText(getContext(),R.string.connexion_impossible,Toast.LENGTH_LONG).show();
                                     }
                                 }
 
@@ -130,7 +130,7 @@ public class LoginFragment extends Fragment {
                         }
                     });
                     } else {
-                    Toast.makeText(getActivity(), "Mauvais info", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), R.string.erreur_credentials_connexion, Toast.LENGTH_SHORT).show();
                 }
             }
         });

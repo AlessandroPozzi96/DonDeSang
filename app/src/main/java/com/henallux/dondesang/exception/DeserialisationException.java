@@ -1,5 +1,7 @@
 package com.henallux.dondesang.exception;
 
+import com.henallux.dondesang.R;
+
 public class DeserialisationException extends Exception {
     private String typeDonnees, message;
 
@@ -10,6 +12,6 @@ public class DeserialisationException extends Exception {
 
     @Override
     public String getMessage() {
-        return "Exception levée en voulant désérialisé un fichier de type : " + this.typeDonnees + "\n Source de l'erreur : " + this.message;
+        return R.string.exception_deserialisation + this.typeDonnees + R.string.exception_deserialisation_source + this.message;
     }
 }

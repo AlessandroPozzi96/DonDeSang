@@ -136,7 +136,7 @@ public class ScoreFragment extends Fragment {
                                 if(response.isSuccessful()){
                                     utilisateur = response.body();
 
-                                    Toast.makeText(getContext(),"Vous avez gagné 50 points",Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getContext(),R.string.gagner_50points,Toast.LENGTH_LONG).show();
                                     progressBar.setProgress(utilisateur.getScore());
                                     myListener.setUtilisateur(utilisateur);
 
@@ -154,25 +154,25 @@ public class ScoreFragment extends Fragment {
 
                             @Override
                             public void onFailure(Call<Utilisateur> call, Throwable t) {
-                                Toast.makeText(getContext(),"erreur dans le partage",Toast.LENGTH_LONG).show();
+                                Toast.makeText(getContext(),R.string.erreur_partage,Toast.LENGTH_LONG).show();
                             }
                         });
 
-                        Toast.makeText(getActivity(),"share succes",Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(),R.string.reussite_partage,Toast.LENGTH_LONG).show();
                         Log.i("tag","sucess");
                     }
 
                     @Override
                     public void onCancel() {
-                        Toast.makeText(getActivity(),"share Cancel",Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(),R.string.annulation_partage,Toast.LENGTH_LONG).show();
                         Log.i("tag","cancel");
 
                     }
 
                     @Override
                     public void onError(FacebookException error) {
-                        Toast.makeText(getActivity(),error.getMessage(),Toast.LENGTH_LONG).show();
-                        Log.i("tag","error");
+                        Toast.makeText(getActivity(),R.string.erreur_partage,Toast.LENGTH_LONG).show();
+                        Log.i("tag","error : " + error.getMessage());
 
                     }
                 });
@@ -194,12 +194,12 @@ public class ScoreFragment extends Fragment {
 
         if(utilisateur == null)
         {
-            textViewVosPoints.setText("Connecter vous pour voir vos points");
-            textViewPartagerImage.setText("Connecter vous pour partager l'image et gagner des points !");
+            textViewVosPoints.setText(R.string.connexion_voir_points);
+            textViewPartagerImage.setText(R.string.connexion_partage_gagner_points);
             buttonSharePhoto.setEnabled(false);
         }
         else {
-            textViewVosPoints.setText(utilisateur.getScore()+" points");
+            textViewVosPoints.setText(utilisateur.getScore()+ R.string.points);
             progressBar.setMax(1000);
             progressBar.setProgress(utilisateur.getScore());
             buttonSeLoger.setVisibility(View.GONE);

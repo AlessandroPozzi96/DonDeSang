@@ -35,9 +35,9 @@ public class MotDePasseOublieFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if(Util.verificationEmail(email) && Util.verificationEmailDansBD(email)) {  // TEST SUR LE MAIL --> regex OU voir dans la BD s'il existe
-                    Toast.makeText(getActivity(), "Envoyer un mail a " + email.getText().toString(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), R.string.envoyer_mail + email.getText().toString(), Toast.LENGTH_SHORT).show();
                 }else{
-                    Toast.makeText(getActivity(),"mauvais mail",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(),R.string.erreur_mail,Toast.LENGTH_SHORT).show();
                 }
             }
         });

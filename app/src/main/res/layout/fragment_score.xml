@@ -18,9 +18,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="8dp"
-            android:text="Score"
-            android:textColor="#81D4FA"
-            android:textSize="24sp"
+            android:text="@string/score"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
             app:layout_constraintBottom_toTopOf="@+id/textViewPartagerImage"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.501"
@@ -50,7 +49,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="36dp"
             android:layout_marginTop="12dp"
-            android:text="Ton nombre de points jusqu'a présent"
+            android:text="@string/ton_nombre_de_points_jusqu_a_pr_sent"
             app:layout_constraintStart_toStartOf="@+id/progressBar"
             app:layout_constraintTop_toBottomOf="@+id/loginTextconnexion" />
 
@@ -59,7 +58,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="O points"
+            android:text="@string/o_points"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView5" />
@@ -69,7 +68,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="9dp"
-            android:text="0 points"
+            android:text="@string/o_points"
             app:layout_constraintEnd_toStartOf="@+id/progressBar"
             app:layout_constraintStart_toStartOf="@+id/progressBar"
             app:layout_constraintTop_toBottomOf="@+id/progressBar" />
@@ -79,7 +78,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="152dp"
-            android:text="1000 points"
+            android:text="@string/_1000_points"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -88,7 +87,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="11dp"
-            android:text="Envie de gagner encore plus de points ?"
+            android:text="@string/envie_de_gagner_encore_plus_de_points"
             app:layout_constraintStart_toEndOf="@+id/textView9"
             app:layout_constraintTop_toBottomOf="@+id/textView10" />
 
@@ -98,7 +97,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:layout_marginBottom="8dp"
-            android:text="Partage l'image du mois !"
+            android:text="@string/partage_l_image_du_mois"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.502"
@@ -127,8 +126,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:layout_marginEnd="40dp"
-            android:text="Share Photo"
+            android:text="@string/partager_photo"
             app:layout_constraintEnd_toEndOf="@+id/imageToShare"
             app:layout_constraintTop_toBottomOf="@+id/imageToShare" />
 
@@ -136,7 +134,7 @@
             android:id="@+id/buttonSeLoger"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Se connecter"
+            android:text="@string/se_connecter"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@+id/imageToShare" />
 

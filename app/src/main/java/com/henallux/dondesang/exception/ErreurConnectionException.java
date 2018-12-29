@@ -1,5 +1,7 @@
 package com.henallux.dondesang.exception;
 
+import com.henallux.dondesang.R;
+
 public class ErreurConnectionException extends Throwable {
 
     public int statusCode;
@@ -13,11 +15,11 @@ public class ErreurConnectionException extends Throwable {
     {
         if(statusCode >= 400 && statusCode <500)
         {
-            return "Erreur du client, Status code : "+statusCode;
+            return "" + R.string.erreur_client_statusCode + statusCode;
         }
         else
         {
-            return "Erreur du serveur, Status code : "+statusCode;
+            return "" + R.string.erreur_serveur_statusCode + statusCode;
         }
     }
 

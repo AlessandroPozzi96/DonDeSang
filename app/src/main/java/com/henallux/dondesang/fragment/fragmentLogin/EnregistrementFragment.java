@@ -47,7 +47,6 @@ public class EnregistrementFragment extends Fragment {
         LoginFragment loginFragment = new LoginFragment();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.enregistrement_container,loginFragment,"replaceFragmentByLoginFragment");
-        transaction.addToBackStack("LoginFragment");
         transaction.commit();
 
         return inflater.inflate(R.layout.fragment_enregistrement,container,false);

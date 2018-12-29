@@ -201,10 +201,10 @@ public class ProfileFragment extends Fragment {
 
                             ((IMyListener)getActivity()).setUtilisateur(utilisateur);
 
-                            Toast.makeText(getContext(),"Mise a jour effectuée",Toast.LENGTH_LONG).show();
+                            Toast.makeText(getContext(), R.string.màj_effectué, Toast.LENGTH_LONG).show();
                         }else{
                             Log.i("tag",response.toString());
-                            Toast.makeText(getContext(),response.message(),Toast.LENGTH_LONG).show();
+                            Toast.makeText(getContext(),R.string.erreur_enregistrement,Toast.LENGTH_LONG).show();
                             Log.i("tag",utilisateur.getRv());
                             Log.i("tag",utilisateur.getLogin());
                         }
@@ -242,9 +242,9 @@ public class ProfileFragment extends Fragment {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 builder.setCancelable(true);
-                builder.setTitle("Supression");
-                builder.setMessage("Êtes-vous sûr ?");
-                builder.setPositiveButton("Confirm",
+                builder.setTitle(R.string.suppression);
+                builder.setMessage(R.string.etes_vous_sur);
+                builder.setPositiveButton(R.string.confirmation,
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -276,7 +276,7 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if(response.isSuccessful()){
-                    Toast.makeText(getContext(),"CompteSupprimer",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(),R.string.reussite_suppression_compte,Toast.LENGTH_LONG).show();
                     SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPref.edit();
                     editor.remove("tokenAccessJSONString");
@@ -287,7 +287,7 @@ public class ProfileFragment extends Fragment {
                     Intent intent = new Intent(getContext(),MainActivity.class);
                     startActivity(intent);
                 }else{
-                    Toast.makeText(getContext(),"Pas supprimer",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(),R.string.echec_suppresison_compte,Toast.LENGTH_LONG).show();
                 }
             }
 

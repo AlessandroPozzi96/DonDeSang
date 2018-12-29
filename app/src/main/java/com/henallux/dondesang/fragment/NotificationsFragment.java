@@ -115,7 +115,7 @@ public class NotificationsFragment extends Fragment {
                 editor.putInt("indexGroupeSanguin", groupeChoisi);
                 editor.putBoolean("notifications", autoriserNotifications.isChecked());
                 editor.commit();
-                Toast.makeText(getContext(), "Préférences mises à jour", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.preferences_mise_a_jour, Toast.LENGTH_SHORT).show();
             }
         });
 

@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="189dp"
 
-        android:text="Login"
+        android:text="@string/connexion"
         app:layout_constraintBaseline_toBaselineOf="@+id/buttonRegister"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -21,7 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Register"
+        android:text="@string/enregistrement"
         app:layout_constraintStart_toEndOf="@+id/buttonLogin"
         app:layout_constraintTop_toTopOf="parent" />
 

@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +36,7 @@ public class InfosFragment extends Fragment {
     private Button butFaq, button_Question1, button_Question3, button_Question2;
     private FragmentManager fragmentManager;
     private InformationViewModel informationViewModel;
+    private String tag = "InfosFragment";
 
     @Nullable
     @Override
@@ -78,7 +80,8 @@ public class InfosFragment extends Fragment {
             @Override
             public void onResponse(Call<List<Information>> call, Response<List<Information>> response) {
                 if (!response.isSuccessful()) {
-                    Toast.makeText(getContext(), "Code : " + response.code(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.erreur_chargement_infos, Toast.LENGTH_SHORT).show();
+                    Log.d(tag, "Code : " + response.code());
                     return;
                 }
 

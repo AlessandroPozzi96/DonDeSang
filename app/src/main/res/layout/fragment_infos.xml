@@ -18,7 +18,7 @@
             android:id="@+id/textView8"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Infos"
+            android:text="@string/infos"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
 
@@ -80,7 +80,7 @@
             android:id="@+id/button_FAQ"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="FAQ"
+            android:text="@string/f_a_q"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Button"
             android:textSize="18sp"

@@ -93,7 +93,6 @@ public class LocalisationFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_localisation, container, false);
         locationViewModel = ViewModelProviders.of(getActivity()).get(LocationViewModel.class);
 
-        //Récupération de la valeur du code postale
         clientAddress = (EditText) view.findViewById(R.id.editText_CodePostale);
 
         sharePosition = (Switch) view.findViewById(R.id.switch_sharePosition);
@@ -116,7 +115,6 @@ public class LocalisationFragment extends Fragment {
             }
         });
 
-        //Lancement de la recherche de collecte lorsqu'on a une position valide
         butCarte = (Button) view.findViewById(R.id.but_RechercheCentre);
 
         //Récupération des collectes depuis l'API
@@ -130,7 +128,6 @@ public class LocalisationFragment extends Fragment {
             public void onClick(View v)
 
             {
-                //En fonction du choix de l'utilisateur on envoie le code postal ou les coordonnées
                 if (sharePosition.isChecked()) {
                     locationViewModel.setLocation(new LatLng(latitudeGPS, longitudeGPS));
                     ((LocationViewModel) locationViewModel).setUtiliseAddresse(false);
@@ -172,9 +169,9 @@ public class LocalisationFragment extends Fragment {
 
     private void showAlert() {
         final AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
-        dialog.setTitle("Activer la localisation")
-                .setMessage("Activer les services de localisation 'Haute précision' ou 'Economie d\'énergie' pour utiliser cette application \n (Le GPS seul ne suffit pas)")
-                .setPositiveButton("Paramètre de localisation", new DialogInterface.OnClickListener() {
+        dialog.setTitle(R.string.activation_location)
+                .setMessage(R.string.activiation_location_details)
+                .setPositiveButton(R.string.activation_location_parametre, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface paramDialogInterface, int paramInt) {
                         Intent myIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
@@ -182,7 +179,7 @@ public class LocalisationFragment extends Fragment {
                         sharePosition.setChecked(false);
                     }
                 })
-                .setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.annuler, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface paramDialogInterface, int paramInt) {
                         sharePosition.setChecked(false);
