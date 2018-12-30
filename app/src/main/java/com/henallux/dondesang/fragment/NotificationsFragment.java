@@ -42,7 +42,7 @@ public class NotificationsFragment extends Fragment {
     private SharedPreferences.Editor editor;
     private Button buttonValiderPreferences;
     private Switch autoriserNotifications, autoriserPlaquettes, autoriserPlasma;
-    private int groupeChoisi;
+    private String groupeChoisi;
 
     @Nullable
     @Override
@@ -61,8 +61,7 @@ public class NotificationsFragment extends Fragment {
         autoriserPlasma.setEnabled(false);
 
         groupesSanguins = new ArrayList<>();
-        groupesSanguins.add(new GroupeSanguin(getResources().getString(R.string.groupe_sanguin_aucun)));
-        groupeChoisi = 0;
+        groupeChoisi = getResources().getString(R.string.groupe_sanguin_aucun);
 
         //Récupération des groupes sanguins via retrofit afin de ne pas hardcoder
         final GroupeSanguinService groupeSanguinService = ServiceBuilder.buildService(GroupeSanguinService.class);
@@ -75,6 +74,7 @@ public class NotificationsFragment extends Fragment {
                     return;
                 }
 
+                groupesSanguins.add(new GroupeSanguin(getResources().getString(R.string.groupe_sanguin_aucun)));
                 for (GroupeSanguin groupeSanguin : response.body()) {
                     groupesSanguins.add(groupeSanguin);
                 }
@@ -82,8 +82,8 @@ public class NotificationsFragment extends Fragment {
                 ArrayAdapter<GroupeSanguin> adapter = new ArrayAdapter<GroupeSanguin>(getContext(),  android.R.layout.simple_spinner_dropdown_item, groupesSanguins);
                 adapter.setDropDownViewResource( android.R.layout.simple_spinner_dropdown_item);
                 spinnerGroupesSanguins.setAdapter(adapter);
-                groupeChoisi = sharedPreferences.getInt("indexGroupeSanguin", 0);
-                spinnerGroupesSanguins.setSelection(groupeChoisi);
+                groupeChoisi = sharedPreferences.getString("groupeSanguin", "Aucun");
+                spinnerGroupesSanguins.setSelection(getIndexGroupeSanguin(groupeChoisi));
             }
 
             @Override
@@ -97,7 +97,7 @@ public class NotificationsFragment extends Fragment {
         spinnerGroupesSanguins.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                groupeChoisi = position;
+                groupeChoisi = getGroupesSanguins().get(position).getNom();
             }
 
             @Override
@@ -110,12 +110,7 @@ public class NotificationsFragment extends Fragment {
 
         if (autoriserNotifications.isChecked()) {
             subscribeFromOneTopic(Constants.TOPIC_GENERAL);
-            subscribeFromOneTopic(Constants.TOPIC_GENERAL + "_" + groupeChoisi);
-        }
-        else
-        {
-            unsubscribeFromOneTopic(Constants.TOPIC_GENERAL);
-            unsubscribeFromAllGroupesSanguins();
+            subscribeFromOneTopic(conversionGroupeSanguin(groupeChoisi));
         }
 
         autoriserNotifications.setOnClickListener(new View.OnClickListener() {
@@ -137,7 +132,7 @@ public class NotificationsFragment extends Fragment {
 
                 if (autoriserNotifications.isChecked()) {
                     subscribeFromOneTopic(Constants.TOPIC_GENERAL);
-                    subscribeFromOneTopic(Constants.TOPIC_GENERAL + "_" + groupeChoisi);
+                    subscribeFromOneTopic(conversionGroupeSanguin(groupeChoisi));
                 }
                 else
                 {
@@ -145,15 +140,14 @@ public class NotificationsFragment extends Fragment {
                     unsubscribeFromAllGroupesSanguins();
                 }
 
-                //editor.putString("groupeSanguin", groupeChoisi);
-                editor.putInt("indexGroupeSanguin", groupeChoisi);
+                editor.putString("groupeSanguin", conversionGroupeSanguin(groupeChoisi));
                 editor.putBoolean("notifications", autoriserNotifications.isChecked());
                 editor.commit();
                 Toast.makeText(getContext(), R.string.preferences_mise_a_jour, Toast.LENGTH_SHORT).show();
             }
         });
 
-        Log.d(tag, "Preference groupe sanguin : " + sharedPreferences.getInt("indexGroupeSanguin", 0));
+        Log.d(tag, "Preference groupe sanguin : " + sharedPreferences.getString("groupeSanguin", "Aucun"));
 
         return view;
     }
@@ -165,8 +159,10 @@ public class NotificationsFragment extends Fragment {
     }
 
     public void unsubscribeFromAllGroupesSanguins() {
-        for (int i = 0; i < getGroupesSanguins().size() + 1; i++) {
-            FirebaseMessaging.getInstance().unsubscribeFromTopic(Constants.TOPIC_GENERAL + "_" + i);
+        if (!getGroupesSanguins().isEmpty()) {
+            for (GroupeSanguin groupeSanguin : getGroupesSanguins()) {
+                this.unsubscribeFromOneTopic(conversionGroupeSanguin(groupeSanguin.getNom()));
+            }
         }
     }
 
@@ -184,5 +180,21 @@ public class NotificationsFragment extends Fragment {
 
     public void setGroupesSanguins(ArrayList<GroupeSanguin> groupesSanguins) {
         this.groupesSanguins = groupesSanguins;
+    }
+
+    public int getIndexGroupeSanguin(String groupeChoisi) {
+        int indexGroupeSanguin = 0;
+        for (int i = 0; i < getGroupesSanguins().size(); i++) {
+            if (getGroupesSanguins().get(i).getNom().equals(groupeChoisi)) {
+                indexGroupeSanguin = i;
+            }
+        }
+
+        return indexGroupeSanguin;
+    }
+
+    //Malheureusement Google Firebase Messenger ne prends pas en charge le caractère '+'...
+    public String conversionGroupeSanguin(String groupeSanguin) {
+        return groupeSanguin.replace("+", "%");
     }
 }
