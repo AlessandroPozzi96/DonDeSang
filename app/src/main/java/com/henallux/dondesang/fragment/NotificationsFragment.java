@@ -110,7 +110,7 @@ public class NotificationsFragment extends Fragment {
 
         if (autoriserNotifications.isChecked()) {
             subscribeFromOneTopic(Constants.TOPIC_GENERAL);
-            subscribeFromOneTopic(conversionGroupeSanguin(groupeChoisi));
+            subscribeFromOneTopic(groupeChoisi);
         }
 
         autoriserNotifications.setOnClickListener(new View.OnClickListener() {
@@ -132,7 +132,7 @@ public class NotificationsFragment extends Fragment {
 
                 if (autoriserNotifications.isChecked()) {
                     subscribeFromOneTopic(Constants.TOPIC_GENERAL);
-                    subscribeFromOneTopic(conversionGroupeSanguin(groupeChoisi));
+                    subscribeFromOneTopic(groupeChoisi);
                 }
                 else
                 {
@@ -167,11 +167,11 @@ public class NotificationsFragment extends Fragment {
     }
 
     public void subscribeFromOneTopic(String topic) {
-        FirebaseMessaging.getInstance().subscribeToTopic(topic);
+        FirebaseMessaging.getInstance().subscribeToTopic(conversionGroupeSanguin(topic));
     }
 
     public void unsubscribeFromOneTopic(String topic) {
-        FirebaseMessaging.getInstance().unsubscribeFromTopic(topic);
+        FirebaseMessaging.getInstance().unsubscribeFromTopic(conversionGroupeSanguin(topic));
     }
 
     public ArrayList<GroupeSanguin> getGroupesSanguins() {
