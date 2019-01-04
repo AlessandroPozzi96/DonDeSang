@@ -33,9 +33,18 @@ import com.google.android.gms.maps.model.LatLng;
 import com.henallux.dondesang.Constants;
 import com.henallux.dondesang.R;
 import com.henallux.dondesang.Util;
+import com.henallux.dondesang.model.Collecte;
+import com.henallux.dondesang.model.Jourouverture;
 import com.henallux.dondesang.model.LocationViewModel;
+import com.henallux.dondesang.services.CollecteService;
+import com.henallux.dondesang.services.ServiceBuilder;
 import com.henallux.dondesang.task.LoadAddressesAsyncTask;
-import com.henallux.dondesang.task.LoadCollectesAsyncTask;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class LocalisationFragment extends Fragment {
@@ -118,8 +127,36 @@ public class LocalisationFragment extends Fragment {
         butCarte = (Button) view.findViewById(R.id.but_RechercheCentre);
 
         //Récupération des collectes depuis l'API
-        LoadCollectesAsyncTask loadCollectesAsyncTask = new LoadCollectesAsyncTask(getActivity(), butCarte);
-        loadCollectesAsyncTask.execute();
+        CollecteService collecteService = ServiceBuilder.buildService(CollecteService.class);
+        Call<List<Collecte>> listCall = collecteService.getCollectes();
+        listCall.enqueue(new Callback<List<Collecte>>() {
+            @Override
+            public void onResponse(Call<List<Collecte>> call, Response<List<Collecte>> response) {
+                if (!response.isSuccessful()) {
+                    butCarte.setEnabled(false);
+                    Toast.makeText(getContext(), Constants.MSG_ERREUR_CHARGEMENT, Toast.LENGTH_LONG).show();
+                    Log.d(Constants.TAG_GENERAL, "Code : " + response.code());
+                    return;
+                }
+
+                if (response.body().isEmpty()) {
+                    butCarte.setEnabled(false);
+                }
+                else
+                {
+                    locationViewModel.setCollectes(response.body());
+                    butCarte.setEnabled(true);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Collecte>> call, Throwable t) {
+                butCarte.setEnabled(false);
+                Toast.makeText(getContext(), Constants.MSG_ERREUR_CHARGEMENT, Toast.LENGTH_SHORT).show();
+                Log.d(Constants.TAG_GENERAL, "Requête : " + call.request());
+            }
+        });
+
         butCarte.setEnabled(false);
 
         butCarte.setOnClickListener(new View.OnClickListener()

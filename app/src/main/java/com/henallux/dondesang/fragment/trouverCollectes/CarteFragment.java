@@ -27,11 +27,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.henallux.dondesang.R;
+import com.henallux.dondesang.Util;
 import com.henallux.dondesang.model.Collecte;
 import com.henallux.dondesang.model.Jourouverture;
 import com.henallux.dondesang.model.LocationViewModel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class CarteFragment extends Fragment implements OnMapReadyCallback {
     private LocationViewModel locationViewModel;
@@ -70,19 +72,19 @@ public class CarteFragment extends Fragment implements OnMapReadyCallback {
         String horaires;
 
         if (locationViewModel.getCollectes()!= null && locationViewModel.getCollectes().size() > 0) {
-            ArrayList<Collecte> collectes = locationViewModel.getCollectes();
+            List<Collecte> collectes = locationViewModel.getCollectes();
             for (Collecte collecte : collectes) {
-                telephone = (collecte.getTelephone() == null)? "" + R.string.pas_de_numero : "" + R.string.tel + collecte.getTelephone();
+                telephone = (collecte.getTelephone() == null)? " " + getResources().getString(R.string.pas_de_numero) : " " + getResources().getString(R.string.tel) + collecte.getTelephone();
                 horaires = "";
                 for (Jourouverture jourouverture : collecte.getJourouverture()) {
                     if (jourouverture.getDate() != null) {
-                        horaires += jourouverture.getDateFormate();
+                        horaires += jourouverture.dateFormate();
                     }
                     else
                     {
-                        horaires += jourouverture.getLibelleJour();
+                        horaires += Util.getJourSemaine(jourouverture.getJour());
                     }
-                    horaires += R.string.de + jourouverture.getFkTrancheHoraireNavigation().getHeureDebut() + R.string.a + jourouverture.getFkTrancheHoraireNavigation().getHeureFin() + " \n";
+                    horaires += getResources().getString(R.string.de) + " " + jourouverture.getHeureDebut() + " " + getResources().getString(R.string.a) + " " + jourouverture.getHeureFin() + "\n";
                 }
 
                 googleMap.addMarker(new MarkerOptions()

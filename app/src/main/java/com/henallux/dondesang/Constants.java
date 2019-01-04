@@ -10,4 +10,6 @@ public class Constants {
     public static final String MSG_CHARGEMENT = "Chargement en cours...";
     public static final int TAILLE_REPONSE = 16;
     public static final int TAILLE_QUESTION = 18;
+    public static final String MSG_ERREUR_CHARGEMENT = "Impossible d'accèder auc collectes, vérifier votre connexion internet ou réessayez plus tard";
+    public static final String TAG_GENERAL = "ERROR_GENERAL";
 }

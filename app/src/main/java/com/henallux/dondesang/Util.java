@@ -2,7 +2,18 @@ package com.henallux.dondesang;
 
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class Util {
+    public static ArrayList<String> jours = new ArrayList<String>(
+            Arrays.asList("Dimanche",
+            "Lundi",
+            "Mardi",
+            "Mercredi",
+            "Jeudi",
+            "Vendredi",
+            "Samedi"));
 
     public static boolean verificationLoginLongeur(TextView editLogin){
         if(editLogin.getText().length() > 2){
@@ -64,5 +75,12 @@ public class Util {
             codePostal.setError("L'addresse ne peut être vide !");
             return false;
         }
+    }
+
+    public static String getJourSemaine(int index) {
+        if (index >= 0 && index < 7)
+            return jours.get(index);
+        else
+            return "Jour non disponible";
     }
 }

@@ -11,10 +11,11 @@ import java.util.GregorianCalendar;
 
 public class Jourouverture {
     private Integer id;
-    private String libelleJour;
+    private Integer jour;
     private String date;
     private Integer fkCollecte;
-    private TrancheHoraire fkTrancheHoraireNavigation;
+    private String heureDebut;
+    private String heureFin;
 
     public Integer getId() {
         return id;
@@ -24,20 +25,16 @@ public class Jourouverture {
         this.id = id;
     }
 
-    public String getLibelleJour() {
-        return libelleJour;
+    public Integer getJour() {
+        return jour;
     }
 
-    public void setLibelleJour(String libelleJour) {
-        this.libelleJour = libelleJour;
+    public void setJour(Integer jour) {
+        this.jour = jour;
     }
 
     public String getDate() {
         return date;
-    }
-
-    public String getDateFormate() {
-        return dateFormate(this.date);
     }
 
     public void setDate(String date) {
@@ -52,32 +49,39 @@ public class Jourouverture {
         this.fkCollecte = fkCollecte;
     }
 
-    public TrancheHoraire getFkTrancheHoraireNavigation() {
-        return fkTrancheHoraireNavigation;
+    public String getHeureDebut() {
+        return heureDebut;
     }
 
-    public void setFkTrancheHoraireNavigation(TrancheHoraire fkTrancheHoraireNavigation) {
-        this.fkTrancheHoraireNavigation = fkTrancheHoraireNavigation;
+    public void setHeureDebut(String heureDebut) {
+        this.heureDebut = heureDebut;
     }
 
-    @Override
-    public String toString() {
-        return "Jourouverture{" +
-                "id=" + id +
-                ", libelleJour='" + libelleJour + '\'' +
-                ", date=" + date +
-                ", fkCollecte=" + fkCollecte +
-                ", fkTrancheHoraireNavigation=" + fkTrancheHoraireNavigation +
-                '}';
+    public String getHeureFin() {
+        return heureFin;
     }
 
-    public String dateFormate(String date) {
-        String tmp = date.substring(0, 10);
+    public void setHeureFin(String heureFin) {
+        this.heureFin = heureFin;
+    }
+
+    public String dateFormate() {
+        String tmp = this.date.substring(0, 10);
 
         String year = tmp.substring(0, 4);
         String month = tmp.substring(5, 7);
         String day = tmp.substring(8, 10);
 
         return day + "/" + month + "/" + year;
+    }
+
+    public String heureFormate(String heure) {
+        String tmp;
+        tmp =  heure.substring(0, 5);
+
+        StringBuilder builder = new StringBuilder(tmp);
+        builder.setCharAt(2, 'H');
+
+        return builder.toString();
     }
 }
