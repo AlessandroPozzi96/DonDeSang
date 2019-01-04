@@ -1,5 +1,6 @@
 package com.henallux.dondesang.fragment;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -29,17 +30,23 @@ import com.facebook.share.model.SharePhoto;
 import com.facebook.share.model.SharePhotoContent;
 import com.facebook.share.widget.ShareDialog;
 import com.google.gson.Gson;
+import com.henallux.dondesang.Constants;
 import com.henallux.dondesang.IMyListener;
 import com.henallux.dondesang.R;
 import com.henallux.dondesang.fragment.fragmentLogin.EnregistrementFragment;
 import com.henallux.dondesang.fragment.fragmentLogin.LoginFragment;
+import com.henallux.dondesang.model.Imagepromotion;
 import com.henallux.dondesang.model.Token;
 import com.henallux.dondesang.model.Utilisateur;
+import com.henallux.dondesang.services.ImagepromotionService;
 import com.henallux.dondesang.services.ServiceBuilder;
 import com.henallux.dondesang.services.UtilisateurService;
+import com.henallux.dondesang.task.GetImagespromoAsyncTask;
 import com.henallux.dondesang.task.changerLesDonneesAsyncTask;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -104,7 +111,11 @@ public class ScoreFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initialisationVue();
-        Picasso.with(getContext()).load("https://fr.cdn.v5.futura-sciences.com/buildsv6/images/mediumoriginal/1/2/e/12eac4fff4_82618_panda.jpg").into(imageToShare);
+
+        ImagepromotionService imagepromotionService = ServiceBuilder.buildService(ImagepromotionService.class);
+        Call<List<Imagepromotion>> listCall = imagepromotionService.getImagesPromotions();
+        listCall.enqueue(new GetImagespromoAsyncTask(getActivity(), imageToShare));
+
         buttonSharePhoto = getView().findViewById(R.id.buttonSharePhoto);
 
         // INIT FB
@@ -124,7 +135,7 @@ public class ScoreFragment extends Fragment {
 
                         //new changerLesDonneesAsyncTask(utilisateur,getActivity()).execute();
 
-                        utilisateur.setScore(utilisateur.getScore()+50);
+                        utilisateur.setScore(utilisateur.getScore()+ Constants.AJOUT_SCORE);
                         Log.i("tag",utilisateur.getScore()+" oui");
                         UtilisateurService utilisateurService = ServiceBuilder.buildService(UtilisateurService.class);
                         Call<Utilisateur> requete = utilisateurService.putUtilisateur("Bearer "+token.getAccess_token(),utilisateur.getLogin(),utilisateur);
@@ -176,8 +187,6 @@ public class ScoreFragment extends Fragment {
 
                     }
                 });
-
-                Picasso.with(getContext()).load("https://fr.cdn.v5.futura-sciences.com/buildsv6/images/mediumoriginal/1/2/e/12eac4fff4_82618_panda.jpg").into(target);
             }
         });
 

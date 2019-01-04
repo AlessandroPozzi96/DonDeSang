@@ -34,7 +34,6 @@ import com.henallux.dondesang.Constants;
 import com.henallux.dondesang.R;
 import com.henallux.dondesang.Util;
 import com.henallux.dondesang.model.Collecte;
-import com.henallux.dondesang.model.Jourouverture;
 import com.henallux.dondesang.model.LocationViewModel;
 import com.henallux.dondesang.services.CollecteService;
 import com.henallux.dondesang.services.ServiceBuilder;
@@ -134,7 +133,7 @@ public class LocalisationFragment extends Fragment {
             public void onResponse(Call<List<Collecte>> call, Response<List<Collecte>> response) {
                 if (!response.isSuccessful()) {
                     butCarte.setEnabled(false);
-                    Toast.makeText(getContext(), Constants.MSG_ERREUR_CHARGEMENT, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), Constants.MSG_ERREUR_CHARGEMENT_COLLECTES, Toast.LENGTH_LONG).show();
                     Log.d(Constants.TAG_GENERAL, "Code : " + response.code());
                     return;
                 }
@@ -152,7 +151,7 @@ public class LocalisationFragment extends Fragment {
             @Override
             public void onFailure(Call<List<Collecte>> call, Throwable t) {
                 butCarte.setEnabled(false);
-                Toast.makeText(getContext(), Constants.MSG_ERREUR_CHARGEMENT, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), Constants.MSG_ERREUR_CHARGEMENT_COLLECTES, Toast.LENGTH_SHORT).show();
                 Log.d(Constants.TAG_GENERAL, "Requête : " + call.request());
             }
         });
