@@ -89,7 +89,9 @@ public class RegisterFragment extends Fragment {
         newUtilisateur.setNumero(editNumero.getText().toString());
         newUtilisateur.setVille(editVille.getText().toString());
         newUtilisateur.setRue(editRue.getText().toString());
-        newUtilisateur.setNumGsm(Integer.parseInt(editNumGSM.getText().toString()));
+        if(! editNumGSM.getText().toString().equals("")) {
+            newUtilisateur.setNumGsm(Integer.parseInt(editNumGSM.getText().toString()));
+        }
         newUtilisateur.setPrenom(editPrenom.getText().toString());
         newUtilisateur.setNom(editNom.getText().toString());
         newUtilisateur.setFkRole("USER"); // on ne peut créer que des simple user depuis le mobil
@@ -101,7 +103,7 @@ public class RegisterFragment extends Fragment {
 
         UtilisateurService utilisateurService = ServiceBuilder.buildService(UtilisateurService.class);
         Call<Utilisateur> createRequest = utilisateurService.createUtilisateur(newUtilisateur);
-        createRequest.enqueue(new CreateUtilisateurAsyncTask(getActivity(), getFragmentManager()));
+        createRequest.enqueue(new CreateUtilisateurAsyncTask(getActivity(), getFragmentManager(),newUtilisateur.getPassword()));
     }
 
     private void recuperationDesVues() {
@@ -198,12 +200,6 @@ public class RegisterFragment extends Fragment {
         }
     }
 
-        @Override
-    public void onAttach(Context context) {
-        Log.i("register", "onAttach: ");
-        super.onAttach(context);
-    }
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         Log.i("register", "onCreate: ");
@@ -211,101 +207,5 @@ public class RegisterFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
-    @Override
-    public void onStart() {
-        Log.i("register", "onStart: ");
-
-        super.onStart();
-    }
-
-    @Override
-    public void onResume() {
-        Log.i("register", "onResume: ");
-
-        super.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        Log.i("register", "onPause: ");
-
-        super.onPause();
-    }
-
-    @Override
-    public void onStop() {
-        Log.i("register", "onStop: ");
-
-        super.onStop();
-
-    }
-
-    @Override
-    public void onDestroyView() {
-        Log.i("register", "onDestroyView: ");
-
-        super.onDestroyView();
-    }
-
-    @Override
-    public void onDestroy() {
-        Log.i("register", "onDestroy: ");
-
-        super.onDestroy();
-    }
-
-    @Override
-    public void onDetach() {
-        Log.i("register", "OnDetach: ");
-
-        super.onDetach();
-    }
-
-
-    private class CreationUtilisateur extends AsyncTask<String, Void, Utilisateur> {
-
-
-        Utilisateur nouvelUtilisateur;
-
-        public CreationUtilisateur(Utilisateur utilisateur)
-        {
-            this.nouvelUtilisateur = utilisateur;
-        }
-
-        protected void onPreExecute() {
-        }
-
-        @Override
-        protected Utilisateur doInBackground(String... strings) {
-            Utilisateur utilisateur;
-            DataUtilisateur dataUtilisateur = new DataUtilisateur();
-            try {
-                utilisateur = dataUtilisateur.CreationUtilisateur(this.nouvelUtilisateur);
-                return utilisateur;
-            } catch (Exception e) {
-                erreurMessage = e.getMessage();
-                return null;
-            } catch (ErreurConnectionException e) {
-                erreurMessage = e.getMessage();
-                return null;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(Utilisateur utilisateur) {
-            if (utilisateur != null) {
-                IMyListener myListener = (IMyListener) getActivity();
-                myListener.setUtilisateur(utilisateur);
-                FragmentManager fragmentManager = getFragmentManager();
-                Toast.makeText(getContext(), utilisateur.getLogin(), Toast.LENGTH_LONG).show();
-                ProfileFragment profileFragment = new ProfileFragment();
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.replace(R.id.fragment_container,profileFragment,"replaceFragmentByRegisterFragment");
-                transaction.commit();
-            } else {
-                Toast.makeText(getContext(),R.string.erreur_enregistrement, Toast.LENGTH_LONG).show();
-            }
-        }
-    }
 
 }
