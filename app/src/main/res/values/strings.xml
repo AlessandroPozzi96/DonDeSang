@@ -111,4 +111,12 @@
     <string name="exception_model_variable"> variable : </string>
     <string name="erreur_groupeSanguin">Impossible de charger les groupes sanguins</string>
     <string name="groupe_sanguin_aucun">Aucun</string>
+    <string name="sunday">Dimanche</string>
+    <string name="monday">Lundi</string>
+    <string name="tuesday">Mardi</string>
+    <string name="wednesday">Mercredi</string>
+    <string name="thursday">Jeudi</string>
+    <string name="friday">Vendredi</string>
+    <string name="saturday">Samedi</string>
+    <string name="jourNonDisponible">Jour non disponible</string>
 </resources>

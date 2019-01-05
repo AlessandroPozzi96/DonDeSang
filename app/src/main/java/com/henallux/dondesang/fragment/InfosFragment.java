@@ -18,10 +18,12 @@ import android.widget.Toast;
 
 import com.henallux.dondesang.Constants;
 import com.henallux.dondesang.R;
+import com.henallux.dondesang.Util;
 import com.henallux.dondesang.model.Information;
 import com.henallux.dondesang.model.InformationViewModel;
 import com.henallux.dondesang.services.InformationService;
 import com.henallux.dondesang.services.ServiceBuilder;
+import com.henallux.dondesang.task.LoadInfosAsyncTask;
 
 import java.util.List;
 
@@ -64,9 +66,9 @@ public class InfosFragment extends Fragment {
         button_Question1.setOnClickListener(myButtonListener);
 
         //Si aucune connexion ou API hors service
-        question1 = stylingTextView(Constants.MSG_ERREUR_REPONSE, Constants.TAILLE_REPONSE);
-        question2 = stylingTextView(Constants.MSG_ERREUR_REPONSE, Constants.TAILLE_REPONSE);
-        question3 = stylingTextView(Constants.MSG_ERREUR_REPONSE, Constants.TAILLE_REPONSE);
+        question1 = Util.stylingTextView(Constants.MSG_ERREUR_REPONSE, Constants.TAILLE_REPONSE, getContext());
+        question2 = Util.stylingTextView(Constants.MSG_ERREUR_REPONSE, Constants.TAILLE_REPONSE, getContext());
+        question3 = Util.stylingTextView(Constants.MSG_ERREUR_REPONSE, Constants.TAILLE_REPONSE, getContext());
         button_Question1.setText(Constants.MSG_CHARGEMENT);
         button_Question2.setText(Constants.MSG_CHARGEMENT);
         button_Question3.setText(Constants.MSG_CHARGEMENT);
@@ -76,46 +78,7 @@ public class InfosFragment extends Fragment {
         InformationService informationService = ServiceBuilder.buildService(InformationService.class);
         Call<List<Information>> listCall = informationService.getInformations();
 
-        listCall.enqueue(new Callback<List<Information>>() {
-            @Override
-            public void onResponse(Call<List<Information>> call, Response<List<Information>> response) {
-                if (getContext() == null || butFaq == null || question1 == null || button_Question1 == null || question2 == null || button_Question2 == null || question3 == null || button_Question3 == null )
-                    return;
-                if (!response.isSuccessful()) {
-                        Toast.makeText(getContext(), getResources().getString(R.string.erreur_chargement_infos), Toast.LENGTH_SHORT).show();
-                    Log.d(tag, "Code : " + response.code());
-                    return;
-                }
-
-                List<Information> informations = response.body();
-                question1 = stylingTextView(informations.get(0).getReponse(), Constants.TAILLE_REPONSE);
-                button_Question1.setText(informations.get(0).getQuestion());
-                question2 = stylingTextView(informations.get(1).getReponse(), Constants.TAILLE_REPONSE);
-                button_Question2.setText(informations.get(1).getQuestion());
-                question3 = stylingTextView(informations.get(2).getReponse(), Constants.TAILLE_REPONSE);
-                button_Question3.setText(informations.get(2).getQuestion());
-
-                //On garnit le viewModel pour le fragment FAQ
-                informationViewModel.setInformations(informations);
-                butFaq.setEnabled(true);
-            }
-
-            @Override
-            public void onFailure(Call<List<Information>> call, Throwable t) {
-                if (getContext() != null)
-                    Toast.makeText(getContext(), Constants.MSG_ERREUR_REPONSE, Toast.LENGTH_SHORT).show();
-                if (butFaq == null) {
-                    return;
-                }
-                if (informationViewModel.getInformations() == null || informationViewModel.getInformations().isEmpty()) {
-                    butFaq.setEnabled(false);
-                }
-                else
-                {
-                    butFaq.setEnabled(true);
-                }
-            }
-        });
+        listCall.enqueue(new LoadInfosAsyncTask(getContext(), butFaq, button_Question1, button_Question2, button_Question3, question1, question2, question3, informationViewModel));
 
         return view;
     }
@@ -148,15 +111,4 @@ public class InfosFragment extends Fragment {
         }
     }
 
-    public TextView stylingTextView(String text, float textSize) {
-        TextView textView = new TextView(getContext());
-        textView.setText(text);
-        textView.setTextSize(16);
-        textView.setTypeface(null, Typeface.ITALIC);
-        textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-        textView.setPadding(30, 20, 20, 30);
-        textView.setTextSize(textSize);
-
-        return textView;
-    }
 }

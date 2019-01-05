@@ -74,7 +74,7 @@ public class CarteFragment extends Fragment implements OnMapReadyCallback {
         if (locationViewModel.getCollectes()!= null && locationViewModel.getCollectes().size() > 0) {
             List<Collecte> collectes = locationViewModel.getCollectes();
             for (Collecte collecte : collectes) {
-                telephone = (collecte.getTelephone() == null)? " " + getResources().getString(R.string.pas_de_numero) : " " + getResources().getString(R.string.tel) + collecte.getTelephone();
+                telephone = (collecte.getTelephone() == null)? " " + getResources().getString(R.string.pas_de_numero) : " " + getResources().getString(R.string.tel) + "0" + collecte.getTelephone();
                 horaires = "";
                 for (Jourouverture jourouverture : collecte.getJourouverture()) {
                     if (jourouverture.getDate() != null) {
@@ -82,7 +82,7 @@ public class CarteFragment extends Fragment implements OnMapReadyCallback {
                     }
                     else
                     {
-                        horaires += Util.getJourSemaine(jourouverture.getJour());
+                        horaires += Util.getJourSemaine(jourouverture.getJour(), getContext());
                     }
                     horaires += getResources().getString(R.string.de) + " " + jourouverture.getHeureDebut() + " " + getResources().getString(R.string.a) + " " + jourouverture.getHeureFin() + "\n";
                 }

@@ -38,6 +38,7 @@ import com.henallux.dondesang.model.LocationViewModel;
 import com.henallux.dondesang.services.CollecteService;
 import com.henallux.dondesang.services.ServiceBuilder;
 import com.henallux.dondesang.task.LoadAddressesAsyncTask;
+import com.henallux.dondesang.task.LoadCollectesAsyncTask;
 
 import java.util.List;
 
@@ -128,35 +129,7 @@ public class LocalisationFragment extends Fragment {
         //Récupération des collectes depuis l'API
         CollecteService collecteService = ServiceBuilder.buildService(CollecteService.class);
         Call<List<Collecte>> listCall = collecteService.getCollectes();
-        listCall.enqueue(new Callback<List<Collecte>>() {
-            @Override
-            public void onResponse(Call<List<Collecte>> call, Response<List<Collecte>> response) {
-                if (butCarte == null || getContext() == null)
-                    return;
-                if (!response.isSuccessful()) {
-                    butCarte.setEnabled(false);
-                    Toast.makeText(getContext(), Constants.MSG_ERREUR_CHARGEMENT_COLLECTES, Toast.LENGTH_LONG).show();
-                    Log.d(Constants.TAG_GENERAL, "Code : " + response.code());
-                    return;
-                }
-
-                if (response.body().isEmpty()) {
-                    butCarte.setEnabled(false);
-                }
-                else
-                {
-                    locationViewModel.setCollectes(response.body());
-                    butCarte.setEnabled(true);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Collecte>> call, Throwable t) {
-                butCarte.setEnabled(false);
-                Toast.makeText(getContext(), Constants.MSG_ERREUR_CHARGEMENT_COLLECTES, Toast.LENGTH_SHORT).show();
-                Log.d(Constants.TAG_GENERAL, "Requête : " + call.request());
-            }
-        });
+        listCall.enqueue(new LoadCollectesAsyncTask(getContext(), butCarte, locationViewModel));
 
         butCarte.setEnabled(false);
 

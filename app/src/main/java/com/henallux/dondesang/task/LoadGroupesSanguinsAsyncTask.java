@@ -1,68 +1,73 @@
 package com.henallux.dondesang.task;
 
-import android.app.Activity;
-import android.os.AsyncTask;
-import android.support.v4.app.FragmentActivity;
-import android.util.Log;
-import android.arch.lifecycle.ViewModelProviders;
-import android.widget.Spinner;
 
-import com.henallux.dondesang.DataAcces.GroupeSanguinDAO;
-import com.henallux.dondesang.exception.DeserialisationException;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+import android.widget.Toast;
+
+import com.henallux.dondesang.R;
 import com.henallux.dondesang.model.GroupeSanguin;
-import com.henallux.dondesang.model.NotificationViewModel;
 
 import java.util.ArrayList;
 
-public class LoadGroupesSanguinsAsyncTask extends AsyncTask<Void, Void, ArrayList<GroupeSanguin>> {
-    private String tag = "LoadGroupesSanguinsAsyncTask";
-    private NotificationViewModel notificationViewModel;
-    private Activity activity;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-    public LoadGroupesSanguinsAsyncTask(Activity activity) {
-        super();
-        this.activity = activity;
-        this.notificationViewModel = ViewModelProviders.of((FragmentActivity) this.activity).get(NotificationViewModel.class);
+public class LoadGroupesSanguinsAsyncTask implements Callback<ArrayList<GroupeSanguin>> {
+    private Context context;
+    private ArrayList<GroupeSanguin> groupesSanguins;
+    private Spinner spinnerGroupesSanguins;
+    private String groupeChoisi;
+    private SharedPreferences sharedPreferences;
+
+    public LoadGroupesSanguinsAsyncTask(Context context, ArrayList<GroupeSanguin> groupesSanguins, Spinner spinnerGroupesSanguins, String groupeChoisi, SharedPreferences sharedPreferences) {
+        this.context = context;
+        this.groupesSanguins = groupesSanguins;
+        this.spinnerGroupesSanguins = spinnerGroupesSanguins;
+        this.groupeChoisi = groupeChoisi;
+        this.sharedPreferences = sharedPreferences;
     }
 
     @Override
-    protected void onPreExecute() {
-        super.onPreExecute();
-    }
-
-    @Override
-    protected void onPostExecute(ArrayList<GroupeSanguin> groupeSanguins) {
-        notificationViewModel.setGroupesSanguins(groupeSanguins);
-    }
-
-    @Override
-    protected void onProgressUpdate(Void... values) {
-        super.onProgressUpdate(values);
-    }
-
-    @Override
-    protected void onCancelled(ArrayList<GroupeSanguin> groupeSanguins) {
-        super.onCancelled(groupeSanguins);
-    }
-
-    @Override
-    protected void onCancelled() {
-        super.onCancelled();
-    }
-
-    @Override
-    protected ArrayList<GroupeSanguin> doInBackground(Void... voids) {
-        GroupeSanguinDAO groupeSanguinDAO = new GroupeSanguinDAO();
-        ArrayList<GroupeSanguin> groupesSanguins = new ArrayList<>();
-
-        try {
-            groupesSanguins = groupeSanguinDAO.getAllGroupesSanguin();
-        } catch (DeserialisationException e) {
-            Log.d(tag, "DeserialisationException : " + e.getMessage());
-        } catch (Exception e) {
-            Log.d(tag, "Exception : " + e.getMessage());
+    public void onResponse(Call<ArrayList<GroupeSanguin>> call, Response<ArrayList<GroupeSanguin>> response) {
+        if (context == null || groupesSanguins == null || spinnerGroupesSanguins == null || groupeChoisi == null || sharedPreferences == null)
+            return;
+        if (!response.isSuccessful()) {
+            Toast.makeText(context, context.getResources().getString(R.string.erreur_groupeSanguin), Toast.LENGTH_SHORT).show();
+            return;
         }
 
-        return groupesSanguins;
+        groupesSanguins.add(new GroupeSanguin(context.getResources().getString(R.string.groupe_sanguin_aucun)));
+        for (GroupeSanguin groupeSanguin : response.body()) {
+            groupesSanguins.add(groupeSanguin);
+        }
+
+        ArrayAdapter<GroupeSanguin> adapter = new ArrayAdapter<GroupeSanguin>(context,  android.R.layout.simple_spinner_dropdown_item, groupesSanguins);
+        adapter.setDropDownViewResource( android.R.layout.simple_spinner_dropdown_item);
+        spinnerGroupesSanguins.setAdapter(adapter);
+        groupeChoisi = sharedPreferences.getString("groupeSanguin", "Aucun");
+        spinnerGroupesSanguins.setSelection(getIndexGroupeSanguin(groupeChoisi, groupesSanguins));
+    }
+
+    @Override
+    public void onFailure(Call<ArrayList<GroupeSanguin>> call, Throwable t) {
+        if (context != null)
+            Toast.makeText(context, context.getResources().getString(R.string.erreur_groupeSanguin), Toast.LENGTH_SHORT).show();
+    }
+
+    public int getIndexGroupeSanguin(String groupeChoisi, ArrayList<GroupeSanguin> groupesSanguins) {
+        if (groupeChoisi == null || groupesSanguins == null)
+            return 0;
+        int indexGroupeSanguin = 0;
+        for (int i = 0; i < groupesSanguins.size(); i++) {
+            if (groupesSanguins.get(i).getNom().equals(groupeChoisi)) {
+                indexGroupeSanguin = i;
+            }
+        }
+
+        return indexGroupeSanguin;
     }
 }

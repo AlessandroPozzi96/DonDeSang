@@ -25,6 +25,7 @@ import com.henallux.dondesang.services.FireBaseMessengingService;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.henallux.dondesang.services.GroupeSanguinService;
 import com.henallux.dondesang.services.ServiceBuilder;
+import com.henallux.dondesang.task.LoadGroupesSanguinsAsyncTask;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -70,34 +71,7 @@ public class NotificationsFragment extends Fragment {
         //Récupération des groupes sanguins via retrofit afin de ne pas hardcoder
         final GroupeSanguinService groupeSanguinService = ServiceBuilder.buildService(GroupeSanguinService.class);
         retrofit2.Call<ArrayList<GroupeSanguin>> listCall = groupeSanguinService.getGroupesSanguins();
-        listCall.enqueue(new Callback<ArrayList<GroupeSanguin>>() {
-            @Override
-            public void onResponse(retrofit2.Call<ArrayList<GroupeSanguin>> call, Response<ArrayList<GroupeSanguin>> response) {
-                if (getContext() == null || groupesSanguins == null || spinnerGroupesSanguins == null || groupeChoisi == null || sharedPreferences == null)
-                        return;
-                if (!response.isSuccessful()) {
-                    Toast.makeText(getContext(), getResources().getString(R.string.erreur_groupeSanguin), Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                groupesSanguins.add(new GroupeSanguin(getResources().getString(R.string.groupe_sanguin_aucun)));
-                for (GroupeSanguin groupeSanguin : response.body()) {
-                    groupesSanguins.add(groupeSanguin);
-                }
-
-                ArrayAdapter<GroupeSanguin> adapter = new ArrayAdapter<GroupeSanguin>(getContext(),  android.R.layout.simple_spinner_dropdown_item, groupesSanguins);
-                adapter.setDropDownViewResource( android.R.layout.simple_spinner_dropdown_item);
-                spinnerGroupesSanguins.setAdapter(adapter);
-                groupeChoisi = sharedPreferences.getString("groupeSanguin", "Aucun");
-                spinnerGroupesSanguins.setSelection(getIndexGroupeSanguin(groupeChoisi));
-            }
-
-            @Override
-            public void onFailure(retrofit2.Call<ArrayList<GroupeSanguin>> call, Throwable t) {
-                if (getContext() != null)
-                    Toast.makeText(getContext(), getResources().getString(R.string.erreur_groupeSanguin), Toast.LENGTH_SHORT).show();
-            }
-        });
+        listCall.enqueue(new LoadGroupesSanguinsAsyncTask(getContext(), groupesSanguins, spinnerGroupesSanguins, groupeChoisi, sharedPreferences));
 
         editor = sharedPreferences.edit();
 
@@ -186,16 +160,7 @@ public class NotificationsFragment extends Fragment {
         this.groupesSanguins = groupesSanguins;
     }
 
-    public int getIndexGroupeSanguin(String groupeChoisi) {
-        int indexGroupeSanguin = 0;
-        for (int i = 0; i < getGroupesSanguins().size(); i++) {
-            if (getGroupesSanguins().get(i).getNom().equals(groupeChoisi)) {
-                indexGroupeSanguin = i;
-            }
-        }
 
-        return indexGroupeSanguin;
-    }
 
     //Malheureusement Google Firebase Messenger ne prends pas en charge le caractère '+'...
     public String conversionGroupeSanguin(String groupeSanguin) {
