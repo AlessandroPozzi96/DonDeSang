@@ -30,6 +30,7 @@ import com.henallux.dondesang.model.Utilisateur;
 import com.henallux.dondesang.services.AuthenticationService;
 import com.henallux.dondesang.services.ServiceBuilder;
 import com.henallux.dondesang.services.UtilisateurService;
+import com.henallux.dondesang.task.GetTokenAsyncTask;
 import com.henallux.dondesang.task.GetTokenFromApiAsyncTask;
 
 import retrofit2.Call;
@@ -68,69 +69,9 @@ public class LoginFragment extends Fragment {
                     final Login login = new Login(editUserName.getText().toString(),editPassword.getText().toString());
                     AuthenticationService authenticationService = ServiceBuilder.buildService(AuthenticationService.class);
                     final Call<Token> request = authenticationService.getToken(login);
-                    request.enqueue(new Callback<Token>() {
-                        @Override
-                        public void onResponse(Call<Token> call, Response<Token> response) {
-                            Log.i("tag", response.toString());
-
-                            if(response.code()==200)
-                            {
-
-                            Token token = response.body(); // token récupérer
-
-                            Gson gson = new Gson();
-                            String tokenJSON = gson.toJson(token, Token.class);
-
-                            SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
-                            SharedPreferences.Editor editor = sharedPref.edit();
-                            editor.putString("tokenAccessJSONString", tokenJSON);
-                            editor.commit();
-
-                                ((IMyListener)getActivity()).setToken(token);
-
-                            //Recuperer son profil
-                            UtilisateurService utilisateurService = ServiceBuilder.buildService(UtilisateurService.class);
-                            Call<Utilisateur> requete = utilisateurService.getUtilisateur("Bearer "+token.getAccess_token(), login.getLogin());
-                            requete.enqueue(new Callback<Utilisateur>() {
-                                @Override
-                                public void onResponse(Call<Utilisateur> call, Response<Utilisateur> response) {
-                                    if (response.isSuccessful()) {
-                                        Utilisateur utilisateur = response.body();
-
-                                        Gson gson = new Gson();
-                                        String utilisateurJSON = gson.toJson(utilisateur, Utilisateur.class);
-
-                                        SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
-                                        SharedPreferences.Editor editor = sharedPref.edit();
-                                        editor.putString("utilisateurJSONString", utilisateurJSON);
-                                        editor.commit();
-
-                                        ((IMyListener)getActivity()).setUtilisateur(utilisateur);
-
-                                        ProfileFragment profileFragment = new ProfileFragment();
-                                        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                                        transaction.replace(R.id.fragment_container, profileFragment, "replaceFragmentByRegisterFragment");
-                                        transaction.commit();
-                                    }else{
-                                        Toast.makeText(getContext(),R.string.connexion_impossible,Toast.LENGTH_LONG).show();
-                                    }
-                                }
-
-                                @Override
-                                public void onFailure(Call<Utilisateur> call, Throwable t) {
-
-                                }
-                            });
-                            //
-                        }
-                    }
-                        @Override
-                        public void onFailure(Call<Token> call, Throwable t) {
-
-                        }
-                    });
+                    request.enqueue(new GetTokenAsyncTask(getActivity(), getFragmentManager(), login.getLogin()));
                     } else {
-                    Toast.makeText(getActivity(), R.string.erreur_credentials_connexion, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), getResources().getString(R.string.erreur_credentials_connexion), Toast.LENGTH_SHORT).show();
                 }
             }
         });
