@@ -64,31 +64,6 @@ public class ScoreFragment extends Fragment {
     IMyListener myListener;
     Utilisateur utilisateur;
     Token token;
-    Target target = new Target() {
-        @Override
-        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-            SharePhoto sharePhoto = new SharePhoto.Builder()
-                    .setBitmap(bitmap)
-                    .build();
-            if(shareDialog.canShow(SharePhotoContent.class))
-            {
-                SharePhotoContent content = new SharePhotoContent.Builder()
-                        .addPhoto(sharePhoto)
-                        .build();
-                shareDialog.show(content);
-            }
-        }
-
-        @Override
-        public void onBitmapFailed(Drawable errorDrawable) {
-
-        }
-
-        @Override
-        public void onPrepareLoad(Drawable placeHolderDrawable) {
-
-        }
-    };
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -115,15 +90,6 @@ public class ScoreFragment extends Fragment {
         ImagepromotionService imagepromotionService = ServiceBuilder.buildService(ImagepromotionService.class);
         Call<List<Imagepromotion>> listCall = imagepromotionService.getImagesPromotions();
         listCall.enqueue(new GetImagespromoAsyncTask(getActivity(), imageToShare));
-
-        buttonSharePhoto = getView().findViewById(R.id.buttonSharePhoto);
-
-        // INIT FB
-
-        //shareDialog.registerCallback(callbackManager,callBack);
-
-
-
 
         buttonSharePhoto.setOnClickListener(new View.OnClickListener() {
             @Override

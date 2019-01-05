@@ -34,7 +34,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class NotificationsFragment extends Fragment {
-    private View view;
     private Spinner spinnerGroupesSanguins;
     private ArrayList<GroupeSanguin> groupesSanguins;
     private String tag = "NotificationsFragment";
@@ -47,14 +46,19 @@ public class NotificationsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view =  inflater.inflate(R.layout.fragment_notifications, container, false);
+        return inflater.inflate(R.layout.fragment_notifications, container, false);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
 
-        spinnerGroupesSanguins = (Spinner) view.findViewById(R.id.combobox_groupesanguin);
-        buttonValiderPreferences = (Button) view.findViewById(R.id.button_majPreferences);
-        autoriserNotifications = (Switch) view.findViewById(R.id.switch_autoiserNotifications);
-        autoriserPlaquettes = (Switch) view.findViewById(R.id.switch_autorisationPlaquettes);
-        autoriserPlasma = (Switch) view.findViewById(R.id.switch_autorisationPlasma);
+        spinnerGroupesSanguins = (Spinner) getView().findViewById(R.id.combobox_groupesanguin);
+        buttonValiderPreferences = (Button) getView().findViewById(R.id.button_majPreferences);
+        autoriserNotifications = (Switch) getView().findViewById(R.id.switch_autoiserNotifications);
+        autoriserPlaquettes = (Switch) getView().findViewById(R.id.switch_autorisationPlaquettes);
+        autoriserPlasma = (Switch) getView().findViewById(R.id.switch_autorisationPlasma);
 
         //Fonctionnalités non implémentées
         autoriserPlaquettes.setEnabled(false);
@@ -69,8 +73,10 @@ public class NotificationsFragment extends Fragment {
         listCall.enqueue(new Callback<ArrayList<GroupeSanguin>>() {
             @Override
             public void onResponse(retrofit2.Call<ArrayList<GroupeSanguin>> call, Response<ArrayList<GroupeSanguin>> response) {
+                if (getContext() == null || groupesSanguins == null || spinnerGroupesSanguins == null || groupeChoisi == null || sharedPreferences == null)
+                        return;
                 if (!response.isSuccessful()) {
-                    Toast.makeText(getContext(), R.string.erreur_groupeSanguin, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), getResources().getString(R.string.erreur_groupeSanguin), Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -88,7 +94,8 @@ public class NotificationsFragment extends Fragment {
 
             @Override
             public void onFailure(retrofit2.Call<ArrayList<GroupeSanguin>> call, Throwable t) {
-                Toast.makeText(getContext(), R.string.erreur_groupeSanguin, Toast.LENGTH_SHORT).show();
+                if (getContext() != null)
+                    Toast.makeText(getContext(), getResources().getString(R.string.erreur_groupeSanguin), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -148,10 +155,7 @@ public class NotificationsFragment extends Fragment {
         });
 
         Log.d(tag, "Preference groupe sanguin : " + sharedPreferences.getString("groupeSanguin", "Aucun"));
-
-        return view;
     }
-
 
     public void desactiverParametres(Boolean desactiver) {
 

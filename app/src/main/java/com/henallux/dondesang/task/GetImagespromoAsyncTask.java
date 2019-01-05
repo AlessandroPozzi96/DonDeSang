@@ -28,17 +28,36 @@ public class GetImagespromoAsyncTask implements Callback<List<Imagepromotion>> {
 
     @Override
     public void onResponse(Call<List<Imagepromotion>> call, Response<List<Imagepromotion>> response) {
+        if (context == null || imageView == null)
+            return;
         if (!response.isSuccessful()) {
             Picasso.with(context).load(urlDefaut).into(imageView);
             Toast.makeText(this.context, Constants.MSG_ERREUR_CHARGEMENT_IMAGES, Toast.LENGTH_LONG).show();
             return;
         }
 
-        Picasso.with(context).load(response.body().get(response.body().size() - 1).getUrl()).into(imageView);
+        String url = response.body().get(response.body().size() - 1).getUrl();
+        if (url == null)
+            url = urlDefaut;
+        Picasso.with(context)
+                .load(url)
+                .into(imageView, new com.squareup.picasso.Callback() {
+                    @Override
+                    public void onSuccess() {
+
+                    }
+
+                    @Override
+                    public void onError() {
+                        Toast.makeText(context, Constants.MSG_ERREUR_CHARGEMENT_IMAGES, Toast.LENGTH_LONG).show();
+                    }
+                });
     }
 
     @Override
     public void onFailure(Call<List<Imagepromotion>> call, Throwable t) {
+        if (context == null || imageView == null)
+                return;
         Picasso.with(context).load(urlDefaut).into(imageView);
         Toast.makeText(this.context, Constants.MSG_ERREUR_CHARGEMENT_IMAGES, Toast.LENGTH_LONG).show();
     }

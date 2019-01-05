@@ -131,6 +131,8 @@ public class LocalisationFragment extends Fragment {
         listCall.enqueue(new Callback<List<Collecte>>() {
             @Override
             public void onResponse(Call<List<Collecte>> call, Response<List<Collecte>> response) {
+                if (butCarte == null || getContext() == null)
+                    return;
                 if (!response.isSuccessful()) {
                     butCarte.setEnabled(false);
                     Toast.makeText(getContext(), Constants.MSG_ERREUR_CHARGEMENT_COLLECTES, Toast.LENGTH_LONG).show();

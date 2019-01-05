@@ -79,8 +79,10 @@ public class InfosFragment extends Fragment {
         listCall.enqueue(new Callback<List<Information>>() {
             @Override
             public void onResponse(Call<List<Information>> call, Response<List<Information>> response) {
+                if (getContext() == null || butFaq == null || question1 == null || button_Question1 == null || question2 == null || button_Question2 == null || question3 == null || button_Question3 == null )
+                    return;
                 if (!response.isSuccessful()) {
-                    Toast.makeText(getContext(), R.string.erreur_chargement_infos, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getResources().getString(R.string.erreur_chargement_infos), Toast.LENGTH_SHORT).show();
                     Log.d(tag, "Code : " + response.code());
                     return;
                 }
@@ -100,7 +102,11 @@ public class InfosFragment extends Fragment {
 
             @Override
             public void onFailure(Call<List<Information>> call, Throwable t) {
-                Toast.makeText(getContext(), Constants.MSG_ERREUR_REPONSE, Toast.LENGTH_SHORT).show();
+                if (getContext() != null)
+                    Toast.makeText(getContext(), Constants.MSG_ERREUR_REPONSE, Toast.LENGTH_SHORT).show();
+                if (butFaq == null) {
+                    return;
+                }
                 if (informationViewModel.getInformations() == null || informationViewModel.getInformations().isEmpty()) {
                     butFaq.setEnabled(false);
                 }
