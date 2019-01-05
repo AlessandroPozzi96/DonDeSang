@@ -187,7 +187,7 @@
             android:drawableLeft="@drawable/img_lock"
             android:ems="10"
             android:hint="@string/numGSM"
-            android:inputType="text"
+            android:inputType="number"
             android:padding="8dp"
             android:textColor="#8bc34a"
             android:textColorHint="#CFD8DC"

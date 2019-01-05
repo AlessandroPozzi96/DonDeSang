@@ -24,52 +24,45 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class CreateUtilisateurAsyncTask implements Callback<Utilisateur> {
+public class GetTokenAsyncTask implements Callback<Token> {
     private Activity activity;
     private FragmentManager fragmentManager;
-    private String password;
-    public CreateUtilisateurAsyncTask(Activity activity, FragmentManager fragmentManager,String password) {
+
+    public GetTokenAsyncTask(Activity activity, FragmentManager fragmentManager) {
         this.activity = activity;
         this.fragmentManager = fragmentManager;
-        this.password=password;
     }
 
     @Override
-    public void onResponse(Call<Utilisateur> call, Response<Utilisateur> response) {
+    public void onResponse(Call<Token> call, Response<Token> response) {
         if (activity == null || fragmentManager == null)
             return;
-        // Inscription faite, dirige vers le profil
+
         if (response.isSuccessful())
         {
-            Log.i("tag","Inscription ok");
-            Utilisateur utilisateur = response.body(); // RECUP l'utilisateur => l'enregistrer.
+            Token token = response.body(); // RECUP l'utilisateur => l'enregistrer.
 
             Gson gson = new Gson();
-            String utilisateurJSON = gson.toJson(utilisateur, Utilisateur.class);
+            String tokenJSON = gson.toJson(token, Token.class);
 
             SharedPreferences sharedPref = activity.getPreferences(Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPref.edit();
-            editor.putString("utilisateurJSONString", utilisateurJSON);
+            editor.putString("tokenAccessJSONString", tokenJSON);
             editor.commit();
 
-            ((IMyListener) activity).setUtilisateur(utilisateur);
+            ((IMyListener) activity).setToken(token);
 
-
-            // on c'est inscrit il faut le token.
-            Login login = new Login(utilisateur.getLogin(),password);
-            Log.i("tag",login.getLogin());
-            Log.i("tag",login.getPassword());
-
-            AuthenticationService authenticationService = ServiceBuilder.buildService(AuthenticationService.class);
-            final Call<Token> requete = authenticationService.getToken(login);
-
-            requete.enqueue(new GetTokenAsyncTask(activity,fragmentManager));
+            ProfileFragment profileFragment = new ProfileFragment();
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            transaction.replace(R.id.fragment_container,profileFragment,"replaceFragmentByRegisterFragment");
+            transaction.addToBackStack("LoginFragment");
+            transaction.commit();
 
         }else{
             Log.i("tag",response.message());
             try {
                 Toast.makeText(activity,response.errorBody().string(),Toast.LENGTH_LONG).show();
-                } catch (IOException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
                 Toast.makeText(activity,response.message(),Toast.LENGTH_LONG).show();
             }
@@ -77,7 +70,7 @@ public class CreateUtilisateurAsyncTask implements Callback<Utilisateur> {
     }
 
     @Override
-    public void onFailure(Call<Utilisateur> call, Throwable t) {
-        Toast.makeText(activity,activity.getResources().getString(R.string.erreur_inscription),Toast.LENGTH_LONG).show();
+    public void onFailure(Call<Token> call, Throwable t) {
+        Toast.makeText(activity,"pas de token",Toast.LENGTH_LONG).show();
     }
 }
