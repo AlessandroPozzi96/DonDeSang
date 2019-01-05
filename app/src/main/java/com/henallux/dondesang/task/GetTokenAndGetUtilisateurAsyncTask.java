@@ -22,12 +22,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class GetTokenAsyncTask implements Callback<Token> {
+public class GetTokenAndGetUtilisateurAsyncTask implements Callback<Token> {
     private Activity activity;
     private FragmentManager fragmentManager;
     private String login;
 
-    public GetTokenAsyncTask(Activity activity, FragmentManager fragmentManager, String login) {
+    public GetTokenAndGetUtilisateurAsyncTask(Activity activity, FragmentManager fragmentManager, String login) {
         this.activity = activity;
         this.fragmentManager = fragmentManager;
         this.login = login;

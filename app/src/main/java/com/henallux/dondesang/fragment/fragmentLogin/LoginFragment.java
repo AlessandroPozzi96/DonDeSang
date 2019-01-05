@@ -1,15 +1,11 @@
 package com.henallux.dondesang.fragment.fragmentLogin;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,25 +13,15 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.henallux.dondesang.DataAcces.ApiAuthentification;
-import com.henallux.dondesang.IMyListener;
 import com.henallux.dondesang.R;
 import com.henallux.dondesang.Util;
-import com.henallux.dondesang.exception.ErreurConnectionException;
-import com.henallux.dondesang.fragment.ProfileFragment;
 import com.henallux.dondesang.model.Login;
 import com.henallux.dondesang.model.Token;
-import com.henallux.dondesang.model.Utilisateur;
 import com.henallux.dondesang.services.AuthenticationService;
 import com.henallux.dondesang.services.ServiceBuilder;
-import com.henallux.dondesang.services.UtilisateurService;
-import com.henallux.dondesang.task.GetTokenAsyncTask;
-import com.henallux.dondesang.task.GetTokenFromApiAsyncTask;
+import com.henallux.dondesang.task.GetTokenAndGetUtilisateurAsyncTask;
 
 import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class LoginFragment extends Fragment {
     FragmentManager fragmentManager;
@@ -69,7 +55,7 @@ public class LoginFragment extends Fragment {
                     final Login login = new Login(editUserName.getText().toString(),editPassword.getText().toString());
                     AuthenticationService authenticationService = ServiceBuilder.buildService(AuthenticationService.class);
                     final Call<Token> request = authenticationService.getToken(login);
-                    request.enqueue(new GetTokenAsyncTask(getActivity(), getFragmentManager(), login.getLogin()));
+                    request.enqueue(new GetTokenAndGetUtilisateurAsyncTask(getActivity(), getFragmentManager(), login.getLogin()));
                     } else {
                     Toast.makeText(getActivity(), getResources().getString(R.string.erreur_credentials_connexion), Toast.LENGTH_SHORT).show();
                 }

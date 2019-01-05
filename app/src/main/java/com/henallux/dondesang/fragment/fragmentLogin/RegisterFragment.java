@@ -32,6 +32,7 @@ import com.henallux.dondesang.services.AuthenticationService;
 import com.henallux.dondesang.services.ServiceBuilder;
 import com.henallux.dondesang.services.UtilisateurService;
 import com.henallux.dondesang.task.CreateUserAsyncTask;
+import com.henallux.dondesang.task.CreateUtilisateurAsyncTask;
 
 import javax.security.auth.callback.Callback;
 
@@ -84,73 +85,9 @@ public class RegisterFragment extends Fragment {
             //new CreateUserAsyncTask(utilisateur,getActivity(),getFragmentManager(),getContext()).execute();
             UtilisateurService utilisateurService = ServiceBuilder.buildService(UtilisateurService.class);
             Call<Utilisateur> createRequest = utilisateurService.createUtilisateur(newUtilisateur);
-            createRequest.enqueue(new retrofit2.Callback<Utilisateur>() {
-                @Override
-                public void onResponse(Call<Utilisateur> call, Response<Utilisateur> response) {
-                    // Inscription faite, dirige vers le profil
-                    if (response.isSuccessful())
-                    {
-
-                        Utilisateur utilisateur = response.body(); // RECUP l'utilisateur => l'enregistrer.
-
-                    Gson gson = new Gson();
-                    String utilisateurJSON = gson.toJson(utilisateur, Utilisateur.class);
-
-                    SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPref.edit();
-                    editor.putString("utilisateurJSONString", utilisateurJSON);
-                    editor.commit();
-
-                    ((IMyListener) getActivity()).setUtilisateur(utilisateur);
-
-
-                    // on c'est inscrit il faut le token.
-                    Login login = new Login(utilisateur.getLogin(), utilisateur.getPassword());
-                    AuthenticationService authenticationService = ServiceBuilder.buildService(AuthenticationService.class);
-                    final Call<Token> requete = authenticationService.getToken(login);
-                    requete.enqueue(new retrofit2.Callback<Token>() {
-                        @Override
-                        public void onResponse(Call<Token> call, Response<Token> response) {
-                            if (response.isSuccessful()) {
-                                Token token = response.body();
-
-                                Gson gson = new Gson();
-                                String tokenJSON = gson.toJson(token, Token.class);
-
-                                SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
-                                SharedPreferences.Editor editor = sharedPref.edit();
-                                editor.putString("tokenAccessJSONString", tokenJSON);
-                                editor.commit();
-
-                                ((IMyListener) getActivity()).setToken(token);
-
-
-                                ProfileFragment profileFragment = new ProfileFragment();
-                                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                                transaction.replace(R.id.fragment_container, profileFragment, "replaceFragmentByRegisterFragment");
-                                transaction.addToBackStack("RegisterFragment");
-                                transaction.commit();
-                            } else {
-                                Toast.makeText(getContext(), response.message(), Toast.LENGTH_LONG).show();
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<Token> call, Throwable t) {
-                            Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_LONG).show();
-                        }
-                    });
-                }else{
-                        Toast.makeText(getContext(),response.message(),Toast.LENGTH_LONG).show();
-                    }
-                }
-                @Override
-                public void onFailure(Call<Utilisateur> call, Throwable t) {
-                    Toast.makeText(getContext(),R.string.erreur_inscription,Toast.LENGTH_LONG).show();
-                }
-            });
+            createRequest.enqueue(new CreateUtilisateurAsyncTask(getActivity(), getFragmentManager()));
         }else{
-            Toast.makeText(getActivity(),R.string.champs_invalide,Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(),getResources().getString(R.string.champs_invalide),Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -173,11 +110,11 @@ public class RegisterFragment extends Fragment {
             if(Util.verificationEmailDansBD(editEmail)){
                 return true;
             }else{
-                editEmail.setError("" + R.string.erreur_mail_exist);
+                editEmail.setError("" + getResources().getString(R.string.erreur_mail_exist));
                 return false;
             }
         }else{
-            editEmail.setError("" + R.string.mauvais_mail);
+            editEmail.setError("" + getResources().getString(R.string.mauvais_mail));
             return false;
         }
     }
