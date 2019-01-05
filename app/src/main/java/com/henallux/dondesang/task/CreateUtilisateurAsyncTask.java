@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -16,6 +17,8 @@ import com.henallux.dondesang.model.Token;
 import com.henallux.dondesang.model.Utilisateur;
 import com.henallux.dondesang.services.AuthenticationService;
 import com.henallux.dondesang.services.ServiceBuilder;
+
+import java.io.IOException;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -37,7 +40,7 @@ public class CreateUtilisateurAsyncTask implements Callback<Utilisateur> {
         // Inscription faite, dirige vers le profil
         if (response.isSuccessful())
         {
-
+            Log.i("tag","Inscription ok");
             Utilisateur utilisateur = response.body(); // RECUP l'utilisateur => l'enregistrer.
 
             Gson gson = new Gson();
@@ -88,7 +91,13 @@ public class CreateUtilisateurAsyncTask implements Callback<Utilisateur> {
                 }
             });
         }else{
-            Toast.makeText(activity,response.message(),Toast.LENGTH_LONG).show();
+            Log.i("tag",response.message());
+            try {
+                Toast.makeText(activity,response.errorBody().string(),Toast.LENGTH_LONG).show();
+                } catch (IOException e) {
+                e.printStackTrace();
+                Toast.makeText(activity,response.message(),Toast.LENGTH_LONG).show();
+            }
         }
     }
 

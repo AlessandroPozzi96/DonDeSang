@@ -10,56 +10,22 @@ import java.util.Arrays;
 
 public class Util {
 
-    public static boolean verificationLoginLongeur(TextView editLogin){
-        if(editLogin.getText().length() > 2){
-            return true;
-        }
-        else{
-            editLogin.setError("Minimun 3 caractères");
-            return false;
-        }
-    }
-    public static boolean verificationLoginDisponible(TextView editLogin) {
-        if (true) { // Chercher en bd
-            return true;
-        } else {
-            editLogin.setError("Le login n'est pas disponible");
-            return false;
-        }
-    }
-    public static boolean verificationLoginPresent(TextView editLogin){
-        if(false){ // vérif si login déja présent
-            return true;
+
+    public static String verificationPasswordRepeat(String editPassword,String editPasswordRepeat) {
+        if(editPassword.equals(editPasswordRepeat)){
+            return null;
         }else{
-            editLogin.setError("Le login est présent dans la BD");
-            return false;
-        }
-    }
-    public static boolean verificationPassword(TextView editPassword){
-        if(editPassword.length()>7){
-            // !!! FAIRE D'AUTRE VERIF SI BESOIN
-            return true;
-        }else{
-            editPassword.setError("Minimun 8 caractères");
-            return false;
+            return "Les MDP ne sont pas identiques";
         }
     }
 
-    public static boolean verificationPasswordRepeat(TextView editPassword,TextView editPasswordRepeat) {
-        if(editPassword.getText().toString().equals(editPasswordRepeat.getText().toString())){
-            return true;
-        }else{
-            editPasswordRepeat.setError("Les MDP ne sont pas identiques");
-            return false;
-        }
-    }
-
-    public static boolean verificationEmail(TextView email) {
+    public static String verificationEmail(String email) {
         String regex = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
-        return email.getText().toString().matches(regex);
-    }
-    public static boolean verificationEmailDansBD(TextView email){
-        return true; // VERIF SUR EMAIL DANS BD
+        if(email.matches(regex)){
+            return null;
+        }else{
+            return "Mauvaise syntaxe";
+        }
     }
 
     public static boolean verificationCodePostal(TextView codePostal){
@@ -105,5 +71,19 @@ public class Util {
         textView.setTextSize(textSize);
 
         return textView;
+    }
+
+    public static String verificationTailleminimal(String chaine, int tailleMin) {
+        return (chaine.length()>= tailleMin)? null:"Minimun "+tailleMin+" caractéres";
+    }
+
+    public static String verificationTailleIntervale(String chaine, int min, int max) {
+        if(chaine.length()<min){
+            return "Minimun "+min+ " caractéres";
+        }
+        if(chaine.length()>max){
+            return "Maximun "+max+" caractéres";
+        }
+        return null;
     }
 }

@@ -90,6 +90,8 @@
  (Le GPS seul ne suffit pas)</string>
     <string name="activation_location_parametre">Paramètre de localisation</string>
     <string name="annuler">Annuler</string>
+    <string name="numero">Numéro GSM</string>
+
     <string name="pas_de_numero">Pas de numéro de téléphone</string>
     <string name="tel">Tél: </string>
     <string name="de">\n \t De </string>
@@ -119,4 +121,6 @@
     <string name="friday">Vendredi</string>
     <string name="saturday">Samedi</string>
     <string name="jourNonDisponible">Jour non disponible</string>
+    <string name="numGSM">Numéro GSM</string>
+    <string name="dateNaissance">Date de naissance</string>
 </resources>

@@ -83,15 +83,24 @@ public class LoginFragment extends Fragment {
     }
 
     public boolean verificationLogin() {
-        if (Util.verificationLoginLongeur(editUserName)) {
-            return Util.verificationLoginDisponible(editUserName);
-        } else {
+        String messageErreur = Util.verificationTailleminimal(editUserName.getText().toString(),3);
+        if(messageErreur == null){
+            return true;
+        }else{
+            editUserName.setError(messageErreur);
             return false;
         }
     }
 
     public boolean verificationPassword() {
-        return Util.verificationPassword(editPassword);
+
+        String messageErreur = Util.verificationTailleminimal(editPassword.getText().toString(),8);
+        if(messageErreur == null){
+            return true;
+        }else{
+            editPassword.setError(messageErreur);
+            return false;
+        }
     }
 
 }

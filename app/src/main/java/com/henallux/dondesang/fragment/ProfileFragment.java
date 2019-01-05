@@ -117,6 +117,7 @@ public class ProfileFragment extends Fragment {
         utilisateur = ((IMyListener) getActivity()).getUtilisateur();
         token = ((IMyListener) getActivity()).getToken();
         chargementDesChamps();
+
     }
 
     private void initialize() {
@@ -126,6 +127,7 @@ public class ProfileFragment extends Fragment {
         datePicker = getView().findViewById(R.id.datePicker);
         editTexteMail           = getView().findViewById(R.id.editTexteMail);
         editTextLogin           = getView().findViewById(R.id.editTextLogin);
+        editTextLogin.setEnabled(false);
         editTextNumero          = getView().findViewById(R.id.editTextNumero);
 
         editTextNumGSM          = getView().findViewById(R.id.editTextNumeroGSM);
@@ -172,12 +174,15 @@ public class ProfileFragment extends Fragment {
                 int mois = datePicker.getMonth()+1;
                 utilisateur.setDateNaissance(datePicker.getYear()+"-"+mois+"-"+datePicker.getDayOfMonth());
 
-                Adresse adresse = new Adresse();
+                utilisateur.setRue(editTextRue.getText().toString());
+                utilisateur.setNumero(editTextNumero.getText().toString());
+                utilisateur.setVille(editTextVille.getText().toString());
+
+                /*Adresse adresse = new Adresse();
                 adresse.setRue(editTextRue.getText().toString());
                 adresse.setNumero(editTextNumero.getText().toString());
-                adresse.setVille(editTextVille.getText().toString());
+                adresse.setVille(editTextVille.getText().toString());*/
 
-                utilisateur.setAdresse(adresse);
                 //utilisateur.setGroupeSanguin(groupeSanguin);
                 final UtilisateurService utilisateurService = ServiceBuilder.buildService(UtilisateurService.class);
 
@@ -225,7 +230,7 @@ public class ProfileFragment extends Fragment {
                 SharedPreferences.Editor editor = sharedPref.edit();
                 editor.remove("tokenAccessJSONString");
                 editor.remove("utilisateurJSONString");
-                editor.commit();
+                editor.apply();
 
                 ((IMyListener)getActivity()).setUtilisateur(null);
                 ((IMyListener)getActivity()).setToken(null);
@@ -307,11 +312,10 @@ public class ProfileFragment extends Fragment {
         }
         editTexteMail.setText(utilisateur.getMail());
         editTextNom.setText(utilisateur.getNom());
-        if(utilisateur.getFkAdresseNavigation() != null) {
-            editTextVille.setText(utilisateur.getFkAdresseNavigation().getVille());
-            editTextNumero.setText(utilisateur.getFkAdresseNavigation().getNumero());
-            editTextRue.setText(utilisateur.getFkAdresseNavigation().getRue());
-        }
+
+            editTextNumero.setText(utilisateur.getNumero());
+            editTextRue.setText(utilisateur.getRue());
+            editTextVille.setText(utilisateur.getVille());
         if(utilisateur.getDateNaissance() != null){
             String [] leSplit = utilisateur.getDateNaissance().split("-");
             String [] lautreSplit = leSplit[2].split("T");

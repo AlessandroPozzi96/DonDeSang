@@ -34,10 +34,11 @@ public class MotDePasseOublieFragment extends Fragment {
         buttonMotDePasseOublie.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(Util.verificationEmail(email) && Util.verificationEmailDansBD(email)) {  // TEST SUR LE MAIL --> regex OU voir dans la BD s'il existe
+                String messageErreur = Util.verificationEmail(email.getText().toString());
+                if(messageErreur == null){
                     Toast.makeText(getActivity(), R.string.envoyer_mail + email.getText().toString(), Toast.LENGTH_SHORT).show();
                 }else{
-                    Toast.makeText(getActivity(),R.string.erreur_mail,Toast.LENGTH_SHORT).show();
+                    email.setError(messageErreur);
                 }
             }
         });

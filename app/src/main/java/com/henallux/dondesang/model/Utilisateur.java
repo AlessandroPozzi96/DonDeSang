@@ -13,9 +13,16 @@ public class Utilisateur {
     private Integer numGsm;
     private String dateNaissance;
     private Integer score;
-    private Adresse fkAdresseNavigation;
+    private String ville;
+    private String rue;
+    private String numero;
+    private String fkRole;
     private GroupeSanguin fkGroupesanguinNavigation;
     private String rv;
+
+    public String getFkRole() {
+        return fkRole;
+    }
 
     public String getLogin() {
         return login;
@@ -61,6 +68,22 @@ public class Utilisateur {
         return prenom;
     }
 
+    public String getVille() {
+        return ville;
+    }
+
+    public void setFkRole(String fkRole) {
+        this.fkRole = fkRole;
+    }
+
+    public String getRue() {
+        return rue;
+    }
+
+    public String getNumero() {
+        return numero;
+    }
+
     public void setScore(Integer score) {
         this.score = score;
     }
@@ -81,8 +104,16 @@ public class Utilisateur {
         this.numGsm = numGsm;
     }
 
-    public void setAdresse(Adresse adresse) {
-        this.fkAdresseNavigation = adresse;
+    public void setRue(String rue) {
+        this.rue = rue;
+    }
+
+    public void setNumero(String numero) {
+        this.numero = numero;
+    }
+
+    public void setVille(String ville) {
+        this.ville = ville;
     }
 
     public void setGroupeSanguin(GroupeSanguin groupeSanguin) {
@@ -97,7 +128,5 @@ public class Utilisateur {
         return rv;
     }
 
-    public Adresse getFkAdresseNavigation() {
-        return fkAdresseNavigation;
-    }
+
 }

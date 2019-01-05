@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -32,6 +33,9 @@ public class GetUtilisateurAsyncTask implements Callback<Utilisateur> {
         if (activity == null || fragmentManager == null)
             return;
         if (response.isSuccessful()) {
+
+            Log.i("tag",response.body().toString());
+
             Utilisateur utilisateur = response.body();
 
             Gson gson = new Gson();
