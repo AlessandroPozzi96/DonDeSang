@@ -123,4 +123,12 @@
     <string name="jourNonDisponible">Jour non disponible</string>
     <string name="numGSM">Numéro GSM</string>
     <string name="dateNaissance">Date de naissance</string>
+    <string name="statistiques">Statistiques</string>
+    <string name="nombre_total_de_collectes_n_namur">Nombre total de collectes  \n à Namur :</string>
+    <string name="nombre_de_dons_de_sang">Nombre de dons de sang :</string>
+    <string name="nombre_d_utilisateurs_inscrit">Nombre d\'utilisateurs inscrit :</string>
+    <string name="nombre_potentielle_de_n_vies_de_sauv_es">Nombre potentielle de \n  vies de sauvées :</string>
+    <string name="merci_toi">Merci à toi !</string>
+    <string name="l_application_a_aid_a_fournir">L\'application a aidé a fournir</string>
+    <string name="tot_don_de_sang"> dons de sang \n à la Croix Rouge,</string>
 </resources>
