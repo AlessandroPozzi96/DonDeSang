@@ -269,7 +269,13 @@ public class ProfileFragment extends Fragment {
         buttonVoirstat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                if (utilisateur != null)
+                {
+                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                    transaction.replace(R.id.fragment_container, new StatistiqueFragment(),"replaceFragmentByStatistiqueFragment");
+                    transaction.addToBackStack("LoginFragment");
+                    transaction.commit();
+                }
             }
         });
     }
