@@ -45,7 +45,7 @@
         android:layout_height="wrap_content"
 
         android:layout_marginStart="26dp"
-        android:text="@string/r_initialiser_mot_de_passe"
+        android:text="@string/changer_mon_mot_de_passe"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/mDPOublieEditEmail"
         app:layout_constraintTop_toBottomOf="@+id/mDPOublieEditEmail" />

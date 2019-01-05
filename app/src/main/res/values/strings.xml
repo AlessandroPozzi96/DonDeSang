@@ -99,7 +99,7 @@
     <string name="collectes_indisponible">Pas de collectes disponibles, veuillez vérifier votre connexion internet</string>
     <string name="connexion_impossible">Connexion impossible</string>
     <string name="erreur_credentials_connexion">Login ou mot de passe incorrecte</string>
-    <string name="envoyer_mail">Mail envoyé a </string>
+    <string name="envoyer_mail">Un mail va être envoyé a  </string>
     <string name="erreur_mail">Adresse mail inexistante</string>
     <string name="erreur_inscription">Inscription impossbile</string>
     <string name="champs_invalide">Données invalides</string>
@@ -131,4 +131,8 @@
     <string name="merci_toi">Merci à toi !</string>
     <string name="l_application_a_aid_a_fournir">L\'application a aidé a fournir</string>
     <string name="tot_don_de_sang"> dons de sang \n à la Croix Rouge,</string>
+    <string name="envoyer_le_mot_de_passe">Envoyer le mot de passe</string>
+    <string name="mail_notFound">Adresse mail introuvable</string>
+    <string name="password_reset_ok">Votre nouveau mot de passe vient d\'être envoyé à votre adresse mail</string>
+    <string name="changer_mon_mot_de_passe">Changer mon mot de passe</string>
 </resources>

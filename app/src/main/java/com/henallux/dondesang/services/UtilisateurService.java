@@ -17,6 +17,9 @@ public interface UtilisateurService {
     @GET("Utilisateurs/{login}") // {} correspond a notre path du dessous
     Call<Utilisateur> getUtilisateur(@Header("Authorization") String tokenAcces, @Path("login")String login);
 
+    @GET("Utilisateurs/ResetPassword/{mail}")
+    Call<Void> resetPasswordUtilisateur(@Path("mail") String mail);
+
     @POST("Utilisateurs")
     Call<Utilisateur> createUtilisateur(@Body Utilisateur newUtilisateur);
 

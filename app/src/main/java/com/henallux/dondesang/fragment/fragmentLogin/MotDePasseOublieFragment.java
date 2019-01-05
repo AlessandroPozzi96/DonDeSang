@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.telecom.Call;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,9 @@ import android.widget.Toast;
 
 import com.henallux.dondesang.R;
 import com.henallux.dondesang.Util;
+import com.henallux.dondesang.services.ServiceBuilder;
+import com.henallux.dondesang.services.UtilisateurService;
+import com.henallux.dondesang.task.ResetPasswordUtilisateurAsyncTask;
 
 public class MotDePasseOublieFragment extends Fragment {
 
@@ -36,7 +40,10 @@ public class MotDePasseOublieFragment extends Fragment {
             public void onClick(View v) {
                 String messageErreur = Util.verificationEmail(email.getText().toString());
                 if(messageErreur == null){
-                    Toast.makeText(getActivity(), R.string.envoyer_mail + email.getText().toString(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), getResources().getString(R.string.envoyer_mail) + " " + email.getText().toString(), Toast.LENGTH_SHORT).show();
+                    UtilisateurService utilisateurService = ServiceBuilder.buildService(UtilisateurService.class);
+                    retrofit2.Call<Void> call = utilisateurService.resetPasswordUtilisateur("" + email.getText());
+                    call.enqueue(new ResetPasswordUtilisateurAsyncTask(getContext()));
                 }else{
                     email.setError(messageErreur);
                 }
