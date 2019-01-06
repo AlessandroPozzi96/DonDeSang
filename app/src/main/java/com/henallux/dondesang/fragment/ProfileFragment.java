@@ -309,16 +309,19 @@ public class ProfileFragment extends Fragment {
 
     public ArrayList<GroupeSanguin> getGroupesSanguins()
     {
+
+        getResources().getString(R.string.erreur_credentials_connexion);
+        
         ArrayList<GroupeSanguin> groupesSanguins = new ArrayList<>(
                 Arrays.asList(
-                        new GroupeSanguin("inconnu"),
-                        new GroupeSanguin("O-"),
-                        new GroupeSanguin("O+"),
-                        new GroupeSanguin("A-"),
-                        new GroupeSanguin("A+"),
-                        new GroupeSanguin("AB-"),
-                        new GroupeSanguin("AB+"))
-        );
+                        new GroupeSanguin(getResources().getString(R.string.inconnu)),
+                        new GroupeSanguin(getResources().getString(R.string.GroupeOMois)),
+                        new GroupeSanguin(getResources().getString(R.string.GroupeOPlus)),
+                        new GroupeSanguin(getResources().getString(R.string.GroupeAMois)),
+                        new GroupeSanguin(getResources().getString(R.string.GroupeAPlus)),
+                        new GroupeSanguin(getResources().getString(R.string.GroupeABMois)),
+                        new GroupeSanguin(getResources().getString(R.string.GroupeABPlus))
+        ));
         return groupesSanguins;
     }
 

@@ -56,7 +56,6 @@ public class RegisterFragment extends Fragment {
     TextView editNom;
     TextView editPrenom;
 
-    String erreurMessage;
     DatePicker datePicker;
 
     @Nullable
