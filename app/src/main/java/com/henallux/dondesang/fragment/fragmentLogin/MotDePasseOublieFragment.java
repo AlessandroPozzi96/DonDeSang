@@ -38,7 +38,7 @@ public class MotDePasseOublieFragment extends Fragment {
         buttonMotDePasseOublie.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String messageErreur = Util.verificationEmail(email.getText().toString());
+                String messageErreur = Util.verificationEmail(email.getText().toString(), getContext());
                 if(messageErreur == null){
                     Toast.makeText(getActivity(), getResources().getString(R.string.envoyer_mail) + " " + email.getText().toString(), Toast.LENGTH_SHORT).show();
                     UtilisateurService utilisateurService = ServiceBuilder.buildService(UtilisateurService.class);

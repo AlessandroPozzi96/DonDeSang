@@ -140,4 +140,9 @@
     <string name="notifications_menu">Notifications</string>
     <string name="score_menu">Score</string>
     <string name="infos_menu">Infos</string>
+    <string name="erreur_mdp_identique">Les MDP ne sont pas identiques</string>
+    <string name="mauvaise_syntaxe">Mauvaise syntaxe</string>
+    <string name="adresse_vide">L\'adresse ne peut être vide !</string>
+    <string name="caractere"> caractères</string>
+    <string name="numero_adresse">Le numéro de maison doit contenir 1 numéro et 4 caractére maximun</string>
 </resources>
