@@ -157,7 +157,9 @@ public class ProfileFragment extends Fragment {
         spinnerGroupesSanguins2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                utilisateur.setFkGroupesanguin(parent.getItemAtPosition(position).toString());
+                if(position !=0) {
+                    utilisateur.setFkGroupesanguin(parent.getItemAtPosition(position).toString());
+                }
             }
 
             @Override
@@ -337,6 +339,16 @@ public class ProfileFragment extends Fragment {
         editTextNumero.setText(utilisateur.getNumero());
         editTextRue.setText(utilisateur.getRue());
         editTextVille.setText(utilisateur.getVille());
+
+
+        if(utilisateur.getFkGroupesanguin()!=null) {
+            for (int i = 0; i < groupesSanguins.size(); i++) {
+                if (groupesSanguins.get(i).getNom().equals(utilisateur.getFkGroupesanguin())) {
+                    spinnerGroupesSanguins2.setSelection(i);
+                }
+            }
+        }
+
         if(utilisateur.getDateNaissance() != null){
             String [] leSplit = utilisateur.getDateNaissance().split("-");
             String [] lautreSplit = leSplit[2].split("T");
