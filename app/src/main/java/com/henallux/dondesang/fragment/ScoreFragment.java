@@ -43,6 +43,7 @@ import com.henallux.dondesang.services.ServiceBuilder;
 import com.henallux.dondesang.services.UtilisateurService;
 import com.henallux.dondesang.task.GetImagespromoAsyncTask;
 import com.henallux.dondesang.task.LoadScoreAsyncTask;
+import com.henallux.dondesang.task.ShareImageAsyncTask;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -144,64 +145,7 @@ public class ScoreFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                shareDialog.registerCallback(callbackManager, new FacebookCallback<Sharer.Result>() {
-                    @Override
-                    public void onSuccess(Sharer.Result result) {
-
-                        //new changerLesDonneesAsyncTask(utilisateur,getActivity()).execute();
-
-                        utilisateur.setScore(utilisateur.getScore()+ Constants.AJOUT_SCORE);
-                        UtilisateurService utilisateurService = ServiceBuilder.buildService(UtilisateurService.class);
-                        Call<Utilisateur> requete = utilisateurService.putUtilisateur("Bearer "+token.getAccess_token(),utilisateur.getLogin(),utilisateur);
-                        requete.enqueue(new Callback<Utilisateur>() {
-
-                            @Override
-                            public void onResponse(Call<Utilisateur> call, Response<Utilisateur> response) {
-                                Log.i("tag",token.getAccess_token());
-                                if(response.isSuccessful()){
-                                    utilisateur = response.body();
-                                    textViewVosPoints.setText(utilisateur.getScore()+"");
-
-                                    Toast.makeText(getContext(),R.string.gagner_50points,Toast.LENGTH_LONG).show();
-                                    progressBar.setProgress(utilisateur.getScore());
-                                    myListener.setUtilisateur(utilisateur);
-
-                                    Gson gson = new Gson();
-                                    String utilisateurJSON = gson.toJson(utilisateur, Utilisateur.class);
-                                    SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
-                                    SharedPreferences.Editor editor = sharedPref.edit();
-                                    editor.putString("utilisateurJSONString", utilisateurJSON);
-                                    editor.commit();
-
-                                }else{
-                                    Toast.makeText(getContext(),response.message(),Toast.LENGTH_LONG).show();
-                                }
-                            }
-
-                            @Override
-                            public void onFailure(Call<Utilisateur> call, Throwable t) {
-                                Toast.makeText(getContext(),R.string.erreur_partage,Toast.LENGTH_LONG).show();
-                            }
-                        });
-
-                        Toast.makeText(getActivity(),R.string.reussite_partage,Toast.LENGTH_LONG).show();
-                        Log.i("tag","sucess");
-                    }
-
-                    @Override
-                    public void onCancel() {
-                        Toast.makeText(getActivity(),R.string.annulation_partage,Toast.LENGTH_LONG).show();
-                        Log.i("tag","cancel");
-
-                    }
-
-                    @Override
-                    public void onError(FacebookException error) {
-                        Toast.makeText(getActivity(),R.string.erreur_partage,Toast.LENGTH_LONG).show();
-                        Log.i("tag","error : " + error.getMessage());
-
-                    }
-                });
+                shareDialog.registerCallback(callbackManager, new ShareImageAsyncTask(utilisateur, token, textViewVosPoints, progressBar, getActivity()));
 
                 ImagepromotionService imagepromotionService = ServiceBuilder.buildService(ImagepromotionService.class);
                 Call<List<Imagepromotion>> listCall = imagepromotionService.getImagesPromotions();
