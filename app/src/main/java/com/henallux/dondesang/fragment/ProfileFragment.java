@@ -51,6 +51,7 @@ import com.henallux.dondesang.model.Token;
 import com.henallux.dondesang.model.Utilisateur;
 import com.henallux.dondesang.services.ServiceBuilder;
 import com.henallux.dondesang.services.UtilisateurService;
+import com.henallux.dondesang.task.DeleteUtilisateurAsyncTask;
 import com.henallux.dondesang.task.UpdateUtilisateurAsyncTask;
 
 import org.json.JSONException;
@@ -270,30 +271,7 @@ public class ProfileFragment extends Fragment {
     private void SupprimerCompte() {
         UtilisateurService utilisateurService = ServiceBuilder.buildService(UtilisateurService.class);
         Call<Void> requete = utilisateurService.deleteUtilisateur("Bearer "+token.getAccess_token(), utilisateur.getLogin());
-        requete.enqueue(new Callback<Void>() {
-            @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                if(response.isSuccessful()){
-                    Toast.makeText(getContext(),R.string.reussite_suppression_compte,Toast.LENGTH_LONG).show();
-                    SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPref.edit();
-                    editor.remove("tokenAccessJSONString");
-                    editor.remove("utilisateurJSONString");
-                    editor.commit();
-
-
-                    Intent intent = new Intent(getContext(),MainActivity.class);
-                    startActivity(intent);
-                }else{
-                    Toast.makeText(getContext(),R.string.echec_suppresison_compte,Toast.LENGTH_LONG).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-
-            }
-        });
+        requete.enqueue(new DeleteUtilisateurAsyncTask(getActivity()));
     }
 
     public void chargementDesChamps()
