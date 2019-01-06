@@ -159,7 +159,7 @@ public class RegisterFragment extends Fragment {
     }
 
     public boolean verificationPasswordRepeat(){
-        String messageErreur = Util.verificationPasswordRepeat(editPassword.getText().toString(),editPasswordRepeat.getText().toString());
+        String messageErreur = Util.verificationPasswordRepeat(editPassword.getText().toString(),editPasswordRepeat.getText().toString(), getContext());
         if(messageErreur==null){
             return true;
         }else{
@@ -168,7 +168,7 @@ public class RegisterFragment extends Fragment {
         }
     }
     public boolean verificationEmail() {
-        String messageErreur = Util.verificationEmail(editEmail.getText().toString());
+        String messageErreur = Util.verificationEmail(editEmail.getText().toString(), getContext());
         if(messageErreur==null){
             return true;
         }else{
@@ -177,7 +177,7 @@ public class RegisterFragment extends Fragment {
         }
     }
     public boolean verificationNumGSM() {
-        String messageErreur = Util.verificationTailleIntervale(editNumGSM.getText().toString(),8,13);
+        String messageErreur = Util.verificationTailleIntervale(editNumGSM.getText().toString(),8,13, getContext());
         if(messageErreur==null){
             return true;
         }else{
@@ -193,7 +193,7 @@ public class RegisterFragment extends Fragment {
     }
     public boolean verificationNumero() {
 
-        String messageErreur = Util.verificationRegex(editNumero.getText().toString(),Constants.REGEX_NUMERO_MAISON);
+        String messageErreur = Util.verificationRegex(editNumero.getText().toString(),Constants.REGEX_NUMERO_MAISON, getContext());
         if(messageErreur == null){
             return true;
         }else{
@@ -203,7 +203,7 @@ public class RegisterFragment extends Fragment {
     }
 
     private boolean verificationTailleMinimal(TextView edit, int min) {
-        String messageErreur = Util.verificationTailleminimal(edit.getText().toString(),min);
+        String messageErreur = Util.verificationTailleminimal(edit.getText().toString(),min, getContext());
         if(messageErreur==null){
             return true;
         }else{

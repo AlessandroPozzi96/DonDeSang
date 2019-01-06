@@ -11,29 +11,29 @@ import java.util.Arrays;
 public class Util {
 
 
-    public static String verificationPasswordRepeat(String editPassword,String editPasswordRepeat) {
+    public static String verificationPasswordRepeat(String editPassword,String editPasswordRepeat, Context context) {
         if(editPassword.equals(editPasswordRepeat)){
             return null;
         }else{
-            return "Les MDP ne sont pas identiques";
+            return context.getResources().getString(R.string.erreur_mdp_identique);
         }
     }
 
-    public static String verificationEmail(String email) {
+    public static String verificationEmail(String email, Context context) {
         String regex = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
         if(email.matches(regex)){
             return null;
         }else{
-            return "Mauvaise syntaxe";
+            return context.getResources().getString(R.string.mauvaise_syntaxe);
         }
     }
 
-    public static boolean verificationCodePostal(TextView codePostal){
+    public static boolean verificationCodePostal(TextView codePostal, Context context){
         if(codePostal.getText().length() > 1){
             return true;
         }
         else{
-            codePostal.setError("L'adresse ne peut être vide !");
+            codePostal.setError(context.getResources().getString(R.string.adresse_vide));
             return false;
         }
     }
@@ -73,25 +73,25 @@ public class Util {
         return textView;
     }
 
-    public static String verificationTailleminimal(String chaine, int tailleMin) {
-        return (chaine.length()>= tailleMin)? null:"Minimun "+tailleMin+" caractéres";
+    public static String verificationTailleminimal(String chaine, int tailleMin, Context context) {
+        return (chaine.length()>= tailleMin)? null:"Minimun "+tailleMin+ " " + context.getResources().getString(R.string.caractere);
     }
 
-    public static String verificationTailleIntervale(String chaine, int min, int max) {
+    public static String verificationTailleIntervale(String chaine, int min, int max, Context context) {
         if(chaine.length()<min){
-            return "Minimun "+min+ " caractéres";
+            return "Minimun "+min+ " " + context.getResources().getString(R.string.caractere);
         }
         if(chaine.length()>max){
-            return "Maximun "+max+" caractéres";
+            return "Maximun "+max+" " + context.getResources().getString(R.string.caractere);
         }
         return null;
     }
 
-    public static String verificationRegex(String chaine,String regex) {
+    public static String verificationRegex(String chaine,String regex, Context context) {
         if(chaine.matches(regex)){
             return null;
         }else{
-            return "Le numéro de maison doit contenir 1 numéro et 4 caractére maximun";
+            return context.getResources().getString(R.string.numero_adresse);
         }
     }
 

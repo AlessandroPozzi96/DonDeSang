@@ -151,7 +151,7 @@ public class LocalisationFragment extends Fragment {
                 else
                 {
                     ((LocationViewModel) locationViewModel).setUtiliseAddresse(true);
-                    if (Util.verificationCodePostal(clientAddress)) {
+                    if (Util.verificationCodePostal(clientAddress, getContext())) {
                         loadAddressesAsyncTask = new LoadAddressesAsyncTask(fragmentManager, getActivity());
                         loadAddressesAsyncTask.execute(clientAddress.getText().toString());
                     }

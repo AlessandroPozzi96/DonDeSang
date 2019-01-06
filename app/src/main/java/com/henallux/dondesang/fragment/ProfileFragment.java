@@ -404,7 +404,7 @@ public class ProfileFragment extends Fragment {
         }
     }*/
     public boolean verificationEmail() {
-        String messageErreur = Util.verificationEmail(editTexteMail.getText().toString());
+        String messageErreur = Util.verificationEmail(editTexteMail.getText().toString(), getContext());
         if(messageErreur==null){
             return true;
         }else{
@@ -413,7 +413,7 @@ public class ProfileFragment extends Fragment {
         }
     }
     public boolean verificationNumGSM() {
-        String messageErreur = Util.verificationTailleIntervale(editTextNumGSM.getText().toString(),8,13);
+        String messageErreur = Util.verificationTailleIntervale(editTextNumGSM.getText().toString(),8,13, getContext());
         if(messageErreur==null){
             return true;
         }else{
@@ -429,7 +429,7 @@ public class ProfileFragment extends Fragment {
     }
     public boolean verificationNumero() {
 
-        String messageErreur = Util.verificationRegex(editTextNumero.getText().toString(),Constants.REGEX_NUMERO_MAISON);
+        String messageErreur = Util.verificationRegex(editTextNumero.getText().toString(),Constants.REGEX_NUMERO_MAISON, getContext());
         if(messageErreur == null){
             return true;
         }else{
@@ -438,7 +438,7 @@ public class ProfileFragment extends Fragment {
         }
     }
     public boolean verificationPaswword(){
-        String messageErreur = Util.verificationTailleminimal(editTextPassword.getText().toString(),8);
+        String messageErreur = Util.verificationTailleminimal(editTextPassword.getText().toString(),8, getContext());
         if(messageErreur == null){
             return true;
         }else{
@@ -448,7 +448,7 @@ public class ProfileFragment extends Fragment {
     }
 
     private boolean verificationTailleMinimal(TextView edit, int min) {
-        String messageErreur = Util.verificationTailleminimal(edit.getText().toString(),min);
+        String messageErreur = Util.verificationTailleminimal(edit.getText().toString(),min, getContext());
         if(messageErreur==null){
             return true;
         }else{

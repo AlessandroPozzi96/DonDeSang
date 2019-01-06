@@ -83,7 +83,7 @@ public class LoginFragment extends Fragment {
     }
 
     public boolean verificationLogin() {
-        String messageErreur = Util.verificationTailleminimal(editUserName.getText().toString(),3);
+        String messageErreur = Util.verificationTailleminimal(editUserName.getText().toString(),3, getContext());
         if(messageErreur == null){
             return true;
         }else{
@@ -94,7 +94,7 @@ public class LoginFragment extends Fragment {
 
     public boolean verificationPassword() {
 
-        String messageErreur = Util.verificationTailleminimal(editPassword.getText().toString(),8);
+        String messageErreur = Util.verificationTailleminimal(editPassword.getText().toString(),8, getContext());
         if(messageErreur == null){
             return true;
         }else{
