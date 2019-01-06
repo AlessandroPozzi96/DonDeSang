@@ -364,7 +364,7 @@ public class ProfileFragment extends Fragment {
     {
         ArrayList<GroupeSanguin> groupesSanguins = new ArrayList<>(
                 Arrays.asList(
-                        new GroupeSanguin("inconu"),
+                        new GroupeSanguin("inconnu"),
                         new GroupeSanguin("O-"),
                         new GroupeSanguin("O+"),
                         new GroupeSanguin("A-"),
