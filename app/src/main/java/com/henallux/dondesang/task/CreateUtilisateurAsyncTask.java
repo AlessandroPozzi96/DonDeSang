@@ -9,6 +9,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.henallux.dondesang.Constants;
 import com.henallux.dondesang.IMyListener;
 import com.henallux.dondesang.R;
 import com.henallux.dondesang.fragment.ProfileFragment;
@@ -78,6 +79,6 @@ public class CreateUtilisateurAsyncTask implements Callback<Utilisateur> {
 
     @Override
     public void onFailure(Call<Utilisateur> call, Throwable t) {
-        Toast.makeText(activity,activity.getResources().getString(R.string.erreur_inscription),Toast.LENGTH_LONG).show();
+        Toast.makeText(activity, Constants.MSG_ERREUR_GENERAL, Toast.LENGTH_SHORT).show();
     }
 }
