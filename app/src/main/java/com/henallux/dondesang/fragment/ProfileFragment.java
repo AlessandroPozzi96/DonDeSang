@@ -51,6 +51,7 @@ import com.henallux.dondesang.model.Token;
 import com.henallux.dondesang.model.Utilisateur;
 import com.henallux.dondesang.services.ServiceBuilder;
 import com.henallux.dondesang.services.UtilisateurService;
+import com.henallux.dondesang.task.UpdateUtilisateurAsyncTask;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -202,39 +203,7 @@ public class ProfileFragment extends Fragment {
                     final UtilisateurService utilisateurService = ServiceBuilder.buildService(UtilisateurService.class);
 
                     Call<Utilisateur> requete = utilisateurService.putUtilisateur("Bearer " + token.getAccess_token(), utilisateur.getLogin(), utilisateur);
-                    requete.enqueue(new Callback<Utilisateur>() {
-                        @Override
-                        public void onResponse(Call<Utilisateur> call, Response<Utilisateur> response) {
-                            Gson g = new GsonBuilder().disableHtmlEscaping().create();
-                            String utilisateurJSON = g.toJson(utilisateur);
-                            Log.i("tag", utilisateurJSON);
-
-                            if (response.isSuccessful()) {
-                                utilisateur = response.body();
-
-                                Log.i("tag", token.getAccess_token());
-
-                                SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
-                                SharedPreferences.Editor editor = sharedPref.edit();
-                                editor.putString("utilisateurJSONString", utilisateurJSON);
-                                editor.commit();
-
-                                ((IMyListener) getActivity()).setUtilisateur(utilisateur);
-
-                                Toast.makeText(getContext(), R.string.màj_effectué, Toast.LENGTH_LONG).show();
-                            } else {
-                                Log.i("tag", response.toString());
-                                Toast.makeText(getContext(), R.string.erreur_enregistrement, Toast.LENGTH_LONG).show();
-                                Log.i("tag", utilisateur.getRv());
-                                Log.i("tag", utilisateur.getLogin());
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<Utilisateur> call, Throwable t) {
-
-                        }
-                    });
+                    requete.enqueue(new UpdateUtilisateurAsyncTask(getActivity(), utilisateur, token));
                 }else{
                     Toast.makeText(getContext(),"Champ incorect",Toast.LENGTH_LONG);
                 }
