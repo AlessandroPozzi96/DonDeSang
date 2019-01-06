@@ -74,7 +74,7 @@ public class Util {
     }
 
     public static String verificationTailleminimal(String chaine, int tailleMin, Context context) {
-        return (chaine.length()>= tailleMin)? null:"Minimun "+tailleMin+ " " + context.getResources().getString(R.string.caractere);
+        return (chaine.length()>= tailleMin)? null:context.getResources().getString(R.string.minimun)+" "+tailleMin+ " " + context.getResources().getString(R.string.caractere);
     }
 
     public static String verificationTailleIntervale(String chaine, int min, int max, Context context) {
