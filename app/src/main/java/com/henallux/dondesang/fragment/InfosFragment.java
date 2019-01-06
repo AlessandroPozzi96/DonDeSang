@@ -65,13 +65,7 @@ public class InfosFragment extends Fragment {
         button_Question2.setOnClickListener(myButtonListener);
         button_Question1.setOnClickListener(myButtonListener);
 
-        //Si aucune connexion ou API hors service
-        question1 = Util.stylingTextView(Constants.MSG_ERREUR_REPONSE, Constants.TAILLE_REPONSE, getContext());
-        question2 = Util.stylingTextView(Constants.MSG_ERREUR_REPONSE, Constants.TAILLE_REPONSE, getContext());
-        question3 = Util.stylingTextView(Constants.MSG_ERREUR_REPONSE, Constants.TAILLE_REPONSE, getContext());
-        button_Question1.setText(Constants.MSG_CHARGEMENT);
-        button_Question2.setText(Constants.MSG_CHARGEMENT);
-        button_Question3.setText(Constants.MSG_CHARGEMENT);
+        remplissageTextTemporaire();
 
         fragmentManager = getFragmentManager();
 
@@ -109,6 +103,16 @@ public class InfosFragment extends Fragment {
                     break;
             }
         }
+    }
+
+    public void remplissageTextTemporaire() {
+        //Si aucune connexion ou API hors service
+        question1 = Util.stylingTextView(Constants.MSG_ERREUR_REPONSE, Constants.TAILLE_REPONSE, getContext());
+        question2 = Util.stylingTextView(Constants.MSG_ERREUR_REPONSE, Constants.TAILLE_REPONSE, getContext());
+        question3 = Util.stylingTextView(Constants.MSG_ERREUR_REPONSE, Constants.TAILLE_REPONSE, getContext());
+        button_Question1.setText(Constants.MSG_CHARGEMENT);
+        button_Question2.setText(Constants.MSG_CHARGEMENT);
+        button_Question3.setText(Constants.MSG_CHARGEMENT);
     }
 
 }

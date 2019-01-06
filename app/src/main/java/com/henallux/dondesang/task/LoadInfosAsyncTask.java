@@ -41,7 +41,11 @@ public class LoadInfosAsyncTask implements Callback<List<Information>> {
     @Override
     public void onResponse(Call<List<Information>> call, Response<List<Information>> response) {
         if (context == null || butFaq == null || question1 == null || button_Question1 == null || question2 == null || button_Question2 == null || question3 == null || button_Question3 == null || informationViewModel == null)
+        {
+            Log.d(Constants.TAG_GENERAL, "LoadInfos element null");
             return;
+        }
+
         if (!response.isSuccessful()) {
             Toast.makeText(context, context.getResources().getString(R.string.erreur_chargement_infos), Toast.LENGTH_SHORT).show();
             Log.d(tag, "Code : " + response.code());
@@ -49,11 +53,12 @@ public class LoadInfosAsyncTask implements Callback<List<Information>> {
         }
 
         List<Information> informations = response.body();
-        question1 = Util.stylingTextView(informations.get(0).getReponse(), Constants.TAILLE_REPONSE, context);
+
+        question1.setText(informations.get(0).getReponse());
         button_Question1.setText(informations.get(0).getQuestion());
-        question2 = Util.stylingTextView(informations.get(1).getReponse(), Constants.TAILLE_REPONSE, context);
+        question2.setText(informations.get(1).getReponse());
         button_Question2.setText(informations.get(1).getQuestion());
-        question3 = Util.stylingTextView(informations.get(2).getReponse(), Constants.TAILLE_REPONSE, context);
+        question3.setText(informations.get(2).getReponse());
         button_Question3.setText(informations.get(2).getQuestion());
 
         //On garnit le viewModel pour le fragment FAQ
