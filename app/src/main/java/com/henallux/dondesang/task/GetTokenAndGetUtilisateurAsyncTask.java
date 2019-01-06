@@ -59,6 +59,8 @@ public class GetTokenAndGetUtilisateurAsyncTask implements Callback<Token> {
             Call<Utilisateur> requete = utilisateurService.getUtilisateur("Bearer "+token.getAccess_token(), login);
             requete.enqueue(new GetUtilisateurAsyncTask(activity, fragmentManager));
         }
+        else
+            Toast.makeText(activity, activity.getResources().getString(R.string.erreur_credentials_connexion), Toast.LENGTH_LONG).show();
     }
 
     @Override

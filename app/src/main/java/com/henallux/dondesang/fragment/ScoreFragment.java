@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -56,6 +57,7 @@ public class ScoreFragment extends Fragment {
     IMyListener myListener;
     Utilisateur utilisateur;
     Token token;
+    Gson gson;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -64,8 +66,27 @@ public class ScoreFragment extends Fragment {
         FacebookSdk.sdkInitialize(getActivity().getApplicationContext());
         callbackManager = CallbackManager.Factory.create();
         shareDialog = new ShareDialog(this);
-        utilisateur = myListener.getUtilisateur();
-        token = myListener.getToken();
+
+        if (myListener.getUtilisateur() == null || myListener.getToken() == null) {
+            SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+
+            String utilisateurJSONString = sharedPref.getString("utilisateurJSONString",null);
+            String tokenAccessJSONString = sharedPref.getString("tokenAccessJSONString",null);
+            Gson gson = new Gson();
+
+            if(utilisateurJSONString != null){
+                utilisateur = gson.fromJson(utilisateurJSONString,Utilisateur.class);
+            }
+
+            if(tokenAccessJSONString != null){
+                token = gson.fromJson(tokenAccessJSONString,Token.class);
+            }
+        }
+        else
+        {
+            utilisateur = myListener.getUtilisateur();
+            token = myListener.getToken();
+        }
     }
 
     @Nullable

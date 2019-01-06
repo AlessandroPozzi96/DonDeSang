@@ -33,6 +33,7 @@ import com.henallux.dondesang.model.Jourouverture;
 import com.henallux.dondesang.model.LocationViewModel;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class CarteFragment extends Fragment implements OnMapReadyCallback {
@@ -73,16 +74,29 @@ public class CarteFragment extends Fragment implements OnMapReadyCallback {
 
         if (locationViewModel.getCollectes()!= null && locationViewModel.getCollectes().size() > 0) {
             List<Collecte> collectes = locationViewModel.getCollectes();
+            Integer jourSauve;
+            String dateSauve;
             for (Collecte collecte : collectes) {
                 telephone = (collecte.getTelephone() == null)? " " + getResources().getString(R.string.pas_de_numero) : " " + getResources().getString(R.string.tel) + "0" + collecte.getTelephone();
                 horaires = "";
+                jourSauve = null;
+                dateSauve = null;
                 for (Jourouverture jourouverture : collecte.getJourouverture()) {
                     if (jourouverture.getDate() != null) {
-                        horaires += jourouverture.dateFormate();
+                        if (dateSauve != jourouverture.getDate())
+                        {
+                            horaires += jourouverture.dateFormate();
+                        }
+                        dateSauve = jourouverture.getDate();
                     }
                     else
                     {
-                        horaires += Util.getJourSemaine(jourouverture.getJour(), getContext());
+                        if (jourouverture.getJour() != null) {
+                            if (jourSauve != jourouverture.getJour()) {
+                                horaires += Util.getJourSemaine(jourouverture.getJour(), getContext());
+                            }
+                            jourSauve = jourouverture.getJour();
+                        }
                     }
                     horaires += getResources().getString(R.string.de) + " " + jourouverture.getHeureDebut() + " " + getResources().getString(R.string.a) + " " + jourouverture.getHeureFin() + "\n";
                 }
