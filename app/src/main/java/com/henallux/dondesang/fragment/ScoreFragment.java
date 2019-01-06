@@ -4,6 +4,8 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
@@ -24,6 +26,8 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.share.Sharer;
+import com.facebook.share.model.SharePhoto;
+import com.facebook.share.model.SharePhotoContent;
 import com.facebook.share.widget.ShareDialog;
 import com.google.gson.Gson;
 import com.henallux.dondesang.Constants;
@@ -39,6 +43,8 @@ import com.henallux.dondesang.services.ServiceBuilder;
 import com.henallux.dondesang.services.UtilisateurService;
 import com.henallux.dondesang.task.GetImagespromoAsyncTask;
 import com.henallux.dondesang.task.LoadScoreAsyncTask;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import java.util.List;
 
@@ -59,6 +65,33 @@ public class ScoreFragment extends Fragment {
     Utilisateur utilisateur;
     Token token;
     Gson gson;
+
+
+    Target target = new Target() {
+        @Override
+        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+            SharePhoto sharePhoto = new SharePhoto.Builder()
+                    .setBitmap(bitmap)
+                    .build();
+            if(shareDialog.canShow(SharePhotoContent.class))
+            {
+                SharePhotoContent content = new SharePhotoContent.Builder()
+                        .addPhoto(sharePhoto)
+                        .build();
+                shareDialog.show(content);
+            }
+        }
+
+        @Override
+        public void onBitmapFailed(Drawable errorDrawable) {
+
+        }
+
+        @Override
+        public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+        }
+    };
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -101,9 +134,11 @@ public class ScoreFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         initialisationVue();
 
+
         ImagepromotionService imagepromotionService = ServiceBuilder.buildService(ImagepromotionService.class);
         Call<List<Imagepromotion>> listCall = imagepromotionService.getImagesPromotions();
-        listCall.enqueue(new GetImagespromoAsyncTask(getActivity(), imageToShare));
+        listCall.enqueue(new GetImagespromoAsyncTask(getActivity(), imageToShare,null));
+
 
         buttonSharePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,7 +151,6 @@ public class ScoreFragment extends Fragment {
                         //new changerLesDonneesAsyncTask(utilisateur,getActivity()).execute();
 
                         utilisateur.setScore(utilisateur.getScore()+ Constants.AJOUT_SCORE);
-                        Log.i("tag",utilisateur.getScore()+" oui");
                         UtilisateurService utilisateurService = ServiceBuilder.buildService(UtilisateurService.class);
                         Call<Utilisateur> requete = utilisateurService.putUtilisateur("Bearer "+token.getAccess_token(),utilisateur.getLogin(),utilisateur);
                         requete.enqueue(new Callback<Utilisateur>() {
@@ -126,6 +160,7 @@ public class ScoreFragment extends Fragment {
                                 Log.i("tag",token.getAccess_token());
                                 if(response.isSuccessful()){
                                     utilisateur = response.body();
+                                    textViewVosPoints.setText(utilisateur.getScore()+"");
 
                                     Toast.makeText(getContext(),R.string.gagner_50points,Toast.LENGTH_LONG).show();
                                     progressBar.setProgress(utilisateur.getScore());
@@ -167,7 +202,11 @@ public class ScoreFragment extends Fragment {
 
                     }
                 });
-            }
+
+                ImagepromotionService imagepromotionService = ServiceBuilder.buildService(ImagepromotionService.class);
+                Call<List<Imagepromotion>> listCall = imagepromotionService.getImagesPromotions();
+                listCall.enqueue(new GetImagespromoAsyncTask(getActivity(), null,target));
+                }
         });
 
         buttonSeLoger.setOnClickListener(new View.OnClickListener() {
