@@ -16,4 +16,5 @@ public class Constants {
     public static final String MSG_ERREUR_CHARGEMENT_IMAGES = "Impossible de charger l'image la plus récente pour l'instant, réessayez plus tard";
     public static final String MSG_ERREUR_GENERAL = "Impossible de charger cette ressource, vérifier votre connexion internet ou réessayez plus tard";
     public static final String REGEX_NUMERO_MAISON = "^[1-9]{1}+[\\w]{0,3}$";
+    public static final String MSG_ERREUR_CHARGEMENT_SCORE = "Impossible d'affiché le score le plus récent";
 }

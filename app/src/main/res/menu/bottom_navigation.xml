@@ -2,17 +2,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/nav_profile"
         android:icon="@drawable/ic_profile"
-        android:title="Profile" />
+        android:title="@string/profile" />
     <item android:id="@+id/nav_map"
         android:icon="@drawable/ic_map"
-        android:title="Carte" />
+        android:title="@string/carte" />
     <item android:id="@+id/nav_notifications"
         android:icon="@drawable/ic_notifications"
-        android:title="Notifications" />
+        android:title="@string/notifications_menu" />
     <item android:id="@+id/nav_group"
         android:icon="@drawable/ic_group"
-        android:title="Group" />
+        android:title="@string/score_menu" />
     <item android:id="@+id/nav_faq"
         android:icon="@drawable/ic_faq"
-        android:title="Infos" />
+        android:title="@string/infos_menu" />
 </menu>

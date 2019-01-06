@@ -38,6 +38,7 @@ import com.henallux.dondesang.services.ImagepromotionService;
 import com.henallux.dondesang.services.ServiceBuilder;
 import com.henallux.dondesang.services.UtilisateurService;
 import com.henallux.dondesang.task.GetImagespromoAsyncTask;
+import com.henallux.dondesang.task.LoadScoreAsyncTask;
 
 import java.util.List;
 
@@ -187,7 +188,10 @@ public class ScoreFragment extends Fragment {
             buttonSharePhoto.setEnabled(false);
         }
         else {
-            textViewVosPoints.setText(utilisateur.getScore()+ R.string.points);
+            UtilisateurService utilisateurService = ServiceBuilder.buildService(UtilisateurService.class);
+            Call<Utilisateur> utilisateurCall = utilisateurService.getUtilisateur("Bearer " + token.getAccess_token(), utilisateur.getLogin());
+            utilisateurCall.enqueue(new LoadScoreAsyncTask(getContext(), utilisateur, textViewVosPoints, progressBar));
+            textViewVosPoints.setText(utilisateur.getScore()+ " " + getResources().getString(R.string.points));
             progressBar.setMax(1000);
             progressBar.setProgress(utilisateur.getScore());
             buttonSeLoger.setVisibility(View.GONE);

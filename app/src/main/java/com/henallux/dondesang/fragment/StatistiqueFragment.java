@@ -1,5 +1,7 @@
 package com.henallux.dondesang.fragment;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.henallux.dondesang.Constants;
 import com.henallux.dondesang.IMyListener;
 import com.henallux.dondesang.R;
@@ -34,9 +37,28 @@ public class StatistiqueFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         myListener = (IMyListener) getActivity();
-        utilisateur = myListener.getUtilisateur();
-        token = myListener.getToken();
+        if (myListener.getUtilisateur() == null || myListener.getToken() == null) {
+            SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+
+            String utilisateurJSONString = sharedPref.getString("utilisateurJSONString",null);
+            String tokenAccessJSONString = sharedPref.getString("tokenAccessJSONString",null);
+            Gson gson = new Gson();
+
+            if(utilisateurJSONString != null){
+                utilisateur = gson.fromJson(utilisateurJSONString,Utilisateur.class);
+            }
+
+            if(tokenAccessJSONString != null){
+                token = gson.fromJson(tokenAccessJSONString,Token.class);
+            }
+        }
+        else
+        {
+            utilisateur = myListener.getUtilisateur();
+            token = myListener.getToken();
+        }
     }
+
 
     @Nullable
     @Override
