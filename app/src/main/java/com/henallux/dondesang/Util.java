@@ -86,4 +86,13 @@ public class Util {
         }
         return null;
     }
+
+    public static String verificationRegex(String chaine,String regex) {
+        if(chaine.matches(regex)){
+            return null;
+        }else{
+            return "Le numéro de maison doit contenir 1 numéro et 4 caractére maximun";
+        }
+    }
+
 }

@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.henallux.dondesang.Constants;
 import com.henallux.dondesang.DataAcces.ApiAuthentification;
 import com.henallux.dondesang.DataAcces.DataUtilisateur;
 import com.henallux.dondesang.IMyListener;
@@ -56,7 +57,6 @@ public class RegisterFragment extends Fragment {
     TextView editPrenom;
 
     String erreurMessage;
-    private Spinner spinnerComboboxGroupesanguin;
     DatePicker datePicker;
 
     @Nullable
@@ -95,6 +95,12 @@ public class RegisterFragment extends Fragment {
         newUtilisateur.setPrenom(editPrenom.getText().toString());
         newUtilisateur.setNom(editNom.getText().toString());
         newUtilisateur.setFkRole("USER"); // on ne peut créer que des simple user depuis le mobil
+
+        int mois = datePicker.getMonth() + 1;
+        newUtilisateur.setDateNaissance(datePicker.getYear() + "-" + mois + "-" + datePicker.getDayOfMonth());
+
+
+
         //new CreateUserAsyncTask(utilisateur,getActivity(),getFragmentManager(),getContext()).execute();
         Log.i("tag", newUtilisateur.toString());
 
@@ -119,7 +125,6 @@ public class RegisterFragment extends Fragment {
         editNumero = getView().findViewById(R.id.registerEditNumero);
         datePicker = getView().findViewById(R.id.registerDatePicker);
         editNumGSM = getView().findViewById(R.id.registerEditNumGSM);
-        spinnerComboboxGroupesanguin = getView().findViewById(R.id.registerCombobox_groupesanguin);
         buttonInscription = getView().findViewById(R.id.registerButtonInscription);
     }
 
@@ -187,7 +192,14 @@ public class RegisterFragment extends Fragment {
         return verificationTailleMinimal(editRue,2);
     }
     public boolean verificationNumero() {
-        return true;
+
+        String messageErreur = Util.verificationRegex(editNumero.getText().toString(),Constants.REGEX_NUMERO_MAISON);
+        if(messageErreur == null){
+            return true;
+        }else{
+            editNumero.setError(messageErreur);
+            return false;
+        }
     }
 
     private boolean verificationTailleMinimal(TextView edit, int min) {

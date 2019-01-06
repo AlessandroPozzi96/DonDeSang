@@ -18,7 +18,16 @@ public class Utilisateur {
     private String numero;
     private String fkRole;
     private GroupeSanguin fkGroupesanguinNavigation;
+    private String fkGroupesanguin;
     private String rv;
+
+    public String getFkGroupesanguin() {
+        return fkGroupesanguin;
+    }
+
+    public void setFkGroupesanguin(String fkGroupesanguin) {
+        this.fkGroupesanguin = fkGroupesanguin;
+    }
 
     public String getFkRole() {
         return fkRole;

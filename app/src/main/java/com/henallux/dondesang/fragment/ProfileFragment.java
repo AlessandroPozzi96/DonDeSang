@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.nfc.Tag;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -23,6 +24,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.CallbackManager;
@@ -34,10 +36,12 @@ import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.henallux.dondesang.Constants;
 import com.henallux.dondesang.DataAcces.ApiAuthentification;
 import com.henallux.dondesang.DataAcces.DataUtilisateur;
 import com.henallux.dondesang.IMyListener;
 import com.henallux.dondesang.R;
+import com.henallux.dondesang.Util;
 import com.henallux.dondesang.activity.MainActivity;
 import com.henallux.dondesang.exception.ErreurConnectionException;
 import com.henallux.dondesang.fragment.fragmentLogin.EnregistrementFragment;
@@ -83,6 +87,7 @@ public class ProfileFragment extends Fragment {
     EditText editTextNumero;
     EditText editTextPrenom;
     EditText editTextNom;
+    EditText editTextPassword;
     Button buttonVoirstat;
     Button buttonSupprimerCompte;
     Button buttonDeco;
@@ -124,14 +129,15 @@ public class ProfileFragment extends Fragment {
         groupeSanguin = new GroupeSanguin();
 
         //editTextDateNaissance   = getView().findViewById(R.id.editTextDateNaissance);
-        datePicker = getView().findViewById(R.id.datePicker);
+        datePicker              = getView().findViewById(R.id.datePicker);
         editTexteMail           = getView().findViewById(R.id.editTexteMail);
         editTextLogin           = getView().findViewById(R.id.editTextLogin);
         editTextLogin.setEnabled(false);
+
         editTextNumero          = getView().findViewById(R.id.editTextNumero);
 
         editTextNumGSM          = getView().findViewById(R.id.editTextNumeroGSM);
-
+        editTextPassword        = getView().findViewById(R.id.editTextPassword);
         editTextRue             = getView().findViewById(R.id.editTextRue);
         editTextVille           = getView().findViewById(R.id.editTextVille);
         editTextPrenom          = getView().findViewById(R.id.editTextPrenom);
@@ -151,7 +157,7 @@ public class ProfileFragment extends Fragment {
         spinnerGroupesSanguins2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                groupeSanguin.setNom(parent.getItemAtPosition(position).toString());
+                utilisateur.setFkGroupesanguin(parent.getItemAtPosition(position).toString());
             }
 
             @Override
@@ -164,62 +170,72 @@ public class ProfileFragment extends Fragment {
         buttonChangerDonne.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                utilisateur.setPrenom(editTextPrenom.getText().toString());
-                utilisateur.setNom(editTextNom.getText().toString());
-                utilisateur.setMail(editTexteMail.getText().toString());
-                //utilisateur.setDateNaissance(editTextDateNaissance.getText().toString());
-                if(! editTextNumGSM.getText().toString().equals("")){
-                    utilisateur.setNumGsm(Integer.parseInt(editTextNumGSM.getText().toString()));
-                }
-                int mois = datePicker.getMonth()+1;
-                utilisateur.setDateNaissance(datePicker.getYear()+"-"+mois+"-"+datePicker.getDayOfMonth());
+                if(verificationDonnees()) {
+                    utilisateur.setPrenom(editTextPrenom.getText().toString());
+                    utilisateur.setNom(editTextNom.getText().toString());
+                    utilisateur.setMail(editTexteMail.getText().toString());
+                    //utilisateur.setDateNaissance(editTextDateNaissance.getText().toString());
+                    if (!editTextNumGSM.getText().toString().equals("")) {
+                        utilisateur.setNumGsm(Integer.parseInt(editTextNumGSM.getText().toString()));
+                    }
+                    int mois = datePicker.getMonth() + 1;
+                    utilisateur.setDateNaissance(datePicker.getYear() + "-" + mois + "-" + datePicker.getDayOfMonth());
 
-                utilisateur.setRue(editTextRue.getText().toString());
-                utilisateur.setNumero(editTextNumero.getText().toString());
-                utilisateur.setVille(editTextVille.getText().toString());
+                    utilisateur.setRue(editTextRue.getText().toString());
+                    utilisateur.setNumero(editTextNumero.getText().toString());
+                    utilisateur.setVille(editTextVille.getText().toString());
 
-                /*Adresse adresse = new Adresse();
-                adresse.setRue(editTextRue.getText().toString());
-                adresse.setNumero(editTextNumero.getText().toString());
-                adresse.setVille(editTextVille.getText().toString());*/
+                    if(editTextPassword.getText().toString().equals("")){
+                        utilisateur.setPassword(null);
+                    }else{
+                        utilisateur.setPassword(editTextPassword.getText().toString());
+                    }
 
-                //utilisateur.setGroupeSanguin(groupeSanguin);
-                final UtilisateurService utilisateurService = ServiceBuilder.buildService(UtilisateurService.class);
+                    Gson gson= new Gson();
 
-                Call<Utilisateur> requete = utilisateurService.putUtilisateur("Bearer "+token.getAccess_token(), utilisateur.getLogin(),utilisateur);
-                requete.enqueue(new Callback<Utilisateur>() {
-                    @Override
-                    public void onResponse(Call<Utilisateur> call, Response<Utilisateur> response) {
-                        Gson g = new GsonBuilder().disableHtmlEscaping().create();
-                        String utilisateurJSON = g.toJson(utilisateur);
-                        Log.i("tag",utilisateurJSON);
 
-                        if(response.isSuccessful()) {
-                            utilisateur = response.body();
+                    Log.i("tag","utilisateur refait :"+gson.toJson(utilisateur,Utilisateur.class));
 
-                            Log.i("tag",token.getAccess_token());
+                    //utilisateur.setGroupeSanguin(groupeSanguin);
+                    final UtilisateurService utilisateurService = ServiceBuilder.buildService(UtilisateurService.class);
 
-                            SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
-                            SharedPreferences.Editor editor = sharedPref.edit();
-                            editor.putString("utilisateurJSONString", utilisateurJSON);
-                            editor.commit();
+                    Call<Utilisateur> requete = utilisateurService.putUtilisateur("Bearer " + token.getAccess_token(), utilisateur.getLogin(), utilisateur);
+                    requete.enqueue(new Callback<Utilisateur>() {
+                        @Override
+                        public void onResponse(Call<Utilisateur> call, Response<Utilisateur> response) {
+                            Gson g = new GsonBuilder().disableHtmlEscaping().create();
+                            String utilisateurJSON = g.toJson(utilisateur);
+                            Log.i("tag", utilisateurJSON);
 
-                            ((IMyListener)getActivity()).setUtilisateur(utilisateur);
+                            if (response.isSuccessful()) {
+                                utilisateur = response.body();
 
-                            Toast.makeText(getContext(), R.string.màj_effectué, Toast.LENGTH_LONG).show();
-                        }else{
-                            Log.i("tag",response.toString());
-                            Toast.makeText(getContext(),R.string.erreur_enregistrement,Toast.LENGTH_LONG).show();
-                            Log.i("tag",utilisateur.getRv());
-                            Log.i("tag",utilisateur.getLogin());
+                                Log.i("tag", token.getAccess_token());
+
+                                SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPref.edit();
+                                editor.putString("utilisateurJSONString", utilisateurJSON);
+                                editor.commit();
+
+                                ((IMyListener) getActivity()).setUtilisateur(utilisateur);
+
+                                Toast.makeText(getContext(), R.string.màj_effectué, Toast.LENGTH_LONG).show();
+                            } else {
+                                Log.i("tag", response.toString());
+                                Toast.makeText(getContext(), R.string.erreur_enregistrement, Toast.LENGTH_LONG).show();
+                                Log.i("tag", utilisateur.getRv());
+                                Log.i("tag", utilisateur.getLogin());
+                            }
                         }
-                    }
 
-                    @Override
-                    public void onFailure(Call<Utilisateur> call, Throwable t) {
+                        @Override
+                        public void onFailure(Call<Utilisateur> call, Throwable t) {
 
-                    }
-                });
+                        }
+                    });
+                }else{
+                    Toast.makeText(getContext(),"Champ incorect",Toast.LENGTH_LONG);
+                }
             }
         });
         buttonDeco = getView().findViewById(R.id.buttonDeco);
@@ -312,16 +328,15 @@ public class ProfileFragment extends Fragment {
     public void chargementDesChamps()
     {
         editTextLogin.setText(utilisateur.getLogin());
+        editTextNom.setText(utilisateur.getNom());
         editTextPrenom.setText(utilisateur.getPrenom());
-        if(utilisateur.getNumGsm() !=null) {
-            editTextNumGSM.setText("0"+utilisateur.getNumGsm());
+        if(utilisateur.getNumGsm() != null) {
+            editTextNumGSM.setText(utilisateur.getNumGsm()+"");
         }
         editTexteMail.setText(utilisateur.getMail());
-        editTextNom.setText(utilisateur.getNom());
-
-            editTextNumero.setText(utilisateur.getNumero());
-            editTextRue.setText(utilisateur.getRue());
-            editTextVille.setText(utilisateur.getVille());
+        editTextNumero.setText(utilisateur.getNumero());
+        editTextRue.setText(utilisateur.getRue());
+        editTextVille.setText(utilisateur.getVille());
         if(utilisateur.getDateNaissance() != null){
             String [] leSplit = utilisateur.getDateNaissance().split("-");
             String [] lautreSplit = leSplit[2].split("T");
@@ -347,4 +362,100 @@ public class ProfileFragment extends Fragment {
         );
         return groupesSanguins;
     }
+
+
+    public boolean verificationDonnees(){
+
+        boolean loginValide     = verificationLogin();
+        //boolean passwordValide = verificationPaswword();
+        boolean emailValide     = verificationEmail();
+        boolean numGSMnValide   = verificationNumGSM();
+        boolean villeValide     = verificationVille();
+        boolean rueValide       = verificationRue();
+        boolean numeroValide    = verificationNumero();
+        boolean nomValide       = verificationNom();
+        boolean prenomValide    = verificationPrenom();
+        return nomValide && prenomValide && loginValide && emailValide && numGSMnValide && villeValide && rueValide && numeroValide;
+    }
+
+    private boolean verificationPrenom() {
+        return verificationTailleMinimal(editTextPrenom,2);
+    }
+
+    private boolean verificationNom() {
+        return verificationTailleMinimal(editTextNom,2);
+    }
+
+    public boolean verificationLogin(){ // Fait juste une vérification de longeur
+        return verificationTailleMinimal(editTextLogin,3);
+    }
+
+    /*public boolean verificationPaswword(){
+        return verificationTailleMinimal(,8);
+    }
+
+    public boolean verificationPasswordRepeat(){
+        String messageErreur = Util.verificationPasswordRepeat(editPassword.getText().toString(),editPasswordRepeat.getText().toString());
+        if(messageErreur==null){
+            return true;
+        }else{
+            editPasswordRepeat.setError(messageErreur);
+            return false;
+        }
+    }*/
+    public boolean verificationEmail() {
+        String messageErreur = Util.verificationEmail(editTexteMail.getText().toString());
+        if(messageErreur==null){
+            return true;
+        }else{
+            editTexteMail.setError(messageErreur);
+            return false;
+        }
+    }
+    public boolean verificationNumGSM() {
+        String messageErreur = Util.verificationTailleIntervale(editTextNumGSM.getText().toString(),8,13);
+        if(messageErreur==null){
+            return true;
+        }else{
+            editTextNumGSM.setError(messageErreur);
+            return false;
+        }
+    }
+    public boolean verificationVille() {
+        return verificationTailleMinimal(editTextVille,2);
+    }
+    public boolean verificationRue() {
+        return verificationTailleMinimal(editTextRue,2);
+    }
+    public boolean verificationNumero() {
+
+        String messageErreur = Util.verificationRegex(editTextNumero.getText().toString(),Constants.REGEX_NUMERO_MAISON);
+        if(messageErreur == null){
+            return true;
+        }else{
+            editTextNumero.setError(messageErreur);
+            return false;
+        }
+    }
+    public boolean verificationPaswword(){
+        String messageErreur = Util.verificationTailleminimal(editTextPassword.getText().toString(),8);
+        if(messageErreur == null){
+            return true;
+        }else{
+            editTextPassword.setError(messageErreur);
+            return false;
+        }
+    }
+
+    private boolean verificationTailleMinimal(TextView edit, int min) {
+        String messageErreur = Util.verificationTailleminimal(edit.getText().toString(),min);
+        if(messageErreur==null){
+            return true;
+        }else{
+            edit.setError(messageErreur);
+            return false;
+        }
+    }
+
+
 }
