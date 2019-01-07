@@ -74,15 +74,15 @@ public class Util {
     }
 
     public static String verificationTailleminimal(String chaine, int tailleMin, Context context) {
-        return (chaine.length()>= tailleMin)? null:"Minimun "+tailleMin+ " " + context.getResources().getString(R.string.caractere);
+        return (chaine.length()>= tailleMin)? null:context.getResources().getString(R.string.minimun)+" "+tailleMin+ " " + context.getResources().getString(R.string.caractere);
     }
 
     public static String verificationTailleIntervale(String chaine, int min, int max, Context context) {
         if(chaine.length()<min){
-            return "Minimun "+min+ " " + context.getResources().getString(R.string.caractere);
+            return context.getResources().getString(R.string.minimun)+" "+min+ " " + context.getResources().getString(R.string.caractere);
         }
         if(chaine.length()>max){
-            return "Maximun "+max+" " + context.getResources().getString(R.string.caractere);
+            return context.getResources().getString(R.string.maximun)+" "+max+" " + context.getResources().getString(R.string.caractere);
         }
         return null;
     }

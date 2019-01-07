@@ -145,4 +145,13 @@
     <string name="adresse_vide">L\'adresse ne peut être vide !</string>
     <string name="caractere"> caractères</string>
     <string name="numero_adresse">Le numéro de maison doit contenir 1 numéro et 4 caractére maximun</string>
+    <string name="inconnu">inconnu</string>
+    <string name="GroupeOMois">O-</string>
+    <string name="GroupeOPlus">O+</string>
+    <string name="GroupeAMois">A-</string>
+    <string name="GroupeAPlus">A+</string>
+    <string name="GroupeABMois">AB-</string>
+    <string name="GroupeABPlus">AB+</string>
+    <string name="minimun">Minimun</string>
+    <string name="maximun">Maximun</string>
 </resources>
