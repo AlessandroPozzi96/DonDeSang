@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements IMyListener {
 
         SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
         editor = sharedPref.edit();
-
+//        editor.clear().commit();
         String utilisateurJSONString = sharedPref.getString("utilisateurJSONString",null);
         String tokenAccessJSONString = sharedPref.getString("tokenAccessJSONString",null);
         gson = new Gson();
@@ -130,9 +130,6 @@ public class MainActivity extends AppCompatActivity implements IMyListener {
     public void setToken(Token tok) {
         this.token = tok;
 
-        String tokenJSON = gson.toJson(token, Token.class);
-        editor.putString("tokenAccessJSONString", tokenJSON);
-        editor.commit();
     }
     public Token getToken()
     {
@@ -147,9 +144,6 @@ public class MainActivity extends AppCompatActivity implements IMyListener {
     @Override
     public void setUtilisateur(Utilisateur result) {
         this.utilisateur = result;
-        String utilisateurJSON = gson.toJson(result, Utilisateur.class);
-        editor.putString("utilisateurJSONString", utilisateurJSON);
-        editor.commit();
     }
 
     @Override
