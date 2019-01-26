@@ -154,4 +154,7 @@
     <string name="GroupeABPlus">AB+</string>
     <string name="minimun">Minimun</string>
     <string name="maximun">Maximun</string>
+    <string name="inscription">Confirmation inscription</string>
+    <string name="accepter">Accepter</string>
+    <string name="contrat_croixrouge">En cliquant sur "\Accepter"\ vous autorisez la Croix Rouge à utiliser vos données personnelles</string>
 </resources>

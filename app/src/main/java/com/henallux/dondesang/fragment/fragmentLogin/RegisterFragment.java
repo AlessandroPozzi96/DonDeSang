@@ -1,6 +1,7 @@
 package com.henallux.dondesang.fragment.fragmentLogin;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -72,7 +74,25 @@ public class RegisterFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if(verificationDonnees()){
-                    inscription();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    builder.setCancelable(true);
+                    builder.setTitle(R.string.inscription);
+                    builder.setMessage(R.string.contrat_croixrouge);
+                    builder.setPositiveButton(R.string.accepter,
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    inscription();
+                                }
+                            });
+                    builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    });
+
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
                 }else{
                     Toast.makeText(getActivity(),getResources().getString(R.string.champs_invalide),Toast.LENGTH_SHORT).show();
                 }
